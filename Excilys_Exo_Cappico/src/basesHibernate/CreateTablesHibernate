@@ -1,0 +1,35 @@
+
+
+
+CREATE TABLE Zone ( 
+id INT , 
+debut INT, 
+fin INT, 
+prix INT,
+PRIMARY KEY (id)
+
+);
+
+CREATE TABLE Abonnement ( 
+id INT PRIMARY KEY, 
+zone INT,
+periode INT,
+CONSTRAINT `fk_abo_personne`          
+
+        FOREIGN KEY (zone) REFERENCES Zone(id)
+
+);
+
+
+CREATE TABLE Personne ( 
+id INTEGER AUTO_INCREMENT PRIMARY KEY, 
+nom VARCHAR(40), 
+prenom VARCHAR(40), 
+adresse VARCHAR(40), 
+age INTEGER NOT NULL,  
+abo INTEGER NOT NULL,
+
+CONSTRAINT `fk_personne_abo`          
+
+        FOREIGN KEY (abo) REFERENCES Abonnement(id)
+);

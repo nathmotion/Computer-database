@@ -1,0 +1,53 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name = "Zone" table = "Zone">
+      
+      <meta attribute = "class-description">
+         This class contains the zone detail. 
+      </meta>
+      
+      <id name = "id" type = "int" column = "id">
+         <generator class="native"/>
+      </id>
+      
+      <property name = "debut" column = "debut" type = "int"/>
+      <property name = "fin" column = "fin" type = "int"/>
+      <property name = "prix" column = "prix" type = "int"/>
+      
+   </class>
+      <class name = "Abonnement" table = "Abonnement">
+      
+      <meta attribute = "class-description">
+         This class contains the abonnement detail. 
+      </meta>
+      
+      <id name = "id" type = "int" column = "id">
+         <generator class="native"/>
+      </id>
+      
+      <property name = "zone" column = "zone" type = "int"/>
+      <property name = "periode" column = "periode" type = "int"/>
+      
+   </class>
+      <class name = "Personne" table = "Personne">
+      
+      <meta attribute = "class-description">
+         This class contains the person detail. 
+      </meta>
+      
+      <id name = "id" type = "int" column = "id">
+         <generator class="native"/>
+      </id>
+      
+      <property name = "nom" column = "nom" type = "string"/>
+      <property name = "prenom" column = "prenom" type = "string"/>
+      <property name = "adresse" column = "adresse" type = "string"/>
+      <property name = "age" column = "age" type = "int"/>
+      <property name = "abo" column = "abo" type = "int"/>
+      
+   </class>
+</hibernate-mapping>
