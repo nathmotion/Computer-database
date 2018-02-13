@@ -6,7 +6,7 @@ public enum SingletonConn {
 	INSTANCE;
 	
 	// url 
-	private String url= "jdbc:mysql://127.0.0.1:3306/computer-database-db";
+	private String url= "jdbc:mysql://127.0.0.1:3306/computer-database-db?useSSL=false";
 	
 	// username
 	
@@ -22,15 +22,16 @@ public enum SingletonConn {
 
 	
 	
-	/*SingletonConn(){
+	SingletonConn(){
 		try {
 			conn= DriverManager.getConnection(url, username, password);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.err.println("error"+e.getMessage());
 		}
 	}
-	*/
+	
 	
 	
 	
