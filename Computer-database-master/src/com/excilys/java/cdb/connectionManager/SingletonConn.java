@@ -1,3 +1,5 @@
+package com.excilys.java.cdb.connectionManager;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -10,7 +12,7 @@ public enum SingletonConn {
 	
 	// username
 	
-	private String username ="admnincdb";
+	private String username ="admincdb";
 	
 	// password
 	
@@ -34,7 +36,14 @@ public enum SingletonConn {
 	
 	
 	
-	
+	public void closeConn() {
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	
 	public String getUrl() {

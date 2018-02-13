@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 public class Computer {
 
+	private Long id;
 	private String name;
 	private Timestamp introduction;
 	private Timestamp Discontinuation;
