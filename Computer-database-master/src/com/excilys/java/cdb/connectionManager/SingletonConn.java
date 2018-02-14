@@ -34,7 +34,14 @@ public enum SingletonConn {
 		}
 	}
 	
-	
+	public void initConn() {
+		try {
+			conn= DriverManager.getConnection(url, username, password);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	public void closeConn() {
 		try {

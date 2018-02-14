@@ -3,6 +3,8 @@ package com.excilys.java.cdb.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import com.excilys.java.cdb.connectionManager.SingletonConn;
@@ -10,93 +12,51 @@ import com.excilys.java.cdb.model.Company;
 
 public class DaoCompany extends Dao<Company>{
 
-	private String defaultquery = " Select id, name from company";
-	
-	private ResultSet results;
 		
 	
 	// requete sql pour trouver une Compagnie grace a l'id indiqué
 	@Override
-	public Optional<Company>  findById(Long id) {
+	public ArrayList<Company>getAll() {
 		// TODO Auto-generated method stub
 		Company ic = null ;
-		
+		ArrayList<Company> listCompany = new ArrayList<Company>();
 			// requeste SQL 
-			String queryfindbyId = "SELECT id ,name FROM company WHERE id=?";
-		 	PreparedStatement ps;
+			String query = "SELECT id,name FROM company  ";
+		 	Statement s;
 			//  Singleton connection manager
 		 	SingletonConn con= SingletonConn.INSTANCE;		
-			
+			con.initConn();
 			try {
 							// preparation de la requete dans l'instance de connection
-				ps = con.getConn().prepareStatement(queryfindbyId);
-				ps.setLong(1, id);
+				s = con.getConn().createStatement();
 																													// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
-				ResultSet rs=ps.executeQuery();
+				ResultSet rs=s.executeQuery(query);
 				
 									// fermeture de connexion
-				con.closeConn();
+				
 												
 					// lecture par ligne du resultats de la requetes
-				ic =new Company(rs.getLong("id"),rs.getString("name"));
+				
+				while(rs.next()) {
+					ic =new Company(rs.getLong("id"),rs.getString("name"));
+					listCompany.add(ic);
+				}
+				con.closeConn();
 				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				
-				System.err.println(" error requetes FIND : " + e.getMessage());
+				System.err.println(" error requetes GET ALL : " + e.getMessage());
 			}
 			
 				
 			
 	// pas sur du retour
-		return Optional.ofNullable(ic);
+		return listCompany;
 	}
 
-	@Override
-	public boolean create(Company obj) {
-		// TODO Auto-generated method stub
-		
-		String queryfindbyId = "INSERT INTO company (id, name) VALUES (?, ?)";
-	 	PreparedStatement ps;
-		SingletonConn con= SingletonConn.INSTANCE;		
-		
-		try {
-			
-			ps = con.getConn().prepareStatement(queryfindbyId);
-			ps.setLong(1,obj.getId());
-			ps.setString(2, obj.getName());
-			ps.executeUpdate();
-			
-			con.closeConn();
-			
-					
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.err.println(" error requete CREATE  : " + e.getMessage());
-		}
-		
-			
-		
-		return false;
-	}
 
-	@Override
-	public boolean update(Company obj) {
-		// TODO Auto-generated method stub
-		String queryfindbyId = "INSERT INTO company (id, name) VALUES (?, ?)";
-	 	PreparedStatement ps;
-		SingletonConn con= SingletonConn.INSTANCE;		
-		
-		return false;
-	}
-
-	@Override
-	public boolean delete(Company obj) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 
 }
