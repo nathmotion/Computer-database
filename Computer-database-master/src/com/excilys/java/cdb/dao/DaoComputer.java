@@ -5,21 +5,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import com.excilys.java.cdb.connectionManager.SingletonConn;
 import com.excilys.java.cdb.model.Company;
 import com.excilys.java.cdb.model.Computer;
 
+
 public class DaoComputer extends Dao<Computer>{
 
+		
+	final static String queryGetAll ="SELECT id, name, introduced, discontinued, company_id FROM computer  ";
+	final static String queryById = "SELECT id, name, introduced, discontinued, company_id FROM computer  WHERE id=?";
+	
+	/***
+	 * 					REQUETES SQL 	RECUPERE LA LISTE DES COMPUTER
+	 * 
+	 */
+	
 	
 	@Override
 	public ArrayList<Computer> getAll() {
 		// TODO Auto-generated method stub
 		Computer ic = null ;
 		ArrayList<Computer> listComputer = new ArrayList<Computer>();
-			// requeste SQL 
-			String query = "SELECT id, name, introduced, discontinued, company_id FROM computer  ";
 		 	Statement s;
 			//  Singleton connection manager
 		 	SingletonConn con= SingletonConn.INSTANCE;		
@@ -28,7 +37,7 @@ public class DaoComputer extends Dao<Computer>{
 							// preparation de la requete dans l'instance de connection
 				s = con.getConn().createStatement();
 																													// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
-				ResultSet rs=s.executeQuery(query);
+				ResultSet rs=s.executeQuery(queryGetAll);
 				
 									// fermeture de connexion
 				
@@ -47,14 +56,18 @@ public class DaoComputer extends Dao<Computer>{
 				
 				System.err.println(" error requetes GET ALL : " + e.getMessage());
 			}
-			
-				
-			
 	// return la liste
 		return listComputer;
-		
-		
 	}
+	
+	
+	
+	
+	/***
+	 * 					REQUETES SQL 	AJOUTE UN ORDINATEUR PASSER PAR PARAMETRE 
+	 * 
+	 */
+	
 	public boolean create(Computer obj) {
 		// TODO Auto-generated method stub
 		
@@ -84,7 +97,13 @@ public class DaoComputer extends Dao<Computer>{
 		
 		return false;
 	}
-
+	
+	
+	/***
+	 * 					REQUETES SQL 	MIS A JOUR UN ORDINATEUR PASSER PAR PARAMETRE 
+	 * 
+	 */
+	
 	
 	public boolean update(Computer obj) {
 		// TODO Auto-generated method stub
@@ -113,6 +132,10 @@ public class DaoComputer extends Dao<Computer>{
 		return false;
 	}
 
+	/***
+	 * 					REQUETES SQL 	SUPPRIMER UN ORDINATEUR PASSER PAR PARAMETRE 
+	 * 
+	 */
 	
 	public boolean delete(Computer obj) {
 		// TODO Auto-generated method stub
@@ -136,7 +159,43 @@ public class DaoComputer extends Dao<Computer>{
 		}
 		return false;
 	}
-
+	
+	/***
+	 * 					REQUETES SQL 	RECUPERE UN ORDINATEUR PASSER PAR PARAMETRE 
+	 * 
+	 */
+	
+	
+	public Optional<Computer> findById(Long id){
+		Computer ic = null;
+		PreparedStatement s;
+		//  Singleton connection manager
+	 	SingletonConn con= SingletonConn.INSTANCE;		
+		con.initConn();
+		try {
+						// preparation de la requete dans l'instance de connection
+			s = con.getConn().prepareStatement(queryById);
+			s.setLong(1,id);																									// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
+			ResultSet rs=s.executeQuery();
+			
+								// fermeture de connexion
+							
+				// lecture par ligne du resultats de la requetes
+			
+			System.out.println("res " + rs.getString("name"));
+				ic =new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));
+				
+				con.closeConn();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+			System.err.println(" error requetes GET ALL : " + e.getMessage());
+		}
+		Optional<Computer> op= Optional.ofNullable(ic);
+		return op;
+	}
 
 	
 }
