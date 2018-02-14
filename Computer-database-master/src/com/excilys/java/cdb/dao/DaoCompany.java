@@ -15,33 +15,31 @@ public class DaoCompany extends Dao<Company>{
 	private ResultSet results;
 		
 	
+	// requete sql pour trouver une Compagnie grace a l'id indiqué
 	@Override
 	public Optional<Company>  findById(Long id) {
 		// TODO Auto-generated method stub
-			
+		Company ic = null ;
+		
+			// requeste SQL 
 			String queryfindbyId = "SELECT id ,name FROM company WHERE id=?";
 		 	PreparedStatement ps;
-			SingletonConn con= SingletonConn.INSTANCE;		
+			//  Singleton connection manager
+		 	SingletonConn con= SingletonConn.INSTANCE;		
 			
 			try {
-				
+							// preparation de la requete dans l'instance de connection
 				ps = con.getConn().prepareStatement(queryfindbyId);
 				ps.setLong(1, id);
-				Optional<ResultSet> opCompany = Optional.ofNullable(ps.executeQuery());
+																													// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
+				ResultSet rs=ps.executeQuery();
+				
+									// fermeture de connexion
 				con.closeConn();
+												
+					// lecture par ligne du resultats de la requetes
+				ic =new Company(rs.getLong("id"),rs.getString("name"));
 				
-				if(opCompany.isPresent()) {
-				
-					ResultSet rs = opCompany.get();
-					
-					while(rs.next()) {
-						String name =rs.getString("Name");
-						Long idres = rs.getLong("id");
-						System.out.println("Name : "+ name  +"   id: "+idres);
-						System.out.println();
-					}
-				}
-			
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -51,8 +49,8 @@ public class DaoCompany extends Dao<Company>{
 			
 				
 			
-	
-		return null;
+	// pas sur du retour
+		return Optional.ofNullable(ic);
 	}
 
 	@Override
@@ -68,22 +66,11 @@ public class DaoCompany extends Dao<Company>{
 			ps = con.getConn().prepareStatement(queryfindbyId);
 			ps.setLong(1,obj.getId());
 			ps.setString(2, obj.getName());
-			Optional<ResultSet> opCompany = Optional.ofNullable(ps.executeQuery());
+			ps.executeUpdate();
+			
 			con.closeConn();
 			
-			if(opCompany.isPresent()) {
-			
-				ResultSet rs = opCompany.get();
-				
-				while(rs.next()) {
-				
-					String name =rs.getString("Name");
-					Long id = rs.getLong("id");
-					System.out.println("Name : "+ name  +"   id: "+id);
-					System.out.println();
-				}
-			}
-		
+					
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -92,7 +79,7 @@ public class DaoCompany extends Dao<Company>{
 		
 			
 		
-		return null;
+		return false;
 	}
 
 	@Override
