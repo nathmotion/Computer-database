@@ -58,6 +58,8 @@ public class Testdb {
 				affichageSupprOrdinateur(sc,servcomputer);
 				sc.nextLine();
 				continue;
+				default : 
+						System.out.println(" L'option que vous avez choisie n'est pas dans la lsite de choix ");
 			}
 
 
