@@ -58,8 +58,10 @@ public class Testdb {
 				affichageSupprOrdinateur(sc,servcomputer);
 				sc.nextLine();
 				continue;
-				default : 
-						System.out.println(" L'option que vous avez choisie n'est pas dans la lsite de choix ");
+			default : 
+				System.out.println(" L'option que vous avez choisie n'est pas dans la liste de choix ");
+				pause(sc);
+				clearConsole(20);
 			}
 
 
@@ -68,57 +70,14 @@ public class Testdb {
 	}
 
 
-	/**
-	 *  AFFICHE LE MENU 
-	 */
-	public static void printMenu() {
-
-		System.out.println("1) Afficher listes des compagnies				2) Afficher listes des ordinateurs ");
-		System.out.println("3) Affiches Les detail Ordinateur				4) Ajouter un ordinateur ");
-		System.out.println("5) mise a jour d'un ordinateur					6) Supprimer d'un ordinateur ");
-		System.out.println("Saisir votre choix : ");
-	}
-	public static void pause(Scanner sc) {
-		System.out.println("Appuyer sur entree pour continuer .....");
-		sc.nextLine();
-		clearConsole();
-	}
-
-	public final static void clearConsole()
-	{
-		for(int clear = 0; clear < 12; clear++)
-		{
-			System.out.println() ;
-		}
-	}
-
-	public static void afficheMenuOrdinateurs() {
-		clearConsole();
-		System.out.println(" 					========= LISTE DES ORDINATEURS   ===========					");
-		clearConsole();
-	}
-	public static void afficheMenuCompany() {
-		clearConsole();
-		System.out.println(" 					=========  LISTE DES COMPAGNIES  ===========					");
-		clearConsole();
-	}
-	public static void afficheMenuAjout() {
-		clearConsole();
-		System.out.println(" 					=========  AJOUT.  D' UN ORDINATEUR  ===========					");
-		clearConsole();
-	}
-	public static void afficheMenuSuppr() {
-		clearConsole();
-		System.out.println(" 					=========  SUPPR.  D' UN ORDINATEUR  ===========					");
-		clearConsole();
-	}
+	
 	/**
 	 * 	AFFICHE DE LA LISTE DES COMPUTER
 	 * @param tableComputer
 	 */
 	public static void afficheListComputer(ArrayList<Computer> tableComputer) {
-		clearConsole();
-		afficheMenuOrdinateurs();
+		clearConsole(20);
+		afficheMenu(" LISTE DES ORDINATEURS ");
 		tableComputer.forEach((computer ->{
 			System.out.println("id: "+computer.getId());
 			System.out.println("name: "+computer.getName());
@@ -131,8 +90,8 @@ public class Testdb {
 	 * @param tableCompany
 	 */
 	public static void afficheListCompany(ArrayList<Company> tableCompany) {
-		clearConsole();
-		afficheMenuCompany();
+		clearConsole(20);
+		afficheMenu(" LISTE DES COMPANY ");
 		tableCompany.forEach((company ->{
 			System.out.println("id: "+company.getId());
 			System.out.println("name: "+company.getName());
@@ -172,16 +131,16 @@ public class Testdb {
 	 * @param servcomputer
 	 */
 	public static void affichageAjoutOrdinateur(Scanner sc, ServiceComputer servcomputer) {
-		afficheMenuAjout();
+		afficheMenu(" AJOUT D'UN ORDINATEUR");
 		System.out.println("Veuillez saisir le nom de nouveau ordinateur: ");
 		String name = sc.nextLine();
-		afficheMenuAjout();
+		afficheMenu(" AJOUT D'UN ORDINATEUR");
 		System.out.println("Veuillez saisir la date d'introduction du nouveau ordinateur(AAAA\\MM\\JJ): ");
 		String date_introduced = sc.nextLine();
-		afficheMenuAjout();
+		afficheMenu(" AJOUT D'UN ORDINATEUR");
 		System.out.println("Veuillez saisir la date d'introduction du nouveau ordinateur(AAAA\\MM\\JJ): ");
 		String date_discontinued = sc.nextLine();
-		afficheMenuAjout();
+		afficheMenu(" AJOUT D'UN ORDINATEUR");
 		System.out.println("Veuillez saisir l'id de la company : ");
 		Long company_id = sc.nextLong();
 		sc.nextLine();
@@ -210,7 +169,7 @@ public class Testdb {
 	 * @param servcomputer
 	 */
 	public static void affichageSupprOrdinateur(Scanner sc, ServiceComputer servcomputer) {
-		afficheMenuAjout();
+		afficheMenu("SUPPR . D'UN ORDINATEUR");
 		System.out.println("Veuillez saisir le nom de ordinateur que vous souhaiter suppr.: ");
 		Long id = sc.nextLong();
 		sc.nextLine();
@@ -220,5 +179,34 @@ public class Testdb {
 
 	}
 
+	/**
+	 *  AFFICHE LE MENU 
+	 */
+	public static void printMenu() {
+		afficheMenu(" M E N U ");
+		System.out.println();
+		System.out.println("1) Afficher listes des compagnies				2) Afficher listes des ordinateurs ");
+		System.out.println("3) Affiches Les detail Ordinateur				4) Ajouter un ordinateur ");
+		System.out.println("5) mise a jour d'un ordinateur					6) Supprimer d'un ordinateur ");
+		System.out.println("Saisir votre choix : ");
+	}
+	public static void pause(Scanner sc) {
+		System.out.println("Appuyer sur entree pour continuer .....");
+		sc.nextLine();
+		clearConsole(20);
+	}
+
+	public final static void clearConsole(int l)
+	{
+		for(int clear = 0; clear < l; clear++)
+		{
+			System.out.println() ;
+		}
+	}
+	public static void afficheMenu(String menu) {
+		clearConsole(20);
+		System.out.println(" 					========= "+menu+" ===========					");
+		clearConsole(3);
+	}
 
 }
