@@ -2,6 +2,7 @@ package com.excilys.java.IHM;
 
 import java.io.Console;
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,23 +31,27 @@ public class Testdb {
 
 			switch(choix){
 			case "1": 
-
 				ArrayList<Company>  tableCompany= servcompany.getDao().getAll();
 				afficheListCompany(tableCompany);
+				pause(sc);
 				continue;
 				
 			case "2" :
 				ArrayList<Computer> tableComputer= servcomputer.getDao().getAll();
 				afficheListComputer(tableComputer);
+				pause(sc);
+
 				continue;
 				
 			case "3" :
 				afficheFindbyId(sc,servcomputer);
 				sc.nextLine();
+				pause(sc);
+
 				continue;
 			case "4" :
-				afficheFindbyId(sc,servcomputer);
-				sc.nextLine();
+				affichageAjoutOrdinateur(sc,servcomputer);
+				//sc.nextLine();
 				continue;
 			case "5" :
 				afficheFindbyId(sc,servcomputer);
@@ -122,27 +127,46 @@ public class Testdb {
 	
 	public final static void clearConsole()
 	{
-		for(int clear = 0; clear < 20; clear++)
+		for(int clear = 0; clear < 12; clear++)
 		  {
 		     System.out.println() ;
 		  }
 	}
-	public void afficheMenuAjout() {
-		for(int i=0;i<4;i++) {
-			System.out.println();
-		}
+	public static void afficheMenuAjout() {
+	clearConsole();
 		System.out.println(" 					=========  AJOUT  D' UN ORDINATEUR  ===========					");
-		for(int i=0;i<4;i++) {
-			System.out.println();
-		}
+		clearConsole();
 	}
-	public void ajoutOrdinateur(Scanner sc) {
+	public static void affichageAjoutOrdinateur(Scanner sc, ServiceComputer servcomputer) {
 			afficheMenuAjout();
 			System.out.println("Veuillez saisir le nom de nouveau ordinateur: ");
 			String name = sc.nextLine();
 			afficheMenuAjout();
-			System.out.println("Veuillez saisir la date d'introduction du nouveau ordinateur: ");
+			System.out.println("Veuillez saisir la date d'introduction du nouveau ordinateur(AAAA\\MM\\JJ): ");
 			String date_introduced = sc.nextLine();
+			afficheMenuAjout();
+			System.out.println("Veuillez saisir la date d'introduction du nouveau ordinateur(AAAA\\\\MM\\\\JJ): ");
+			String date_discontinued = sc.nextLine();
+			afficheMenuAjout();
+			System.out.println("Veuillez saisir l'id de la company : ");
+			Long company_id = sc.nextLong();
+			sc.nextLine();
+			
+			ajoutOrdinateur(servcomputer,name,date_introduced,date_discontinued,company_id);
 	}
 
+	public static void ajoutOrdinateur(ServiceComputer servcomputer,String name, String date_introduced, String date_discontinued,Long company_id) {
+		Computer computer= new Computer();
+		computer.setName(name);
+		computer.setIntroduced(Timestamp.valueOf(LocalDateTime.now()));
+		computer.setDiscontinued(null);
+		computer.setCompany_id(company_id);
+		servcomputer.getDao().create(computer);
+	}
+	
+	public static void pause(Scanner sc) {
+		System.out.println("Appuyer sur entree pour continuer .....");
+		sc.nextLine();
+		clearConsole();
+	}
 }

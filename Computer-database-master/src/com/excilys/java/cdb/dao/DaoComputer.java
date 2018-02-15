@@ -4,8 +4,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.sql.Types;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
+
+import javax.sound.sampled.AudioFileFormat.Type;
 
 import com.excilys.java.cdb.connectionManager.SingletonConn;
 import com.excilys.java.cdb.model.Company;
@@ -45,12 +52,10 @@ public class DaoComputer extends Dao<Computer>{
 				con.closeConn();
 				
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				
+		
 				System.err.println(" error requetes GET ALL : " + e.getMessage());
 			}
-	// return la liste
+	
 		return listComputer;
 	}
 	
@@ -63,7 +68,6 @@ public class DaoComputer extends Dao<Computer>{
 	 * @return
 	 */
 	public boolean create(Computer obj) {
-		// TODO Auto-generated method stub
 		
 		
 	 	PreparedStatement ps;
@@ -73,8 +77,19 @@ public class DaoComputer extends Dao<Computer>{
 			
 			ps = con.getConn().prepareStatement(queryCreate);
 			ps.setString(1, obj.getName());
-			ps.setTimestamp(2,obj.getIntroduced());
-			ps.setTimestamp(3, obj.getDiscontinued());
+			if( obj.getIntroduced()!=null) {
+				ps.setTimestamp(2,obj.getIntroduced());
+			}
+			else {
+				ps.setTimestamp(2, null);
+			}
+			if( obj.getIntroduced()!=null) {
+				ps.setTimestamp(3, obj.getDiscontinued());
+			}
+			else {
+				ps.setTimestamp(3,null);
+			}
+
 			ps.setLong(4,obj.getCompany_id());
 			ps.executeUpdate();
 			
@@ -82,8 +97,7 @@ public class DaoComputer extends Dao<Computer>{
 			return true;
 					
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
 			System.err.println(" error requete CREATE  : " + e.getMessage());
 		}
 		
@@ -118,8 +132,7 @@ public class DaoComputer extends Dao<Computer>{
 			return true;
 					
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
 			System.err.println(" error requete Update  : " + e.getMessage());
 		}
 		return false;
@@ -145,8 +158,7 @@ public class DaoComputer extends Dao<Computer>{
 			return true;
 					
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 			System.err.println(" error requete DELETE  : " + e.getMessage());
 		}
 		return false;
@@ -177,9 +189,7 @@ public class DaoComputer extends Dao<Computer>{
 			}
 			con.closeConn();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
+	
 			System.err.println(" error requetes GET ALL : " + e.getMessage());
 		}
 		Optional<Computer> op= Optional.ofNullable(icomputer);
