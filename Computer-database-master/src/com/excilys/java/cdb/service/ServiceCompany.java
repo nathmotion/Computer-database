@@ -5,10 +5,10 @@ import com.excilys.java.cdb.dao.DaoCompany;
 public enum ServiceCompany {
 		INSTANCE;
 	
-	private DaoCompany dc ;
+	private DaoCompany daocompany ;
 	
 	ServiceCompany(){
-		dc = new DaoCompany();
+		daocompany = new DaoCompany();
 	}
 	/**
 	 *  RECUPERE LE DAO DE LA CLASS METIER COMPANY
@@ -16,7 +16,7 @@ public enum ServiceCompany {
 	 */
 	public DaoCompany getDao(){
 		
-		return dc;
+		return daocompany;
 		
 	}
 }

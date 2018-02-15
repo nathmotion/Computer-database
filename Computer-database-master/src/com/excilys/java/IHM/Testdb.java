@@ -41,8 +41,15 @@ public class Testdb {
 				continue;
 				
 			case "3" :
-
-				
+				afficheFindbyId(sc,servcomputer);
+				sc.nextLine();
+				continue;
+			case "4" :
+				afficheFindbyId(sc,servcomputer);
+				sc.nextLine();
+				continue;
+			case "5" :
+				afficheFindbyId(sc,servcomputer);
 				sc.nextLine();
 				continue;
 			}
@@ -93,7 +100,7 @@ public class Testdb {
 
 	}
 	
-	public void afficheFindbyId(Scanner sc, ServiceComputer servcomputer) {
+	public static void afficheFindbyId(Scanner sc, ServiceComputer servcomputer) {
 		System.out.println("Veullez saisir l' id de l'ordinateur ");
 		int id = sc.nextInt();
 
@@ -119,6 +126,23 @@ public class Testdb {
 		  {
 		     System.out.println() ;
 		  }
+	}
+	public void afficheMenuAjout() {
+		for(int i=0;i<4;i++) {
+			System.out.println();
+		}
+		System.out.println(" 					=========  AJOUT  D' UN ORDINATEUR  ===========					");
+		for(int i=0;i<4;i++) {
+			System.out.println();
+		}
+	}
+	public void ajoutOrdinateur(Scanner sc) {
+			afficheMenuAjout();
+			System.out.println("Veuillez saisir le nom de nouveau ordinateur: ");
+			String name = sc.nextLine();
+			afficheMenuAjout();
+			System.out.println("Veuillez saisir la date d'introduction du nouveau ordinateur: ");
+			String date_introduced = sc.nextLine();
 	}
 
 }

@@ -130,7 +130,7 @@ public class DaoComputer extends Dao<Computer>{
 	 * @param obj
 	 * @return
 	 */
-	public boolean delete(Computer obj) {
+	public boolean delete(Computer computer) {
 		// TODO Auto-generated method stub
 	 	PreparedStatement ps;
 		SingletonConn con= SingletonConn.INSTANCE;		
@@ -138,7 +138,7 @@ public class DaoComputer extends Dao<Computer>{
 		try {
 			
 			ps = con.getConn().prepareStatement(queryDelete);
-			ps.setLong(1,obj.getId());
+			ps.setLong(1,computer.getId());
 			ps.executeUpdate();
 			
 			con.closeConn();
@@ -158,22 +158,22 @@ public class DaoComputer extends Dao<Computer>{
 	 * @return
 	 */
 	public Optional<Computer> findById(int id){
-		Computer ic = null;
-		PreparedStatement s;
+		Computer icomputer = null;
+		PreparedStatement stat;
 		//  Singleton connection manager
 	 	SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
 		try {
 						// preparation de la requete dans l'instance de connection
-			s = con.getConn().prepareStatement(queryById);
-			s.setInt(1,id);																									// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
-			ResultSet rs=s.executeQuery();
+			stat = con.getConn().prepareStatement(queryById);
+			stat.setInt(1,id);																									// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
+			ResultSet rs=stat.executeQuery();
 			
 								// fermeture de connexion
 							
 				// lecture par ligne du resultats de la requetes
 			while(rs.next()) {
-				ic =new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));
+				icomputer =new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));
 			}
 			con.closeConn();
 		} catch (SQLException e) {
@@ -182,7 +182,7 @@ public class DaoComputer extends Dao<Computer>{
 			
 			System.err.println(" error requetes GET ALL : " + e.getMessage());
 		}
-		Optional<Computer> op= Optional.ofNullable(ic);
+		Optional<Computer> op= Optional.ofNullable(icomputer);
 		return op;
 	}
 

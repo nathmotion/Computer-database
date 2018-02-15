@@ -6,17 +6,17 @@ public enum ServiceComputer {
 			INSTANCE;
 	
 
-	private DaoComputer dc ;
+	private DaoComputer daocomputer ;
 	
 	ServiceComputer(){
-		dc = new DaoComputer();
+		daocomputer = new DaoComputer();
 	}
 	/**
 	 * 		RECUPERE LE DAO DE LA CLASS METIER COMPUTER
 	 * @return
 	 */
 	public DaoComputer getDao(){
-		return dc;
+		return daocomputer;
 		
 	}
 }
