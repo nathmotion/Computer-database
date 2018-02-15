@@ -7,9 +7,10 @@ import com.excilys.java.cdb.connectionManager.SingletonConn;
 
 public abstract class Dao<T>{
 	
-//	protected SingletonConn con = SingletonConn.INSTANCE;
-
-	// requete de recherche sql by id
+	/**
+	 * 
+	 * @return
+	 */
 	public abstract ArrayList<T> getAll();
 	
 

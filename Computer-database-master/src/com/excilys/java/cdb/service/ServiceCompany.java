@@ -10,7 +10,10 @@ public enum ServiceCompany {
 	ServiceCompany(){
 		dc = new DaoCompany();
 	}
-	
+	/**
+	 *  RECUPERE LE DAO DE LA CLASS METIER COMPANY
+	 * @return
+	 */
 	public DaoCompany getDao(){
 		
 		return dc;

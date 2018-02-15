@@ -17,13 +17,13 @@ public class DaoComputer extends Dao<Computer>{
 		
 	final static String queryGetAll ="SELECT id, name, introduced, discontinued, company_id FROM computer  ";
 	final static String queryById = "SELECT id, name, introduced, discontinued, company_id FROM computer  WHERE id=?";
-	
-	/***
-	 * 					REQUETES SQL 	RECUPERE LA LISTE DES COMPUTER
-	 * 
+	final static String queryUpdate = "UPDATE computer SET name= ?, instroduced=? , discontinued=? ,company_id= ? WHERE id =?";
+	final static String queryCreate= "INSERT INTO computer ( name, introduced, discontinued ,company_id) VALUES (?, ?, ?, ?)";
+	final static String queryDelete= "DELETE FROM computer WHERE id =?";
+
+	/**
+	 * REQUETES SQL 	RECUPERE LA LISTE DES COMPUTER
 	 */
-	
-	
 	@Override
 	public ArrayList<Computer> getAll() {
 		// TODO Auto-generated method stub
@@ -35,15 +35,9 @@ public class DaoComputer extends Dao<Computer>{
 			con.initConn();
 			try {
 							// preparation de la requete dans l'instance de connection
-				s = con.getConn().createStatement();
-																													// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
+				s = con.getConn().createStatement();																											// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
 				ResultSet rs=s.executeQuery(queryGetAll);
-				
-									// fermeture de connexion
-				
-												
-					// lecture par ligne du resultats de la requetes
-				
+				// lecture par ligne du resultats de la requetes
 				while(rs.next()) {
 					ic =new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));
 					listComputer.add(ic);
@@ -63,21 +57,21 @@ public class DaoComputer extends Dao<Computer>{
 	
 	
 	
-	/***
-	 * 					REQUETES SQL 	AJOUTE UN ORDINATEUR PASSER PAR PARAMETRE 
-	 * 
+	/**
+	 * REQUETES SQL 	AJOUTE UN ORDINATEUR PASSER PAR PARAMETRE 
+	 * @param obj
+	 * @return
 	 */
-	
 	public boolean create(Computer obj) {
 		// TODO Auto-generated method stub
 		
-		String query= "INSERT INTO computer ( name, introduced, discontinued ,company_id) VALUES (?, ?, ?, ?)";
+		
 	 	PreparedStatement ps;
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
 		try {
 			
-			ps = con.getConn().prepareStatement(query);
+			ps = con.getConn().prepareStatement(queryCreate);
 			ps.setString(1, obj.getName());
 			ps.setTimestamp(2,obj.getIntroduced());
 			ps.setTimestamp(3, obj.getDiscontinued());
@@ -99,21 +93,20 @@ public class DaoComputer extends Dao<Computer>{
 	}
 	
 	
-	/***
-	 * 					REQUETES SQL 	MIS A JOUR UN ORDINATEUR PASSER PAR PARAMETRE 
-	 * 
+	/**
+	 * 	REQUETES SQL 	MIS A JOUR UN ORDINATEUR PASSER PAR PARAMETRE 	
+	 * @param obj
+	 * @return
 	 */
-	
-	
 	public boolean update(Computer obj) {
 		// TODO Auto-generated method stub
-		String query = "UPDATE computer SET name= ?, instroduced=? , discontinued=? ,company_id= ? WHERE id =?";
+		
 	 	PreparedStatement ps;
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
 		try {
 			
-			ps = con.getConn().prepareStatement(query);
+			ps = con.getConn().prepareStatement(queryUpdate);
 			ps.setString(1, obj.getName());
 			ps.setTimestamp(2,obj.getIntroduced());
 			ps.setTimestamp(3, obj.getDiscontinued());
@@ -132,20 +125,19 @@ public class DaoComputer extends Dao<Computer>{
 		return false;
 	}
 
-	/***
-	 * 					REQUETES SQL 	SUPPRIMER UN ORDINATEUR PASSER PAR PARAMETRE 
-	 * 
+	/**
+	 * REQUETES SQL 	SUPPRIMER UN ORDINATEUR PASSER PAR PARAMETRE 
+	 * @param obj
+	 * @return
 	 */
-	
 	public boolean delete(Computer obj) {
 		// TODO Auto-generated method stub
-		String query = "DELETE FROM computer WHERE id =?";
 	 	PreparedStatement ps;
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
 		try {
 			
-			ps = con.getConn().prepareStatement(query);
+			ps = con.getConn().prepareStatement(queryDelete);
 			ps.setLong(1,obj.getId());
 			ps.executeUpdate();
 			
@@ -160,13 +152,12 @@ public class DaoComputer extends Dao<Computer>{
 		return false;
 	}
 	
-	/***
-	 * 					REQUETES SQL 	RECUPERE UN ORDINATEUR PASSER PAR PARAMETRE 
-	 * 
+	/**
+	 * REQUETES SQL 	RECUPERE UN ORDINATEUR PASSER PAR PARAMETRE 
+	 * @param id
+	 * @return
 	 */
-	
-	
-	public Optional<Computer> findById(Long id){
+	public Optional<Computer> findById(int id){
 		Computer ic = null;
 		PreparedStatement s;
 		//  Singleton connection manager
@@ -175,18 +166,16 @@ public class DaoComputer extends Dao<Computer>{
 		try {
 						// preparation de la requete dans l'instance de connection
 			s = con.getConn().prepareStatement(queryById);
-			s.setLong(1,id);																									// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
+			s.setInt(1,id);																									// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
 			ResultSet rs=s.executeQuery();
 			
 								// fermeture de connexion
 							
 				// lecture par ligne du resultats de la requetes
-			
-			System.out.println("res " + rs.getString("name"));
+			while(rs.next()) {
 				ic =new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));
-				
-				con.closeConn();
-			
+			}
+			con.closeConn();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -29,40 +29,26 @@ public class Testdb {
 		Console console= System.console();
 		do {	
 			//choix=null;
-			System.out.println("") ;
-			System.out.println("") ;
-			System.out.println("") ;
-			System.out.println("1) Afficher listes des compagnies				2) Afficher listes des ordinateurs ");
-			
-			System.out.println("3) Affiches Les detail Ordinateur				4) Ajouter un ordinateur ");
-			
-			System.out.println("5) mise a jour d'un ordinateur					6) Supprimer d'un ordinateur ");
-			System.out.println();
-			System.out.println("Saisir votre choix : ");
+			printMenu();
 			choix = sc.nextLine();
 	    
 			switch(choix){
 			case "1": 
+				
 				ArrayList<Company>  tableCompany= servcompany.getDao().getAll();
-				tableCompany.forEach((company ->{
-					System.out.println();	
-					System.out.println("id: "+company.getId());
-					System.out.println("name: "+company.getName());
-					System.out.println();	
-				}));
+				afficheListCompany(tableCompany);
+				//sc.nextLine();
 				continue;
 			case "2" :
 				// affihce le contenu de list de compagnie
-	
+				
+
 				ArrayList<Computer> tableComputer= servcomputer.getDao().getAll();
-				tableComputer.forEach((computer ->{
-					System.out.println();	
-					System.out.println("id: "+computer.getId());
-					System.out.println("name: "+computer.getName());
-					System.out.println();	
-					}));
-				break;
+				afficheListComputer(tableComputer);
+				
+				continue;
 			case "3" :
+
 				System.out.println("") ;
 				System.out.println("") ;
 				System.out.println("") ;
@@ -71,7 +57,9 @@ public class Testdb {
 				System.out.println("") ;
 				System.out.println("Veullez saisir l' id de l'ordinateur ");
 				System.out.println();
-				Long id = sc.nextLong();
+				int id = sc.nextInt();
+				
+
 				Optional<Computer> opcomputer = servcomputer.getDao().findById(id)	;
 				if(opcomputer.isPresent())
 				{
@@ -87,7 +75,8 @@ public class Testdb {
 				else {
 					//System.out.println(" error aucun computer trouver");
 				}
-				break;
+				sc.nextLine();
+				continue;
 			}
 		
 	
@@ -97,5 +86,43 @@ public class Testdb {
 		
 		
 }
-
+	/**
+	 *  AFFICHE LE MENU 
+	 */
+	public static void printMenu() {
+		System.out.println("") ;
+		System.out.println("") ;
+		System.out.println("") ;
+		System.out.println("1) Afficher listes des compagnies				2) Afficher listes des ordinateurs ");
+		
+		System.out.println("3) Affiches Les detail Ordinateur				4) Ajouter un ordinateur ");
+		
+		System.out.println("5) mise a jour d'un ordinateur					6) Supprimer d'un ordinateur ");
+		System.out.println();
+		System.out.println("Saisir votre choix : ");
+	}
+	/**
+	 * 	AFFICHE DE LA LISTE DES COMPUTER
+	 * @param tableComputer
+	 */
+	public static void afficheListComputer(ArrayList<Computer> tableComputer) {
+		tableComputer.forEach((computer ->{
+			System.out.println();	
+			System.out.println("id: "+computer.getId());
+			System.out.println("name: "+computer.getName());
+			System.out.println();	
+			}));
+	}
+	/**	
+	 * 		AFFICHE LA LISTE DES COMPANY
+	 * @param tableCompany
+	 */
+	public static void afficheListCompany(ArrayList<Company> tableCompany) {
+		tableCompany.forEach((company ->{
+			System.out.println();	
+			System.out.println("id: "+company.getId());
+			System.out.println("name: "+company.getName());
+			System.out.println();	
+		}));
+	}
 }

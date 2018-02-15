@@ -11,9 +11,11 @@ public enum ServiceComputer {
 	ServiceComputer(){
 		dc = new DaoComputer();
 	}
-	
+	/**
+	 * 		RECUPERE LE DAO DE LA CLASS METIER COMPUTER
+	 * @return
+	 */
 	public DaoComputer getDao(){
-		
 		return dc;
 		
 	}

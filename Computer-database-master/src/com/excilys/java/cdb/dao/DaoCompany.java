@@ -12,31 +12,28 @@ import com.excilys.java.cdb.model.Company;
 
 public class DaoCompany extends Dao<Company>{
 
-		
+		final static String queryGetAll ="SELECT id,name FROM company  ";
+
 	
-	// requete sql pour trouver une Compagnie grace a l'id indiqué
+	/**
+	 * 		REQUETE SQL    RECUPERE LA LISTE DES COMPAGNIES
+	 */
 	@Override
 	public ArrayList<Company>getAll() {
 		// TODO Auto-generated method stub
 		Company ic = null ;
 		ArrayList<Company> listCompany = new ArrayList<Company>();
 			// requeste SQL 
-			String query = "SELECT id,name FROM company  ";
 		 	Statement s;
 			//  Singleton connection manager
 		 	SingletonConn con= SingletonConn.INSTANCE;		
 			con.initConn();
 			try {
 							// preparation de la requete dans l'instance de connection
-				s = con.getConn().createStatement();
-																													// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
-				ResultSet rs=s.executeQuery(query);
-				
-									// fermeture de connexion
-				
-												
+				s = con.getConn().createStatement();										// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
+				ResultSet rs=s.executeQuery(queryGetAll);
+									// fermeture de connexion									
 					// lecture par ligne du resultats de la requetes
-				
 				while(rs.next()) {
 					ic =new Company(rs.getLong("id"),rs.getString("name"));
 					listCompany.add(ic);
