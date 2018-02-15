@@ -22,8 +22,8 @@ public class Testdb {
 		ServiceCompany servcompany = ServiceCompany.INSTANCE;
 		ServiceComputer servcomputer = ServiceComputer.INSTANCE;
 		String choix ;
-		
-						//===========	 C L I	===========
+
+		//===========	 C L I	===========
 		Scanner sc =  new Scanner(System.in);
 		do {	
 			printMenu();
@@ -35,14 +35,14 @@ public class Testdb {
 				afficheListCompany(tableCompany);
 				pause(sc);
 				continue;
-				
+
 			case "2" :
 				ArrayList<Computer> tableComputer= servcomputer.getDao().getAll();
 				afficheListComputer(tableComputer);
 				pause(sc);
 
 				continue;
-				
+
 			case "3" :
 				afficheFindbyId(sc,servcomputer);
 				sc.nextLine();
@@ -51,10 +51,10 @@ public class Testdb {
 				continue;
 			case "4" :
 				affichageAjoutOrdinateur(sc,servcomputer);
-				//sc.nextLine();
+
 				continue;
-			case "5" :
-				afficheFindbyId(sc,servcomputer);
+			case "6" :
+				affichageSupprOrdinateur(sc,servcomputer);
 				sc.nextLine();
 				continue;
 			}
@@ -63,19 +63,42 @@ public class Testdb {
 		}while(!choix.equals("exit"));
 
 	}
-	
-	
+
+
 	/**
 	 *  AFFICHE LE MENU 
 	 */
 	public static void printMenu() {
-		
+
 		System.out.println("1) Afficher listes des compagnies				2) Afficher listes des ordinateurs ");
 		System.out.println("3) Affiches Les detail Ordinateur				4) Ajouter un ordinateur ");
 		System.out.println("5) mise a jour d'un ordinateur					6) Supprimer d'un ordinateur ");
 		System.out.println("Saisir votre choix : ");
 	}
-	
+	public static void pause(Scanner sc) {
+		System.out.println("Appuyer sur entree pour continuer .....");
+		sc.nextLine();
+		clearConsole();
+	}
+
+	public final static void clearConsole()
+	{
+		for(int clear = 0; clear < 12; clear++)
+		{
+			System.out.println() ;
+		}
+	}
+
+	public static void afficheMenuAjout() {
+		clearConsole();
+		System.out.println(" 					=========  AJOUT.  D' UN ORDINATEUR  ===========					");
+		clearConsole();
+	}
+	public static void afficheMenuSuppr() {
+		clearConsole();
+		System.out.println(" 					=========  SUPPR.  D' UN ORDINATEUR  ===========					");
+		clearConsole();
+	}
 	/**
 	 * 	AFFICHE DE LA LISTE DES COMPUTER
 	 * @param tableComputer
@@ -89,7 +112,7 @@ public class Testdb {
 
 		}));
 	}
-	
+
 	/**	
 	 * 		AFFICHE LA LISTE DES COMPANY
 	 * @param tableCompany
@@ -104,7 +127,11 @@ public class Testdb {
 		}));
 
 	}
-	
+	/**
+	 * 
+	 * @param sc
+	 * @param servcomputer
+	 */
 	public static void afficheFindbyId(Scanner sc, ServiceComputer servcomputer) {
 		System.out.println("Veullez saisir l' id de l'ordinateur ");
 		int id = sc.nextInt();
@@ -124,37 +151,38 @@ public class Testdb {
 			//System.out.println(" error aucun computer trouver");
 		}
 	}
-	
-	public final static void clearConsole()
-	{
-		for(int clear = 0; clear < 12; clear++)
-		  {
-		     System.out.println() ;
-		  }
-	}
-	public static void afficheMenuAjout() {
-	clearConsole();
-		System.out.println(" 					=========  AJOUT  D' UN ORDINATEUR  ===========					");
-		clearConsole();
-	}
-	public static void affichageAjoutOrdinateur(Scanner sc, ServiceComputer servcomputer) {
-			afficheMenuAjout();
-			System.out.println("Veuillez saisir le nom de nouveau ordinateur: ");
-			String name = sc.nextLine();
-			afficheMenuAjout();
-			System.out.println("Veuillez saisir la date d'introduction du nouveau ordinateur(AAAA\\MM\\JJ): ");
-			String date_introduced = sc.nextLine();
-			afficheMenuAjout();
-			System.out.println("Veuillez saisir la date d'introduction du nouveau ordinateur(AAAA\\\\MM\\\\JJ): ");
-			String date_discontinued = sc.nextLine();
-			afficheMenuAjout();
-			System.out.println("Veuillez saisir l'id de la company : ");
-			Long company_id = sc.nextLong();
-			sc.nextLine();
-			
-			ajoutOrdinateur(servcomputer,name,date_introduced,date_discontinued,company_id);
-	}
 
+
+	/**
+	 * 
+	 * @param sc
+	 * @param servcomputer
+	 */
+	public static void affichageAjoutOrdinateur(Scanner sc, ServiceComputer servcomputer) {
+		afficheMenuAjout();
+		System.out.println("Veuillez saisir le nom de nouveau ordinateur: ");
+		String name = sc.nextLine();
+		afficheMenuAjout();
+		System.out.println("Veuillez saisir la date d'introduction du nouveau ordinateur(AAAA\\MM\\JJ): ");
+		String date_introduced = sc.nextLine();
+		afficheMenuAjout();
+		System.out.println("Veuillez saisir la date d'introduction du nouveau ordinateur(AAAA\\\\MM\\\\JJ): ");
+		String date_discontinued = sc.nextLine();
+		afficheMenuAjout();
+		System.out.println("Veuillez saisir l'id de la company : ");
+		Long company_id = sc.nextLong();
+		sc.nextLine();
+
+		ajoutOrdinateur(servcomputer,name,date_introduced,date_discontinued,company_id);
+	}
+	/**
+	 * 
+	 * @param servcomputer
+	 * @param name
+	 * @param date_introduced
+	 * @param date_discontinued
+	 * @param company_id
+	 */
 	public static void ajoutOrdinateur(ServiceComputer servcomputer,String name, String date_introduced, String date_discontinued,Long company_id) {
 		Computer computer= new Computer();
 		computer.setName(name);
@@ -163,10 +191,21 @@ public class Testdb {
 		computer.setCompany_id(company_id);
 		servcomputer.getDao().create(computer);
 	}
-	
-	public static void pause(Scanner sc) {
-		System.out.println("Appuyer sur entree pour continuer .....");
+	/**
+	 * 
+	 * @param sc
+	 * @param servcomputer
+	 */
+	public static void affichageSupprOrdinateur(Scanner sc, ServiceComputer servcomputer) {
+		afficheMenuAjout();
+		System.out.println("Veuillez saisir le nom de ordinateur que vous souhaiter suppr.: ");
+		Long id = sc.nextLong();
 		sc.nextLine();
-		clearConsole();
+		Computer computer = new Computer();
+		computer.setId(id);
+		servcomputer.getDao().delete(computer);
+
 	}
+	
+
 }
