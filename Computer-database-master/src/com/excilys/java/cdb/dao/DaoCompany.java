@@ -7,50 +7,74 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import org.apache.log4j.Logger;
+
 import com.excilys.java.cdb.connectionManager.SingletonConn;
 import com.excilys.java.cdb.model.Company;
+import com.excilys.java.cdb.model.Computer;
 
 public class DaoCompany extends Dao<Company>{
 
-		final static String queryGetAll ="SELECT id,name FROM company  ";
+	final static String queryGetAll ="SELECT id,name FROM company  ";
+	final static String queryGetPage= "SELECT id, name FROM company LIMIT ? , ?";
+	final static Logger logger = Logger.getLogger(DaoCompany.class);
 
-	
+
 	/**
 	 * 		REQUETE SQL    RECUPERE LA LISTE DES COMPAGNIES
 	 */
 	@Override
 	public ArrayList<Company>getAll() {
-		// TODO Auto-generated method stub
-		Company ic = null ;
+		Company company = null ;
 		ArrayList<Company> listCompany = new ArrayList<Company>();
-			// requeste SQL 
-		 	Statement s;
-			//  Singleton connection manager
-		 	SingletonConn con= SingletonConn.INSTANCE;		
-			con.initConn();
-			try {
-							// preparation de la requete dans l'instance de connection
-				s = con.getConn().createStatement();										// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
-				ResultSet rs=s.executeQuery(queryGetAll);
-									// fermeture de connexion									
-					// lecture par ligne du resultats de la requetes
-				while(rs.next()) {
-					ic =new Company(rs.getLong("id"),rs.getString("name"));
-					listCompany.add(ic);
-				}
-				con.closeConn();
-				
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				
-				System.err.println(" error requetes GET ALL : " + e.getMessage());
+		Statement s;
+		SingletonConn con= SingletonConn.INSTANCE;		
+		con.initConn();
+		try {
+			s = con.getConn().createStatement();										// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
+			ResultSet rs=s.executeQuery(queryGetAll);
+			while(rs.next()) {
+				company =new Company(rs.getLong("id"),rs.getString("name"));
+				listCompany.add(company);
 			}
-			
-				
-			
-	// pas sur du retour
+			s.close();
+			con.closeConn();
+
+		} catch (SQLException e) {
+			logger.error(" error requetes GET ALL : " + e.getMessage());
+		}
 		return listCompany;
+	}
+
+
+	@Override
+	public ArrayList<Company> getPage(int offset) {
+		Company company = null ;
+		ArrayList<Company> listCompany = new ArrayList<Company>();
+		PreparedStatement s;
+		SingletonConn con= SingletonConn.INSTANCE;		
+		con.initConn();
+		try {
+			s = con.getConn().prepareStatement(queryGetPage);
+			s.setInt(1, offset);// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
+			s.setInt(2,10);
+			ResultSet rs=s.executeQuery();
+			while(rs.next()) {
+				company =new Company(rs.getLong("id"),rs.getString("name"));
+				listCompany.add(company);
+			}
+			s.close();
+			con.closeConn();
+			s.close();
+		} catch (SQLException e) {
+
+			logger.error(" error requetes GET ALL : " + e.getMessage());
+		}
+
+		return listCompany;
+
+
+
 	}
 
 

@@ -9,23 +9,23 @@ public class Computer {
 	private Timestamp introduced;
 	private Timestamp discontinued;
 	private Long company_id;
-	
+
 	public Computer() {
-		
+
 	}
 
 
 	public Computer(Long id, String name, Timestamp introduction, Timestamp discontinuation,Long company_id) {
-	
+
 		this.id=id;
 		this.name = name;
 		this.introduced = introduction;
 		this.discontinued = discontinuation;
 		this.company_id=company_id;
-		
+
 	}
 
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -132,7 +132,7 @@ public class Computer {
 			return false;
 		return true;
 	}
-	
-	
-	
+
+
+
 }

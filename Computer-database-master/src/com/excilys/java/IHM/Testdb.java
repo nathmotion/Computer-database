@@ -31,13 +31,14 @@ public class Testdb {
 
 			switch(choix){
 			case "1": 
-				ArrayList<Company>  tableCompany= servcompany.getDao().getAll();
+				ArrayList<Company>  tableCompany= servcompany.getDao().getPage(0);
 				afficheListCompany(tableCompany);
 				pause(sc);
 				continue;
 
 			case "2" :
-				ArrayList<Computer> tableComputer= servcomputer.getDao().getAll();
+				int offset = 0;
+				ArrayList<Computer> tableComputer= servcomputer.getDao().getPage(0);
 				afficheListComputer(tableComputer);
 				pause(sc);
 
@@ -89,6 +90,16 @@ public class Testdb {
 		}
 	}
 
+	public static void afficheMenuOrdinateurs() {
+		clearConsole();
+		System.out.println(" 					========= LISTE DES ORDINATEURS   ===========					");
+		clearConsole();
+	}
+	public static void afficheMenuCompany() {
+		clearConsole();
+		System.out.println(" 					=========  LISTE DES COMPAGNIES  ===========					");
+		clearConsole();
+	}
 	public static void afficheMenuAjout() {
 		clearConsole();
 		System.out.println(" 					=========  AJOUT.  D' UN ORDINATEUR  ===========					");
@@ -105,7 +116,7 @@ public class Testdb {
 	 */
 	public static void afficheListComputer(ArrayList<Computer> tableComputer) {
 		clearConsole();
-
+		afficheMenuOrdinateurs();
 		tableComputer.forEach((computer ->{
 			System.out.println("id: "+computer.getId());
 			System.out.println("name: "+computer.getName());
@@ -119,7 +130,7 @@ public class Testdb {
 	 */
 	public static void afficheListCompany(ArrayList<Company> tableCompany) {
 		clearConsole();
-
+		afficheMenuCompany();
 		tableCompany.forEach((company ->{
 			System.out.println("id: "+company.getId());
 			System.out.println("name: "+company.getName());
@@ -166,7 +177,7 @@ public class Testdb {
 		System.out.println("Veuillez saisir la date d'introduction du nouveau ordinateur(AAAA\\MM\\JJ): ");
 		String date_introduced = sc.nextLine();
 		afficheMenuAjout();
-		System.out.println("Veuillez saisir la date d'introduction du nouveau ordinateur(AAAA\\\\MM\\\\JJ): ");
+		System.out.println("Veuillez saisir la date d'introduction du nouveau ordinateur(AAAA\\MM\\JJ): ");
 		String date_discontinued = sc.nextLine();
 		afficheMenuAjout();
 		System.out.println("Veuillez saisir l'id de la company : ");
@@ -206,6 +217,6 @@ public class Testdb {
 		servcomputer.getDao().delete(computer);
 
 	}
-	
+
 
 }

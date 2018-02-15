@@ -14,6 +14,8 @@ import java.util.Optional;
 
 import javax.sound.sampled.AudioFileFormat.Type;
 
+import org.apache.log4j.Logger;
+
 import com.excilys.java.cdb.connectionManager.SingletonConn;
 import com.excilys.java.cdb.model.Company;
 import com.excilys.java.cdb.model.Computer;
@@ -21,19 +23,21 @@ import com.excilys.java.cdb.model.Computer;
 
 public class DaoComputer extends Dao<Computer>{
 
+	final static Logger logger = Logger.getLogger(DaoComputer.class);
 
 	final static String queryGetAll ="SELECT id, name, introduced, discontinued, company_id FROM computer  ";
 	final static String queryById = "SELECT id, name, introduced, discontinued, company_id FROM computer  WHERE id=?";
 	final static String queryUpdate = "UPDATE computer SET name= ?, instroduced=? , discontinued=? ,company_id= ? WHERE id =?";
 	final static String queryCreate= "INSERT INTO computer ( name, introduced, discontinued ,company_id) VALUES (?, ?, ?, ?)";
 	final static String queryDelete= "DELETE FROM computer WHERE id =?";
+	final static String queryGetPage= "SELECT id, name, introduced, discontinued, company_id FROM computer LIMIT ? , ?";
 
 	/**
 	 * REQUETES SQL 	RECUPERE LA LISTE DES COMPUTER
 	 */
 	@Override
 	public ArrayList<Computer> getAll() {
-		Computer ic = null ;
+		Computer icomputer = null ;
 		ArrayList<Computer> listComputer = new ArrayList<Computer>();
 		Statement s;
 		SingletonConn con= SingletonConn.INSTANCE;		
@@ -43,14 +47,15 @@ public class DaoComputer extends Dao<Computer>{
 			ResultSet rs=s.executeQuery(queryGetAll);
 			// lecture par ligne du resultats de la requetes
 			while(rs.next()) {
-				ic =new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));
-				listComputer.add(ic);
+				icomputer=new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));
+				listComputer.add(icomputer);
 			}
+			s.close();
 			con.closeConn();
-
+			s.close();
 		} catch (SQLException e) {
 
-			System.err.println(" error requetes GET ALL : " + e.getMessage());
+			logger.error(" error requetes GET ALL : " + e.getMessage());
 		}
 
 		return listComputer;
@@ -58,6 +63,36 @@ public class DaoComputer extends Dao<Computer>{
 
 
 
+	@Override
+	public ArrayList<Computer> getPage(int offset) {
+		Computer icomputer = null ;
+		ArrayList<Computer> listComputer = new ArrayList<Computer>();
+		PreparedStatement s;
+		SingletonConn con= SingletonConn.INSTANCE;		
+		con.initConn();
+		try {
+			s = con.getConn().prepareStatement(queryGetPage);
+			s.setInt(1, offset);// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
+			s.setInt(2,10);
+			ResultSet rs=s.executeQuery();
+			// lecture par ligne du resultats de la requetes
+			while(rs.next()) {
+				icomputer=new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));
+				listComputer.add(icomputer);
+			}
+			s.close();
+			con.closeConn();
+			s.close();
+		} catch (SQLException e) {
+
+			logger.error(" error requetes GET ALL : " + e.getMessage());
+		}
+
+		return listComputer;
+
+
+
+	}
 
 	/**
 	 * REQUETES SQL 	AJOUTE UN ORDINATEUR PASSER PAR PARAMETRE 
@@ -88,13 +123,13 @@ public class DaoComputer extends Dao<Computer>{
 			ps.setLong(4,obj.getCompany_id());
 			ps.executeUpdate();
 			System.out.println("Ajout reussi ... ");
-
+			ps.close();
 			con.closeConn();
 			return true;
 
 		} catch (SQLException e) {
 
-			System.err.println(" error requete CREATE  : " + e.getMessage());
+			logger.error(" error requete CREATE  : " + e.getMessage());
 		}
 
 
@@ -121,12 +156,13 @@ public class DaoComputer extends Dao<Computer>{
 			ps.setLong(4,obj.getCompany_id());
 			ps.setLong(5,obj.getId());
 			ps.executeUpdate();
+			ps.close();
 			con.closeConn();
 			return true;
 
 		} catch (SQLException e) {
 
-			System.err.println(" error requete Update  : " + e.getMessage());
+			logger.error(" error requete Update  : " + e.getMessage());
 		}
 		return false;
 	}
@@ -150,7 +186,7 @@ public class DaoComputer extends Dao<Computer>{
 
 		} catch (SQLException e) {
 
-			System.err.println(" error requete DELETE  : " + e.getMessage());
+			logger.error(" error requete DELETE  : " + e.getMessage());
 		}
 		return false;
 	}
@@ -176,11 +212,15 @@ public class DaoComputer extends Dao<Computer>{
 			con.closeConn();
 		} catch (SQLException e) {
 
-			System.err.println(" error requetes GET ALL : " + e.getMessage());
+			logger.error(" error requetes GET ALL : " + e.getMessage());
 		}
 		Optional<Computer> op= Optional.ofNullable(icomputer);
 		return op;
 	}
+
+
+
+
 
 
 }

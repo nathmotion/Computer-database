@@ -3,11 +3,11 @@ package com.excilys.java.cdb.service;
 import com.excilys.java.cdb.dao.DaoComputer;
 
 public enum ServiceComputer {
-			INSTANCE;
-	
+	INSTANCE;
+
 
 	private DaoComputer daocomputer ;
-	
+
 	ServiceComputer(){
 		daocomputer = new DaoComputer();
 	}
@@ -17,6 +17,6 @@ public enum ServiceComputer {
 	 */
 	public DaoComputer getDao(){
 		return daocomputer;
-		
+
 	}
 }
