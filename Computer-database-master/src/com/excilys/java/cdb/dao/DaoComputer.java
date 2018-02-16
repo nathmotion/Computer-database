@@ -37,7 +37,7 @@ public class DaoComputer extends Dao<Computer>{
 	final static String queryGetPage= "SELECT id, name, introduced, discontinued, company_id FROM computer LIMIT ? , ?";
 
 	/**
-	 * REQUETES SQL 	RECUPERE LA LISTE DES COMPUTER
+	 *              				======== REQUETES SQL 	RECUPERE LA LISTE DES COMPUTER   ==============
 	 */
 	@Override
 	public ArrayList<Computer> getAll() {
@@ -66,7 +66,9 @@ public class DaoComputer extends Dao<Computer>{
 	}
 
 
-
+	/**
+	 * 											=======	Pagination 	Computer =======
+	 */
 	@Override
 	public ArrayList<Computer> getPage(int offset) {
 		Computer icomputer = null ;
@@ -76,10 +78,9 @@ public class DaoComputer extends Dao<Computer>{
 		con.initConn();
 		try {
 			s = con.getConn().prepareStatement(queryGetPage);
-			s.setInt(1, offset);// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
+			s.setInt(1, offset);
 			s.setInt(2,10);
 			ResultSet rs=s.executeQuery();
-			// lecture par ligne du resultats de la requetes
 			while(rs.next()) {
 				icomputer=new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));
 				listComputer.add(icomputer);
@@ -99,7 +100,7 @@ public class DaoComputer extends Dao<Computer>{
 	}
 
 	/**
-	 * REQUETES SQL 	AJOUTE UN ORDINATEUR PASSER PAR PARAMETRE 
+	 *                          ======= REQUETES SQL AJOUTE UN ORDINATEUR PASSER PAR PARAMETRE ============= 
 	 * @param obj
 	 * @return
 	 */
@@ -108,12 +109,8 @@ public class DaoComputer extends Dao<Computer>{
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
 		try {
-
 			ps = con.getConn().prepareStatement(queryCreate);
-			ps.setString(1, obj.getName());
-			
-			
-			
+			ps.setString(1, obj.getName());		
 			if( obj.getIntroduced()!=null) {
 				ps.setTimestamp(2,obj.getIntroduced());
 			}
@@ -126,8 +123,11 @@ public class DaoComputer extends Dao<Computer>{
 			else {
 				ps.setTimestamp(3,null);
 			}
-
-			ps.setLong(4,obj.getCompany_id());
+			if(obj.getCompany_id()!=0) {
+                ps.setLong(4, obj.getCompany_id());
+            }else {
+                ps.setNull(4, Types.INTEGER);
+            }
 			ps.executeUpdate();
 			System.out.println("Ajout reussi ... ");
 			ps.close();
@@ -146,7 +146,7 @@ public class DaoComputer extends Dao<Computer>{
 
 
 	/**
-	 * 	REQUETES SQL 	MIS A JOUR UN ORDINATEUR PASSER PAR PARAMETRE 	
+	 * 							========== REQUETES SQL 	MIS A JOUR UN ORDINATEUR PASSER PAR PARAMETRE  ============ 	
 	 * @param obj
 	 * @return
 	 */
@@ -155,7 +155,6 @@ public class DaoComputer extends Dao<Computer>{
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
 		try {
-
 			ps = con.getConn().prepareStatement(queryUpdate);
 			ps.setString(1, obj.getName());
 			ps.setTimestamp(2,obj.getIntroduced());
@@ -166,16 +165,14 @@ public class DaoComputer extends Dao<Computer>{
 			ps.close();
 			con.closeConn();
 			return true;
-
 		} catch (SQLException e) {
-
 			logger.error(" error requete Update  : " + e.getMessage());
 		}
 		return false;
 	}
 
 	/**
-	 * REQUETES SQL 	SUPPRIMER UN ORDINATEUR PASSER PAR PARAMETRE 
+	 * 								====== 	REQUETES SQL 	SUPPRIMER UN ORDINATEUR PASSER PAR PARAMETRE ===========
 	 * @param obj
 	 * @return
 	 */
@@ -184,22 +181,19 @@ public class DaoComputer extends Dao<Computer>{
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
 		try {
-
 			ps = con.getConn().prepareStatement(queryDelete);
 			ps.setLong(1,computer.getId());
 			ps.executeUpdate();
 			con.closeConn();
 			return true;
-
 		} catch (SQLException e) {
-
 			logger.error(" error requete DELETE  : " + e.getMessage());
 		}
 		return false;
 	}
 
 	/**
-	 * REQUETES SQL 	RECUPERE UN ORDINATEUR PASSER PAR PARAMETRE 
+	 * 							===== REQUETES SQL 	RECUPERE UN ORDINATEUR PASSER PAR PARAMETRE ===========
 	 * @param id
 	 * @return
 	 */
@@ -212,13 +206,11 @@ public class DaoComputer extends Dao<Computer>{
 			stat = con.getConn().prepareStatement(queryById);
 			stat.setInt(1,id);																									// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
 			ResultSet rs=stat.executeQuery();
-			// lecture par ligne du resultats de la requetes
 			while(rs.next()) {
 				icomputer =new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));
 			}
 			con.closeConn();
 		} catch (SQLException e) {
-
 			logger.error(" error requetes GET ALL : " + e.getMessage());
 		}
 		Optional<Computer> op= Optional.ofNullable(icomputer);

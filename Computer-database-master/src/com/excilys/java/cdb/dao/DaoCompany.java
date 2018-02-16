@@ -21,7 +21,7 @@ public class DaoCompany extends Dao<Company>{
 
 
 	/**
-	 * 		REQUETE SQL    RECUPERE LA LISTE DES COMPAGNIES
+	 * 								========	REQUETE SQL    RECUPERE LA LISTE DES COMPAGNIES	========
 	 */
 	@Override
 	public ArrayList<Company>getAll() {
@@ -46,7 +46,9 @@ public class DaoCompany extends Dao<Company>{
 		return listCompany;
 	}
 
-
+	/**
+	 *												 ========	REQUETE SQL    RECUPERE COMPANY PAR PAGE	========
+	 */
 	@Override
 	public ArrayList<Company> getPage(int offset) {
 		Company company = null ;

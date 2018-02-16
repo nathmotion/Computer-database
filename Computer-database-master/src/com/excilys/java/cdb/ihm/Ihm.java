@@ -19,12 +19,12 @@ import com.excilys.java.cdb.service.ServiceCompany;
 import com.excilys.java.cdb.service.ServiceComputer;
 
 public class Ihm {
-	final static Logger logger = Logger.getLogger(DaoComputer.class);
+	final static Logger logger = Logger.getLogger(Ihm.class);
 
 	ServiceCompany servcompany = ServiceCompany.INSTANCE;
 	ServiceComputer servcomputer = ServiceComputer.INSTANCE;
 	Scanner sc =  new Scanner(System.in);
-	String choix ;
+	static String choix;
 
 
 
@@ -38,7 +38,7 @@ public class Ihm {
 
 
 	/**
-	 * 				================	 C L I   ================
+	 * 												================	 C L I   ================
 	 */
 	public void  startCLI() {
 		do {	
@@ -54,10 +54,11 @@ public class Ihm {
 
 			case "2" :
 				int offset = 0;
-				ArrayList<Computer> tableComputer= servcomputer.getDao().getPage(0);
+				do {
+				ArrayList<Computer> tableComputer= servcomputer.getDao().getPage(offset);
 				afficheListComputer(tableComputer);
-				pause(sc);
-
+				offset = optionPage(sc,offset);
+				}while(choix.equals("quit"));
 				continue;
 
 			case "3" :
@@ -68,12 +69,14 @@ public class Ihm {
 				continue;
 			case "4" :
 				affichageAjoutOrdinateur(sc,servcomputer);
-
 				continue;
+			case "5":
+				
 			case "6" :
 				affichageSupprOrdinateur(sc,servcomputer);
 				sc.nextLine();
 				continue;
+				
 			default : 
 				System.out.println(" L'option que vous avez choisie n'est pas dans la liste de choix ");
 				pause(sc);
@@ -85,7 +88,7 @@ public class Ihm {
 	}
 	
 	/**
-	 * 	AFFICHE DE LA LISTE DES COMPUTER
+	 * 										=============	AFFICHE DE LA LISTE DES COMPUTER	=============
 	 * @param tableComputer
 	 */
 
@@ -100,7 +103,7 @@ public class Ihm {
 	}
 
 	/**	
-	 * 		AFFICHE LA LISTE DES COMPANY
+	 * 										=============	AFFICHE LA LISTE DES COMPANY 	=============
 	 * @param tableCompany
 	 */
 	public static void afficheListCompany(ArrayList<Company> tableCompany) {
@@ -114,7 +117,7 @@ public class Ihm {
 
 	}
 	/**
-	 * 
+	 *  										=============	AFFICHAGE DU RESULTATS RECHERCHE PAR ID 	=============
 	 * @param sc
 	 * @param servcomputer
 	 */
@@ -139,7 +142,7 @@ public class Ihm {
 
 
 	/**
-	 * 
+	 * 										=============	AFFICHAGE DU MENU D'AJOUT	D'UN ORDINATEUR	 	=============
 	 * @param sc
 	 * @param servcomputer
 	 */
@@ -179,7 +182,7 @@ public class Ihm {
 
 
 	/**
-	 * 
+	 * 										=============	GESTION DU CLI D'AJOUT	D'UN ORDINATEUR	 	=============
 	 * @param servcomputer
 	 * @param name
 	 * @param date_introduced
@@ -207,7 +210,7 @@ public class Ihm {
 		servcomputer.getDao().create(computer);
 	}
 	/**
-	 * 
+	 * 										=============	AFFICHAGE DU MENU SUPPR. D'UN ORDINATEUR	 	=============
 	 * @param sc
 	 * @param servcomputer
 	 */
@@ -221,19 +224,13 @@ public class Ihm {
 		servcomputer.getDao().delete(computer);
 
 	}
+	
+	/**	
+	 *										=============	AFFICHAGE DU MENU D'AJOUT	D'UN ORDINATEUR	 	=============
+	 * @param stringDate
+	 * @return
+	 */
 	public static Timestamp convertStringtoTimestamp(String stringDate) {
-
-		/*DateFormat formatter;
-		formatter = new SimpleDateFormat("dd/MM/yyyy");
-		Date date = null;
-		try {
-			date = (Date) formatter.parse(stringDate);
-		} catch (ParseException e) {
-			logger.error("convertion date to timestamp");
-		}
-		Timestamp timeStampDate = new Timestamp(date.getTime());*/
-		
-
 	    SimpleDateFormat dateFormat = new SimpleDateFormat(
 	            "yyyy-MM-dd hh:mm:ss:SSS");
 
@@ -251,7 +248,7 @@ public class Ihm {
 	}
 
 	/**
-	 *  AFFICHE LE MENU 
+	 *  										=============	AFFICHAGE DU MENU	 	=============
 	 */
 	public static void printMenu() {
 		afficheMenu(" M E N U ");
@@ -261,12 +258,34 @@ public class Ihm {
 		System.out.println("5) mise a jour d'un ordinateur					6) Supprimer un ordinateur ");
 		System.out.println("Saisir votre choix : ");
 	}
+	/**
+	 * 										=============	AFFICHAGE DE PAUSE 	=============
+	 * @param sc
+	 */
 	public static void pause(Scanner sc) {
 		System.out.println("Appuyer sur entree pour continuer .....");
 		sc.nextLine();
 		clearConsole(20);
 	}
-
+	/**
+	 * 										=============	AFFICHAGE D'OPTION DE LA PAGE	 	=============
+	 * @param sc
+	 * @param offset
+	 * @return
+	 */
+	public static int optionPage(Scanner sc,int offset) {
+		System.out.println("	quit : for exit		enter: for continue	");
+		choix =sc.nextLine();
+		if(!choix.equals("quit")) {
+			offset++;
+		}
+		clearConsole(20);
+		return offset;
+	}
+	/**
+	 * 										=============	AFFICHAGE DU MENU D'AJOUT	D'UN ORDINATEUR	 	=============
+	 * @param l
+	 */
 	public final static void clearConsole(int l)
 	{
 		for(int clear = 0; clear < l; clear++)
@@ -274,6 +293,10 @@ public class Ihm {
 			System.out.println() ;
 		}
 	}
+	/**
+	  										=============	AFFICHAGE DES ENTETES DE MENU	 	=============
+	 * @param menu
+	 */
 	public static void afficheMenu(String menu) {
 		clearConsole(20);
 		System.out.println(" 					========= "+menu+" ===========					");
