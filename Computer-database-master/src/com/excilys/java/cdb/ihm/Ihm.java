@@ -47,17 +47,19 @@ public class Ihm {
 
 			switch(choix){
 			case "1": 
-				ArrayList<Company>  tableCompany= servcompany.getDao().getPage(0);
+				int offsetCompany = 0;
+				ArrayList<Company>  tableCompany= servcompany.getDao().getPage(offsetCompany);
 				afficheListCompany(tableCompany);
 				pause(sc);
 				continue;
 
 			case "2" :
 				int offset = 0;
+				int nbComputer =servcomputer.getDao().getNbComputer();
 				do {
 					ArrayList<Computer> tableComputer= servcomputer.getDao().getPage(offset);
 					afficheListComputer(tableComputer);
-					offset = optionPage(sc,offset);
+					offset = optionPage(sc,offset,nbComputer);
 				}while(!choix.equals("quit"));
 				continue;
 
@@ -125,8 +127,7 @@ public class Ihm {
 	public static void afficheFindbyId(Scanner sc, ServiceComputer servcomputer) {
 		System.out.println("Veullez saisir l' id de l'ordinateur ");
 		int id = sc.nextInt();
-
-
+		sc.nextLine();
 		Optional<Computer> opcomputer = servcomputer.getDao().findById(id)	;
 		if(opcomputer.isPresent())
 		{
@@ -138,7 +139,9 @@ public class Ihm {
 			System.out.println("company_id: "+computer.getCompany_id());
 		}
 		else {
+			System.out.println("Aucun Computer n'a été trouver avec cet id = "+ id);
 		}
+		
 	}
 
 
@@ -227,7 +230,7 @@ public class Ihm {
 	}
 
 	/**	
-	 *										=============	AFFICHAGE DU MENU D'AJOUT	D'UN ORDINATEUR	 	=============
+	 *										=============	CONVERSITION DATE TO TIMESTAMP	 	=============
 	 * @param stringDate
 	 * @return
 	 */
@@ -274,8 +277,11 @@ public class Ihm {
 	 * @param offset
 	 * @return
 	 */
-	public static int optionPage(Scanner sc,int offset) {
-		System.out.println("	quit : for exit		enter: for continue	");
+	public static int optionPage(Scanner sc,int offset, int nbComputer) {
+		int pagecourant = (offset/10)+1;
+		int totalPage = nbComputer/10;
+		System.out.println("					"+pagecourant+"/"+totalPage+"			");
+		System.out.println("			quit : for exit			enter: for continue	");
 		choix =sc.nextLine();
 		if(!choix.equals("quit")) {
 			offset+=10;

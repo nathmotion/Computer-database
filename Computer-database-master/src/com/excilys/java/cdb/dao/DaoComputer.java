@@ -35,7 +35,7 @@ public class DaoComputer extends Dao<Computer>{
 	final static String queryCreate= "INSERT INTO computer ( name, introduced, discontinued ,company_id) VALUES (?, ?, ?, ?)";
 	final static String queryDelete= "DELETE FROM computer WHERE id =?";
 	final static String queryGetPage= "SELECT id, name, introduced, discontinued, company_id FROM computer LIMIT ? , ?";
-
+	final static String queryNbComputer="SELECT count(*) as nbcomputer FROM computer";
 	/**
 	 *              						======== REQUETES SQL 	RECUPERE LA LISTE DES COMPUTER   ==============
 	 */
@@ -63,7 +63,7 @@ public class DaoComputer extends Dao<Computer>{
 
 
 	/**
-	 * 														=======	Pagination 	Computer =======
+	 * 														=======	PAGINATION	Computer =======
 	 */
 	@Override
 	public ArrayList<Computer> getPage(int offset) {
@@ -91,6 +91,29 @@ public class DaoComputer extends Dao<Computer>{
 
 
 	}
+	/**
+	 * 
+	 * @return
+	 */
+	public int getNbComputer() {
+		SingletonConn con= SingletonConn.INSTANCE;		
+		con.initConn();
+		int nbComputer=0;
+		System.out.println("coouocu");
+		try(Statement s = con.getConn().createStatement()) {
+			ResultSet rs=s.executeQuery(queryNbComputer);
+			while(rs.next()) {
+				nbComputer=rs.getInt("nbcomputer");
+			}
+			con.closeConn();
+		} catch (SQLException e) {
+
+			logger.error(" error requetes GET ALL : " + e.getMessage());
+		}
+		System.out.println(" nbComputer =" +nbComputer);
+		return nbComputer;
+
+	}
 
 	/**
 	 *                         			 ======= REQUETES SQL AJOUTE UN ORDINATEUR PASSER PAR PARAMETRE ============= 
@@ -110,7 +133,7 @@ public class DaoComputer extends Dao<Computer>{
 			else {
 				ps.setTimestamp(2, null);
 			}
-			if( obj.getIntroduced()!=null) {
+			if( obj.getDiscontinued()!=null) {
 				ps.setTimestamp(3, obj.getDiscontinued());
 			}
 			else {
