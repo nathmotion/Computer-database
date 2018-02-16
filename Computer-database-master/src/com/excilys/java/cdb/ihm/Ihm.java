@@ -55,10 +55,10 @@ public class Ihm {
 			case "2" :
 				int offset = 0;
 				do {
-				ArrayList<Computer> tableComputer= servcomputer.getDao().getPage(offset);
-				afficheListComputer(tableComputer);
-				offset = optionPage(sc,offset);
-				}while(choix.equals("quit"));
+					ArrayList<Computer> tableComputer= servcomputer.getDao().getPage(offset);
+					afficheListComputer(tableComputer);
+					offset = optionPage(sc,offset);
+				}while(!choix.equals("quit"));
 				continue;
 
 			case "3" :
@@ -71,12 +71,14 @@ public class Ihm {
 				affichageAjoutOrdinateur(sc,servcomputer);
 				continue;
 			case "5":
-				
+
 			case "6" :
 				affichageSupprOrdinateur(sc,servcomputer);
 				sc.nextLine();
 				continue;
-				
+			case "exit":
+				System.out.println(" Bye ...");
+				continue;
 			default : 
 				System.out.println(" L'option que vous avez choisie n'est pas dans la liste de choix ");
 				pause(sc);
@@ -86,7 +88,7 @@ public class Ihm {
 
 		}while(!choix.equals("exit"));
 	}
-	
+
 	/**
 	 * 										=============	AFFICHE DE LA LISTE DES COMPUTER	=============
 	 * @param tableComputer
@@ -224,31 +226,31 @@ public class Ihm {
 		servcomputer.getDao().delete(computer);
 
 	}
-	
+
 	/**	
 	 *										=============	AFFICHAGE DU MENU D'AJOUT	D'UN ORDINATEUR	 	=============
 	 * @param stringDate
 	 * @return
 	 */
 	public static Timestamp convertStringtoTimestamp(String stringDate) {
-	    SimpleDateFormat dateFormat = new SimpleDateFormat(
-	            "yyyy-MM-dd hh:mm:ss:SSS");
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd hh:mm:ss:SSS");
 
-	   java.util.Date parsedTimeStamp = null;
-	try {
-		parsedTimeStamp = dateFormat.parse(stringDate);
-	} catch (ParseException e) {
-		logger.error("convertion date to timestamp");
+		java.util.Date parsedTimeStamp = null;
+		try {
+			parsedTimeStamp = dateFormat.parse(stringDate);
+		} catch (ParseException e) {
+			logger.error("convertion date to timestamp");
 
-	}
+		}
 
-	    Timestamp timestamp = new Timestamp(parsedTimeStamp.getTime());
+		Timestamp timestamp = new Timestamp(parsedTimeStamp.getTime());
 
 		return timestamp;
 	}
 
 	/**
-	 *  										=============	AFFICHAGE DU MENU	 	=============
+	 *  										=============	AFFICHAGE DU MENU		=============
 	 */
 	public static void printMenu() {
 		afficheMenu(" M E N U ");
@@ -277,7 +279,7 @@ public class Ihm {
 		System.out.println("	quit : for exit		enter: for continue	");
 		choix =sc.nextLine();
 		if(!choix.equals("quit")) {
-			offset++;
+			offset+=10;
 		}
 		clearConsole(20);
 		return offset;
