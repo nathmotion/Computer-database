@@ -1,5 +1,6 @@
 package com.excilys.java.cdb.dao;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,6 +8,9 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -107,6 +111,9 @@ public class DaoComputer extends Dao<Computer>{
 
 			ps = con.getConn().prepareStatement(queryCreate);
 			ps.setString(1, obj.getName());
+			
+			
+			
 			if( obj.getIntroduced()!=null) {
 				ps.setTimestamp(2,obj.getIntroduced());
 			}
@@ -217,7 +224,6 @@ public class DaoComputer extends Dao<Computer>{
 		Optional<Computer> op= Optional.ofNullable(icomputer);
 		return op;
 	}
-
 
 
 

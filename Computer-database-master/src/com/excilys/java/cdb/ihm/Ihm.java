@@ -1,30 +1,46 @@
-package com.excilys.java.IHM;
+package com.excilys.java.cdb.ihm;
 
-import java.io.Console;
-import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
 
+import org.apache.log4j.Logger;
+
+import com.excilys.java.cdb.dao.DaoComputer;
 import com.excilys.java.cdb.model.Company;
 import com.excilys.java.cdb.model.Computer;
 import com.excilys.java.cdb.service.ServiceCompany;
 import com.excilys.java.cdb.service.ServiceComputer;
 
+public class Ihm {
+	final static Logger logger = Logger.getLogger(DaoComputer.class);
 
-public class Testdb {
+	ServiceCompany servcompany = ServiceCompany.INSTANCE;
+	ServiceComputer servcomputer = ServiceComputer.INSTANCE;
+	Scanner sc =  new Scanner(System.in);
+	String choix ;
+
+
+
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		ServiceCompany servcompany = ServiceCompany.INSTANCE;
-		ServiceComputer servcomputer = ServiceComputer.INSTANCE;
-		String choix ;
+		Ihm myCLI= new Ihm();
+		myCLI.startCLI();
+	}
 
-		//===========	 C L I	===========
-		Scanner sc =  new Scanner(System.in);
+
+
+
+	/**
+	 * 				================	 C L I   ================
+	 */
+	public void  startCLI() {
 		do {	
 			printMenu();
 			choix = sc.nextLine();
@@ -66,15 +82,13 @@ public class Testdb {
 
 
 		}while(!choix.equals("exit"));
-
 	}
-
-
 	
 	/**
 	 * 	AFFICHE DE LA LISTE DES COMPUTER
 	 * @param tableComputer
 	 */
+
 	public static void afficheListComputer(ArrayList<Computer> tableComputer) {
 		clearConsole(20);
 		afficheMenu(" LISTE DES ORDINATEURS ");
@@ -120,7 +134,6 @@ public class Testdb {
 			System.out.println("company_id: "+computer.getCompany_id());
 		}
 		else {
-			//System.out.println(" error aucun computer trouver");
 		}
 	}
 
@@ -135,18 +148,36 @@ public class Testdb {
 		System.out.println("Veuillez saisir le nom de nouveau ordinateur: ");
 		String name = sc.nextLine();
 		afficheMenu(" AJOUT D'UN ORDINATEUR");
-		System.out.println("Veuillez saisir la date d'introduction du nouveau ordinateur(AAAA\\MM\\JJ): ");
-		String date_introduced = sc.nextLine();
+		System.out.println("Entrez l'année la date d'introduction du nouveau ordinateur: ");
+		String year = sc.nextLine();
 		afficheMenu(" AJOUT D'UN ORDINATEUR");
-		System.out.println("Veuillez saisir la date d'introduction du nouveau ordinateur(AAAA\\MM\\JJ): ");
-		String date_discontinued = sc.nextLine();
+		System.out.println("Entrez le mois la date d'introduction du nouveau ordinateur: ");
+		String month = sc.nextLine();
+		afficheMenu(" AJOUT D'UN ORDINATEUR");
+		System.out.println("Entrez le jour la date d'introduction du nouveau ordinateur: ");
+		String day = sc.nextLine();
+		afficheMenu(" AJOUT D'UN ORDINATEUR");
+		System.out.println("Entrez l'année la date de retrait du nouveau ordinateur: ");
+		String yeardisc = sc.nextLine();
+		afficheMenu(" AJOUT D'UN ORDINATEUR");
+		System.out.println("Entrez le mois la date de retrait du nouveau ordinateur: ");
+		String monthdisc = sc.nextLine();
+		afficheMenu(" AJOUT D'UN ORDINATEUR");
+		System.out.println("Entrez le jour la date de retrait du nouveau ordinateur: ");
+		String daydisc = sc.nextLine();
 		afficheMenu(" AJOUT D'UN ORDINATEUR");
 		System.out.println("Veuillez saisir l'id de la company : ");
 		Long company_id = sc.nextLong();
 		sc.nextLine();
 
+		String date_introduced =year+"-"+month+"-"+day+" 00:00:00:000";
+		String date_discontinued = yeardisc+"-"+monthdisc+"-"+daydisc+" 00:00:00:000";
 		ajoutOrdinateur(servcomputer,name,date_introduced,date_discontinued,company_id);
 	}
+
+
+
+
 	/**
 	 * 
 	 * @param servcomputer
@@ -158,8 +189,20 @@ public class Testdb {
 	public static void ajoutOrdinateur(ServiceComputer servcomputer,String name, String date_introduced, String date_discontinued,Long company_id) {
 		Computer computer= new Computer();
 		computer.setName(name);
-		computer.setIntroduced(Timestamp.valueOf(LocalDateTime.now()));
-		computer.setDiscontinued(null);
+
+		if(date_introduced.isEmpty()) {
+			computer.setIntroduced(Timestamp.valueOf(LocalDateTime.now()));
+		}
+		else{
+			computer.setIntroduced(convertStringtoTimestamp(date_introduced));
+		}
+
+		if(date_discontinued.isEmpty()) {
+			computer.setDiscontinued(convertStringtoTimestamp("0000-00-00"));
+		}
+		else {
+			computer.setDiscontinued(convertStringtoTimestamp(date_introduced));
+		}
 		computer.setCompany_id(company_id);
 		servcomputer.getDao().create(computer);
 	}
@@ -178,6 +221,34 @@ public class Testdb {
 		servcomputer.getDao().delete(computer);
 
 	}
+	public static Timestamp convertStringtoTimestamp(String stringDate) {
+
+		/*DateFormat formatter;
+		formatter = new SimpleDateFormat("dd/MM/yyyy");
+		Date date = null;
+		try {
+			date = (Date) formatter.parse(stringDate);
+		} catch (ParseException e) {
+			logger.error("convertion date to timestamp");
+		}
+		Timestamp timeStampDate = new Timestamp(date.getTime());*/
+		
+
+	    SimpleDateFormat dateFormat = new SimpleDateFormat(
+	            "yyyy-MM-dd hh:mm:ss:SSS");
+
+	   java.util.Date parsedTimeStamp = null;
+	try {
+		parsedTimeStamp = dateFormat.parse(stringDate);
+	} catch (ParseException e) {
+		logger.error("convertion date to timestamp");
+
+	}
+
+	    Timestamp timestamp = new Timestamp(parsedTimeStamp.getTime());
+
+		return timestamp;
+	}
 
 	/**
 	 *  AFFICHE LE MENU 
@@ -187,7 +258,7 @@ public class Testdb {
 		System.out.println();
 		System.out.println("1) Afficher listes des compagnies				2) Afficher listes des ordinateurs ");
 		System.out.println("3) Affiches Les detail Ordinateur				4) Ajouter un ordinateur ");
-		System.out.println("5) mise a jour d'un ordinateur					6) Supprimer d'un ordinateur ");
+		System.out.println("5) mise a jour d'un ordinateur					6) Supprimer un ordinateur ");
 		System.out.println("Saisir votre choix : ");
 	}
 	public static void pause(Scanner sc) {
@@ -208,5 +279,4 @@ public class Testdb {
 		System.out.println(" 					========= "+menu+" ===========					");
 		clearConsole(3);
 	}
-
 }
