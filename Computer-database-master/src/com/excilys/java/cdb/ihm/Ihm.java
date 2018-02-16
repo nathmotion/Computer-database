@@ -63,18 +63,17 @@ public class Ihm {
 
 			case "3" :
 				afficheFindbyId(sc,servcomputer);
-				sc.nextLine();
 				pause(sc);
-
 				continue;
 			case "4" :
 				affichageAjoutOrdinateur(sc,servcomputer);
+				pause(sc);
 				continue;
 			case "5":
 
 			case "6" :
 				affichageSupprOrdinateur(sc,servcomputer);
-				sc.nextLine();
+				pause(sc);
 				continue;
 			case "exit":
 				System.out.println(" Bye ...");
@@ -218,7 +217,7 @@ public class Ihm {
 	 */
 	public static void affichageSupprOrdinateur(Scanner sc, ServiceComputer servcomputer) {
 		afficheMenu("SUPPR . D'UN ORDINATEUR");
-		System.out.println("Veuillez saisir le nom de ordinateur que vous souhaiter suppr.: ");
+		System.out.println("Veuillez saisir l'id de ordinateur que vous souhaiter suppr.: ");
 		Long id = sc.nextLong();
 		sc.nextLine();
 		Computer computer = new Computer();
