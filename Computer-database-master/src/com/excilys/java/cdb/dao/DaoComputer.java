@@ -117,30 +117,31 @@ public class DaoComputer extends Dao<Computer>{
 
 	/**
 	 *                         			 ======= REQUETES SQL AJOUTE UN ORDINATEUR PASSER PAR PARAMETRE ============= 
-	 * @param obj
+	 * @param computer
 	 * @return
 	 */
-	public boolean create(Computer obj) {
+	public boolean create(Computer computer) {
 
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
 		try(PreparedStatement ps= con.getConn().prepareStatement(queryCreate)) {
 
-			ps.setString(1, obj.getName());		
-			if( obj.getIntroduced()!=null) {
-				ps.setTimestamp(2,obj.getIntroduced());
+			ps.setString(1, computer.getName());		
+			if( computer.getIntroduced()!=null) {
+				
+				ps.setTimestamp(2,computer.getIntroduced());
 			}
 			else {
 				ps.setTimestamp(2, null);
 			}
-			if( obj.getDiscontinued()!=null) {
-				ps.setTimestamp(3, obj.getDiscontinued());
+			if( computer.getDiscontinued()!=null) {
+				ps.setTimestamp(3, computer.getDiscontinued());
 			}
 			else {
 				ps.setTimestamp(3,null);
 			}
-			if(obj.getCompany_id()!=0) {
-				ps.setLong(4, obj.getCompany_id());
+			if(computer.getCompany_id()!=0) {
+				ps.setLong(4, computer.getCompany_id());
 			}else {
 				ps.setNull(4, Types.INTEGER);
 			}
@@ -162,19 +163,19 @@ public class DaoComputer extends Dao<Computer>{
 
 	/**
 	 * 										========== REQUETES SQL 	MIS A JOUR UN ORDINATEUR PASSER PAR PARAMETRE  ============ 	
-	 * @param obj
+	 * @param computer
 	 * @return
 	 */
-	public boolean update(Computer obj) {
+	public boolean update(Computer computer) {
 
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
 		try(PreparedStatement ps=con.getConn().prepareStatement(queryUpdate)) {
-			ps.setString(1, obj.getName());
-			ps.setTimestamp(2,obj.getIntroduced());
-			ps.setTimestamp(3, obj.getDiscontinued());
-			ps.setLong(4,obj.getCompany_id());
-			ps.setLong(5,obj.getId());
+			ps.setString(1, computer.getName());
+			ps.setTimestamp(2,computer.getIntroduced());
+			ps.setTimestamp(3, computer.getDiscontinued());
+			ps.setLong(4,computer.getCompany_id());
+			ps.setLong(5,computer.getId());
 			ps.executeUpdate();
 			con.closeConn();
 			System.out.println("mise a jour reussi ... ");
@@ -187,7 +188,7 @@ public class DaoComputer extends Dao<Computer>{
 
 	/**
 	 * 								    	====== 	REQUETES SQL 	SUPPRIMER UN ORDINATEUR PASSER PAR PARAMETRE ===========
-	 * @param obj
+	 * @param computer
 	 * @return
 	 */
 	public boolean delete(Computer computer) {
@@ -216,7 +217,7 @@ public class DaoComputer extends Dao<Computer>{
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
 		try(PreparedStatement stat= con.getConn().prepareStatement(queryById)){
-			stat.setInt(1,id);																									// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
+			stat.setInt(1,id);																									
 			ResultSet rs=stat.executeQuery();
 			while(rs.next()) {
 				icomputer =new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));

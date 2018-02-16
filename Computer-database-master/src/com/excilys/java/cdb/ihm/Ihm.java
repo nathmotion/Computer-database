@@ -176,7 +176,10 @@ public class Ihm {
 		System.out.println("Veuillez saisir l'id de la company : ");
 		Long company_id = sc.nextLong();
 		sc.nextLine();
-
+		if( Integer.parseInt(year)>Integer.parseInt(yeardisc) || !yeardisc.isEmpty()) {
+			System.out.println(" Date de discontinued est inferieur ou non nulle");
+			return;
+		}
 		String date_introduced =year+"-"+month+"-"+day+" 00:00:00:000";
 		String date_discontinued = yeardisc+"-"+monthdisc+"-"+daydisc+" 00:00:00:000";
 		ajoutOrdinateur(servcomputer,name,date_introduced,date_discontinued,company_id);

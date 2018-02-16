@@ -12,18 +12,18 @@ public enum SingletonConn {
 	INSTANCE;
 
 
-	final static Logger logger = Logger.getLogger(SingletonConn.class);
+	final static Logger logger=Logger.getLogger(SingletonConn.class);
 
 	// url 
-	private String url= "jdbc:mysql://127.0.0.1:3306/computer-database-db?useSSL=false";
+	private String url="jdbc:mysql://127.0.0.1:3306/computer-database-db?useSSL=false";
 
 	// username
 
-	private String username ="admincdb";
+	private String username="admincdb";
 
 	// password
 
-	private String password = "qwerty1234";
+	private String password="qwerty1234";
 
 	// objet connection
 
