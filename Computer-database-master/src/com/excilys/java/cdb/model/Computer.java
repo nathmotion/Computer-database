@@ -14,9 +14,7 @@ public class Computer {
 
 	}
 
-
 	public Computer(Long id, String name, Timestamp introduction, Timestamp discontinuation,Long company_id) {
-
 		this.id=id;
 		this.name = name;
 		this.introduced = introduction;
@@ -24,7 +22,6 @@ public class Computer {
 		this.company_id=company_id;
 
 	}
-
 
 	public Long getId() {
 		return id;
@@ -75,13 +72,11 @@ public class Computer {
 		discontinued = discontinuation;
 	}
 
-
 	@Override
 	public String toString() {
 		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
 				+ ", company_id=" + company_id + "]";
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -94,7 +89,6 @@ public class Computer {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {

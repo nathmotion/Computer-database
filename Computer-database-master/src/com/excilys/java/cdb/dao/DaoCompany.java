@@ -15,13 +15,13 @@ import com.excilys.java.cdb.model.Computer;
 
 public enum DaoCompany implements Dao<Company>{
 	INSTANCE;
-	
-	final static String queryGetAll ="SELECT id,name FROM company  ";
-	final static String queryGetPage= "SELECT id, name FROM company LIMIT ? , ?";
-	final static Logger logger = Logger.getLogger(DaoCompany.class);
+
+	private final  String queryGetAll ="SELECT id,name FROM company  ";
+	private final  String queryGetPage= "SELECT id, name FROM company LIMIT ? , ?";
+	private final  Logger logger = Logger.getLogger(DaoCompany.class);
 
 	DaoCompany(){
-		
+
 	}
 	/**
 	 * 								========	REQUETE SQL    RECUPERE LA LISTE DES COMPAGNIES	========
@@ -30,19 +30,16 @@ public enum DaoCompany implements Dao<Company>{
 	public ArrayList<Company>getAll() {
 		Company company = null ;
 		ArrayList<Company> listCompany = new ArrayList<Company>();
-		Statement s;
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
-		try {
-			s = con.getConn().createStatement();										// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
+		try(Statement s = con.getConn().createStatement();) {
+													// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
 			ResultSet rs=s.executeQuery(queryGetAll);
 			while(rs.next()) {
 				company =new Company(rs.getLong("id"),rs.getString("name"));
 				listCompany.add(company);
 			}
-			s.close();
 			con.closeConn();
-
 		} catch (SQLException e) {
 			logger.error(" error requetes GET ALL : " + e.getMessage());
 		}
@@ -56,11 +53,10 @@ public enum DaoCompany implements Dao<Company>{
 	public ArrayList<Company> getPage(int offset) {
 		Company company = null ;
 		ArrayList<Company> listCompany = new ArrayList<Company>();
-		PreparedStatement s;
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
-		try {
-			s = con.getConn().prepareStatement(queryGetPage);
+		try(PreparedStatement s= con.getConn().prepareStatement(queryGetPage);){
+			
 			s.setInt(1, offset);// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
 			s.setInt(2,10);
 			ResultSet rs=s.executeQuery();
@@ -68,21 +64,13 @@ public enum DaoCompany implements Dao<Company>{
 				company =new Company(rs.getLong("id"),rs.getString("name"));
 				listCompany.add(company);
 			}
-			s.close();
 			con.closeConn();
-			s.close();
 		} catch (SQLException e) {
 
 			logger.error(" error requetes GET ALL : " + e.getMessage());
 		}
 
 		return listCompany;
-
-
-
 	}
-
-
-
 
 }

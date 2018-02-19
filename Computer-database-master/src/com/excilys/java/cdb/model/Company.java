@@ -3,8 +3,6 @@ package com.excilys.java.cdb.model;
 public class Company {
 
 	private Long id;
-
-
 	private String name;
 
 	public Company() {
@@ -15,10 +13,6 @@ public class Company {
 		this.id = id;
 		this.name = name;
 	}
-
-
-
-
 	public Long getId() {
 		return id;
 	}

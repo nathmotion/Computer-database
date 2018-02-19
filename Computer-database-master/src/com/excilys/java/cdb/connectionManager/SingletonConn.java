@@ -11,31 +11,21 @@ import com.excilys.java.cdb.dao.DaoComputer;
 public enum SingletonConn {
 	INSTANCE;
 
-
-	final static Logger logger=Logger.getLogger(SingletonConn.class);
-
+	final Logger logger=Logger.getLogger(SingletonConn.class);
 	// url 
-	private String url="jdbc:mysql://127.0.0.1:3306/computer-database-db?useSSL=false";
-
+	private final String url="jdbc:mysql://127.0.0.1:3306/computer-database-db?useSSL=false";
 	// username
-
-	private String username="admincdb";
-
+	private final String username="admincdb";
 	// password
-
-	private String password="qwerty1234";
-
+	private final String password="qwerty1234";
 	// objet connection
-
 	private Connection conn ;
-
-
 
 	SingletonConn(){
 		try {
 			conn= DriverManager.getConnection(url, username, password);
 		} catch (SQLException e) {
-
+			logger.error(" Connection fail ....  "+e.getMessage());
 		}
 	}
 
@@ -55,31 +45,17 @@ public enum SingletonConn {
 		}
 	}
 
-
 	public String getUrl() {
 		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
 	}
 
 	public String getUsername() {
 		return username;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
 	public String getPassword() {
 		return password;
 	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public Connection getConn() {
 		return conn;
 	}
@@ -87,8 +63,5 @@ public enum SingletonConn {
 	public void setConn(Connection conn) {
 		this.conn = conn;
 	}
-
-
-
 
 }

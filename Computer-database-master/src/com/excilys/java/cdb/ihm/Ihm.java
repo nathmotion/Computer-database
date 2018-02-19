@@ -27,17 +27,10 @@ public class Ihm {
 	Scanner sc =  new Scanner(System.in);
 	static String choix;
 
-
-
-
 	public static void main(String[] args) {
 		Ihm myCLI= new Ihm();
 		myCLI.startCLI();
 	}
-
-
-
-
 	/**
 	 * 												================	 C L I   ================
 	 */
@@ -180,7 +173,6 @@ public class Ihm {
 
 		if( Integer.parseInt(year)>Integer.parseInt(yeardisc) ) {
 			System.out.println(" Date de discontinued est inferieur "+  Integer.parseInt(year)+" > "+ Integer.parseInt(yeardisc) );
-
 			return;
 		}
 		String date_introduced =year+"-"+month+"-"+day;
@@ -236,7 +228,6 @@ public class Ihm {
 		Computer computer = new Computer();
 		computer.setId(id);
 		servcomputer.daoDelete(computer);
-
 	}
 
 	/**	
@@ -295,8 +286,7 @@ public class Ihm {
 	 * 										=============	AFFICHAGE DU MENU D'AJOUT	D'UN ORDINATEUR	 	=============
 	 * @param l
 	 */
-	public final static void clearConsole(int l)
-	{
+	public final static void clearConsole(int l){
 		for(int clear = 0; clear < l; clear++)
 		{
 			System.out.println() ;
