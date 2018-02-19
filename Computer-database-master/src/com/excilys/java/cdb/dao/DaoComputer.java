@@ -25,10 +25,10 @@ import com.excilys.java.cdb.model.Company;
 import com.excilys.java.cdb.model.Computer;
 
 
-public class DaoComputer extends Dao<Computer>{
-
+public enum DaoComputer implements Dao<Computer>{
+		INSTANCE;
+	
 	final static Logger logger = Logger.getLogger(DaoComputer.class);
-
 	final static String queryGetAll ="SELECT id, name, introduced, discontinued, company_id FROM computer  ";
 	final static String queryById = "SELECT id, name, introduced, discontinued, company_id FROM computer  WHERE id=?";
 	final static String queryUpdate = "UPDATE computer SET name= ?, instroduced=? , discontinued=? ,company_id= ? WHERE id =?";
@@ -87,10 +87,8 @@ public class DaoComputer extends Dao<Computer>{
 		}
 
 		return listComputer;
-
-
-
 	}
+	
 	/**
 	 * 
 	 * @return
@@ -155,11 +153,8 @@ public class DaoComputer extends Dao<Computer>{
 			logger.error(" error requete CREATE  : " + e.getMessage());
 		}
 
-
-
 		return false;
 	}
-
 
 	/**
 	 * 										========== REQUETES SQL 	MIS A JOUR UN ORDINATEUR PASSER PAR PARAMETRE  ============ 	

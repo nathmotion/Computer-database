@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -48,16 +49,16 @@ public class Ihm {
 			switch(choix){
 			case "1": 
 				int offsetCompany = 0;
-				ArrayList<Company>  tableCompany= servcompany.getDao().getPage(offsetCompany);
+				ArrayList<Company>  tableCompany= servcompany.daoGetPage(offsetCompany);
 				afficheListCompany(tableCompany);
 				pause(sc);
 				continue;
 
 			case "2" :
 				int offset = 0;
-				int nbComputer =servcomputer.getDao().getNbComputer();
+				int nbComputer =servcomputer.daoGetNbComputer();
 				do {
-					ArrayList<Computer> tableComputer= servcomputer.getDao().getPage(offset);
+					ArrayList<Computer> tableComputer= servcomputer.daoGetPage(offset);
 					afficheListComputer(tableComputer);
 					offset = optionPage(sc,offset,nbComputer);
 				}while(!choix.equals("quit"));
@@ -128,7 +129,7 @@ public class Ihm {
 		System.out.println("Veullez saisir l' id de l'ordinateur ");
 		int id = sc.nextInt();
 		sc.nextLine();
-		Optional<Computer> opcomputer = servcomputer.getDao().findById(id)	;
+		Optional<Computer> opcomputer = servcomputer.daoFindById(id)	;
 		if(opcomputer.isPresent())
 		{
 			Computer computer = opcomputer.get();
@@ -141,7 +142,7 @@ public class Ihm {
 		else {
 			System.out.println("Aucun Computer n'a été trouver avec cet id = "+ id);
 		}
-		
+
 	}
 
 
@@ -176,12 +177,14 @@ public class Ihm {
 		System.out.println("Veuillez saisir l'id de la company : ");
 		Long company_id = sc.nextLong();
 		sc.nextLine();
-		if( Integer.parseInt(year)>Integer.parseInt(yeardisc) || !yeardisc.isEmpty()) {
-			System.out.println(" Date de discontinued est inferieur ou non nulle");
+
+		if( Integer.parseInt(year)>Integer.parseInt(yeardisc) ) {
+			System.out.println(" Date de discontinued est inferieur "+  Integer.parseInt(year)+" > "+ Integer.parseInt(yeardisc) );
+
 			return;
 		}
-		String date_introduced =year+"-"+month+"-"+day+" 00:00:00:000";
-		String date_discontinued = yeardisc+"-"+monthdisc+"-"+daydisc+" 00:00:00:000";
+		String date_introduced =year+"-"+month+"-"+day;
+		String date_discontinued = yeardisc+"-"+monthdisc+"-"+daydisc;
 		ajoutOrdinateur(servcomputer,name,date_introduced,date_discontinued,company_id);
 	}
 
@@ -196,26 +199,30 @@ public class Ihm {
 	 * @param date_discontinued
 	 * @param company_id
 	 */
-	public static void ajoutOrdinateur(ServiceComputer servcomputer,String name, String date_introduced, String date_discontinued,Long company_id) {
+	public static void ajoutOrdinateur(ServiceComputer servcomputer,String name, String string_date_introduced, String string_date_discontinued,Long company_id) {
 		Computer computer= new Computer();
 		computer.setName(name);
 
-		if(date_introduced.isEmpty()) {
+		if(string_date_introduced.isEmpty()) {
 			computer.setIntroduced(Timestamp.valueOf(LocalDateTime.now()));
 		}
 		else{
-			computer.setIntroduced(convertStringtoTimestamp(date_introduced));
+			LocalDate date_introduced=LocalDate.parse(string_date_introduced);
+			computer.setIntroduced(convertLocalDatetoTimestamp(date_introduced));
 		}
 
-		if(date_discontinued.isEmpty()) {
-			computer.setDiscontinued(convertStringtoTimestamp("0000-00-00"));
+		if(string_date_discontinued.isEmpty()) {
+			LocalDate date_discontinued = LocalDate.parse("0000-00-00");
+			computer.setDiscontinued(convertLocalDatetoTimestamp(date_discontinued));
 		}
 		else {
-			computer.setDiscontinued(convertStringtoTimestamp(date_introduced));
+			LocalDate date_discontinued = LocalDate.parse(string_date_discontinued);
+			computer.setDiscontinued(convertLocalDatetoTimestamp(date_discontinued));
 		}
 		computer.setCompany_id(company_id);
-		servcomputer.getDao().create(computer);
+		servcomputer.daoCreate(computer);
 	}
+
 	/**
 	 * 										=============	AFFICHAGE DU MENU SUPPR. D'UN ORDINATEUR	 	=============
 	 * @param sc
@@ -228,29 +235,17 @@ public class Ihm {
 		sc.nextLine();
 		Computer computer = new Computer();
 		computer.setId(id);
-		servcomputer.getDao().delete(computer);
+		servcomputer.daoDelete(computer);
 
 	}
 
 	/**	
-	 *										=============	CONVERSITION DATE TO TIMESTAMP	 	=============
+	 *										=============	CONVERSITION LOCALDATE TO TIMESTAMP	 	=============
 	 * @param stringDate
 	 * @return
 	 */
-	public static Timestamp convertStringtoTimestamp(String stringDate) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat(
-				"yyyy-MM-dd hh:mm:ss:SSS");
-
-		java.util.Date parsedTimeStamp = null;
-		try {
-			parsedTimeStamp = dateFormat.parse(stringDate);
-		} catch (ParseException e) {
-			logger.error("convertion date to timestamp");
-
-		}
-
-		Timestamp timestamp = new Timestamp(parsedTimeStamp.getTime());
-
+	public static Timestamp convertLocalDatetoTimestamp(LocalDate Date) {	
+		Timestamp timestamp = Timestamp.valueOf(Date.atStartOfDay());
 		return timestamp;
 	}
 
@@ -283,11 +278,15 @@ public class Ihm {
 	public static int optionPage(Scanner sc,int offset, int nbComputer) {
 		int pagecourant = (offset/10)+1;
 		int totalPage = nbComputer/10;
+
 		System.out.println("					"+pagecourant+"/"+totalPage+"			");
 		System.out.println("			quit : for exit			enter: for continue	");
 		choix =sc.nextLine();
+
 		if(!choix.equals("quit")) {
-			offset+=10;
+			if(pagecourant<totalPage) {
+				offset+=10;
+			}
 		}
 		clearConsole(20);
 		return offset;

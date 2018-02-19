@@ -13,13 +13,16 @@ import com.excilys.java.cdb.connectionManager.SingletonConn;
 import com.excilys.java.cdb.model.Company;
 import com.excilys.java.cdb.model.Computer;
 
-public class DaoCompany extends Dao<Company>{
-
+public enum DaoCompany implements Dao<Company>{
+	INSTANCE;
+	
 	final static String queryGetAll ="SELECT id,name FROM company  ";
 	final static String queryGetPage= "SELECT id, name FROM company LIMIT ? , ?";
 	final static Logger logger = Logger.getLogger(DaoCompany.class);
 
-
+	DaoCompany(){
+		
+	}
 	/**
 	 * 								========	REQUETE SQL    RECUPERE LA LISTE DES COMPAGNIES	========
 	 */

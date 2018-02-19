@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.excilys.java.cdb.connectionManager.SingletonConn;
 
-public abstract class Dao<T>{
+public interface Dao<T>{
 
 	/**
 	 * 
