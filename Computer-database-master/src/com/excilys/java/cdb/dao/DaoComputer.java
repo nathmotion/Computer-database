@@ -26,12 +26,12 @@ import com.excilys.java.cdb.model.Computer;
 
 
 public enum DaoComputer implements Dao<Computer>{
-		INSTANCE;
-	
+	INSTANCE;
+
 	final static Logger logger = Logger.getLogger(DaoComputer.class);
 	final static String queryGetAll ="SELECT id, name, introduced, discontinued, company_id FROM computer  ";
 	final static String queryById = "SELECT id, name, introduced, discontinued, company_id FROM computer  WHERE id=?";
-	final static String queryUpdate = "UPDATE computer SET name= ?, instroduced=? , discontinued=? ,company_id= ? WHERE id =?";
+	final static String queryUpdate = "UPDATE computer SET name= ?, introduced=? , discontinued=? ,company_id= ? WHERE id =?";
 	final static String queryCreate= "INSERT INTO computer ( name, introduced, discontinued ,company_id) VALUES (?, ?, ?, ?)";
 	final static String queryDelete= "DELETE FROM computer WHERE id =?";
 	final static String queryGetPage= "SELECT id, name, introduced, discontinued, company_id FROM computer LIMIT ? , ?";
@@ -41,16 +41,16 @@ public enum DaoComputer implements Dao<Computer>{
 	 */
 	@Override
 	public ArrayList<Computer> getAll() {
-		Computer icomputer = null ;
+		Computer iComputer = null ;
 		ArrayList<Computer> listComputer = new ArrayList<Computer>();
 
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
-		try(Statement s = con.getConn().createStatement()) {
-			ResultSet rs=s.executeQuery(queryGetAll);
+		try(Statement stat = con.getConn().createStatement()) {
+			ResultSet rs=stat.executeQuery(queryGetAll);
 			while(rs.next()) {
-				icomputer=new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));
-				listComputer.add(icomputer);
+				iComputer=new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));
+				listComputer.add(iComputer);
 			}
 			con.closeConn();
 		} catch (SQLException e) {
@@ -67,18 +67,18 @@ public enum DaoComputer implements Dao<Computer>{
 	 */
 	@Override
 	public ArrayList<Computer> getPage(int offset) {
-		Computer icomputer = null ;
+		Computer iComputer = null ;
 		ArrayList<Computer> listComputer = new ArrayList<Computer>();
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
-		try(PreparedStatement s = con.getConn().prepareStatement(queryGetPage)) {
+		try(PreparedStatement stat = con.getConn().prepareStatement(queryGetPage)) {
 
-			s.setInt(1, offset);
-			s.setInt(2,10);
-			ResultSet rs=s.executeQuery();
+			stat.setInt(1, offset);
+			stat.setInt(2,10);
+			ResultSet rs=stat.executeQuery();
 			while(rs.next()) {
-				icomputer=new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));
-				listComputer.add(icomputer);
+				iComputer=new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));
+				listComputer.add(iComputer);
 			}
 			con.closeConn();
 		} catch (SQLException e) {
@@ -88,7 +88,7 @@ public enum DaoComputer implements Dao<Computer>{
 
 		return listComputer;
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -98,8 +98,8 @@ public enum DaoComputer implements Dao<Computer>{
 		con.initConn();
 		int nbComputer=0;
 		System.out.println("coouocu");
-		try(Statement s = con.getConn().createStatement()) {
-			ResultSet rs=s.executeQuery(queryNbComputer);
+		try(Statement stat = con.getConn().createStatement()) {
+			ResultSet rs=stat.executeQuery(queryNbComputer);
 			while(rs.next()) {
 				nbComputer=rs.getInt("nbcomputer");
 			}
@@ -126,7 +126,7 @@ public enum DaoComputer implements Dao<Computer>{
 
 			ps.setString(1, computer.getName());		
 			if( computer.getIntroduced()!=null) {
-				
+
 				ps.setTimestamp(2,computer.getIntroduced());
 			}
 			else {
@@ -167,10 +167,26 @@ public enum DaoComputer implements Dao<Computer>{
 		con.initConn();
 		try(PreparedStatement ps=con.getConn().prepareStatement(queryUpdate)) {
 			ps.setString(1, computer.getName());
-			ps.setTimestamp(2,computer.getIntroduced());
-			ps.setTimestamp(3, computer.getDiscontinued());
-			ps.setLong(4,computer.getCompany_id());
+			if( computer.getIntroduced()!=null) {
+
+				ps.setTimestamp(2,computer.getIntroduced());
+			}
+			else {
+				ps.setTimestamp(2, null);
+			}
+			if( computer.getDiscontinued()!=null) {
+				ps.setTimestamp(3, computer.getDiscontinued());
+			}
+			else {
+				ps.setTimestamp(3,null);
+			}
+			if(computer.getCompany_id()!=0) {
+				ps.setLong(4, computer.getCompany_id());
+			}else {
+				ps.setNull(4, Types.INTEGER);
+			}
 			ps.setLong(5,computer.getId());
+
 			ps.executeUpdate();
 			con.closeConn();
 			System.out.println("mise a jour reussi ... ");

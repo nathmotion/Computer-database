@@ -13,12 +13,12 @@ public enum ServiceComputer {
 
 	ServiceComputer(){
 	}
-	
+
 	public ArrayList<Computer> daoGetAllEntities() {
 		daocomputer = DaoComputer.INSTANCE;
 		return daocomputer.getAll();
 	}
-	
+
 	public ArrayList<Computer> daoGetPage(int offset){
 		daocomputer = DaoComputer.INSTANCE;
 		return daocomputer.getPage(offset);
@@ -27,7 +27,7 @@ public enum ServiceComputer {
 		daocomputer =DaoComputer.INSTANCE;
 		return daocomputer.getNbComputer();
 	}
-	
+
 	public boolean daoCreate(Computer computer) {
 		daocomputer= DaoComputer.INSTANCE;
 		return daocomputer.create(computer);
@@ -37,7 +37,7 @@ public enum ServiceComputer {
 		daocomputer = DaoComputer.INSTANCE;
 		return daocomputer.update(computer);
 	}
-	
+
 	public boolean daoDelete(Computer computer) {
 		daocomputer = DaoComputer.INSTANCE;
 		return daocomputer.delete(computer);

@@ -14,15 +14,15 @@ public enum ServiceCompany {
 
 	ServiceCompany(){
 	}
-	
+
 	public ArrayList<Company> daoGetAllEntities() {
 		daocompany = DaoCompany.INSTANCE;
 		return daocompany.getAll();
 	}
-	
+
 	public ArrayList<Company> daoGetPage(int offset){
 		daocompany = DaoCompany.INSTANCE;
 		return daocompany.getPage(offset);
 	}
-	
+
 }

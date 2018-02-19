@@ -33,7 +33,6 @@ public enum DaoCompany implements Dao<Company>{
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
 		try(Statement s = con.getConn().createStatement();) {
-													// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
 			ResultSet rs=s.executeQuery(queryGetAll);
 			while(rs.next()) {
 				company =new Company(rs.getLong("id"),rs.getString("name"));
@@ -56,7 +55,7 @@ public enum DaoCompany implements Dao<Company>{
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
 		try(PreparedStatement s= con.getConn().prepareStatement(queryGetPage);){
-			
+
 			s.setInt(1, offset);// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au objet vide
 			s.setInt(2,10);
 			ResultSet rs=s.executeQuery();
