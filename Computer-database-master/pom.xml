@@ -5,7 +5,16 @@
   <artifactId>Computer-database-master</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
-  
+  <properties> 
+  	<junit-version>4.12</junit-version>
+  	<log4j-api-version>2.10.0</log4j-api-version>
+  	<mysql-connector-version>5.1.45</mysql-connector-version>
+  	<log4j-1.2-api-version>2.10.0</log4j-1.2-api-version>
+  	<log4j-iostreams-version>2.10.0</log4j-iostreams-version>
+  	<mockito-all-version>1.10.19</mockito-all-version>
+  	<mockito-core-version>2.13.0</mockito-core-version>
+  	<log4j-core-version>2.10.0</log4j-core-version>
+  </properties>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -26,8 +35,9 @@
         </configuration>
       </plugin>
       <plugin>
-        <artifactId>maven-war-plugin</artifactId>
-        <version>3.0.0</version>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.0.2</version>
         <configuration>
           <warSourceDirectory>WebContent</warSourceDirectory>
         </configuration>
@@ -38,43 +48,43 @@
   	<dependency>
   		<groupId>mysql</groupId>
   		<artifactId>mysql-connector-java</artifactId>
-  		<version>5.1.45</version>
+  		<version>${mysql-connector-version}</version>
   		<scope>provided</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.logging.log4j</groupId>
   		<artifactId>log4j-api</artifactId>
-  		<version>2.10.0</version>
+  		<version>${log4j-api-version}</version>
   		<scope>provided</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.logging.log4j</groupId>
   		<artifactId>log4j-1.2-api</artifactId>
-  		<version>2.10.0</version>
+  		<version>${log4j-1.2-api-version}</version>
   		<scope>provided</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.logging.log4j</groupId>
   		<artifactId>log4j-iostreams</artifactId>
-  		<version>2.10.0</version>
+  		<version>${log4j-iostreams-version}</version>
   		<scope>provided</scope>
   	</dependency>
   	<dependency>
   		<groupId>junit</groupId>
   		<artifactId>junit</artifactId>
-  		<version>4.12</version>
+  		<version>${junit-version}</version>
   		<scope>test</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.mockito</groupId>
   		<artifactId>mockito-all</artifactId>
-  		<version>1.10.19</version>
+  		<version>${mockito-all-version}</version>
   		<scope>test</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.mockito</groupId>
   		<artifactId>mockito-core</artifactId>
-  		<version>2.13.0</version>
+  		<version>${mockito-core-version}</version>
   		<scope>test</scope>
   	</dependency>
   </dependencies>
@@ -83,7 +93,7 @@
   		<dependency>
   			<groupId>org.apache.logging.log4j</groupId>
   			<artifactId>log4j-core</artifactId>
-  			<version>2.10.0</version>
+  			<version>${log4j-core-version}</version>
   			<scope>provided</scope>
   		</dependency>
   	</dependencies>
