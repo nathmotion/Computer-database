@@ -39,7 +39,6 @@ public class Ihm {
 		do {	
 			printMenu();
 			choix = sc.nextLine();
-
 			switch(choix){
 			case "1": 
 				int offsetCompany = 0;
@@ -47,7 +46,7 @@ public class Ihm {
 				afficheListCompany(tableCompany);
 				pause(sc);
 				continue;
-
+				
 			case "2" :
 				int offset = 0;
 				int nbComputer =servComputer.daoGetNbComputer();
@@ -57,26 +56,31 @@ public class Ihm {
 					offset = optionPage(sc,offset,nbComputer);
 				}while(!choix.equals("quit"));
 				continue;
-
+				
 			case "3" :
 				afficheFindbyId(sc,servComputer);
 				pause(sc);
 				continue;
+				
 			case "4" :
 				affichageAjoutOrdinateur(sc,servComputer);
 				pause(sc);
 				continue;
+				
 			case "5":
 				affichageMiseAjourOrdinateur(sc, servComputer);
 				pause(sc);
 				continue;
+				
 			case "6" :
 				affichageSupprOrdinateur(sc,servComputer);
 				pause(sc);
 				continue;
+				
 			case "exit":
 				System.out.println(" Bye ...");
 				continue;
+				
 			default : 
 				System.out.println(" L'option que vous avez choisie n'est pas dans la liste de choix ");
 				pause(sc);
@@ -300,10 +304,7 @@ public class Ihm {
 		String date_discontinued = yeardisc+"-"+monthdisc+"-"+daydisc;
 		ajoutOrdinateur(servcomputer,name,date_introduced,date_discontinued,company_id);
 	}
-
-
-
-
+	
 	/**
 	 * 										=============	GESTION DU CLI D'AJOUT	D'UN ORDINATEUR	 	=============
 	 * @param servComputer

@@ -60,8 +60,6 @@ public enum DaoComputer implements Dao<Computer>{
 
 		return listComputer;
 	}
-
-
 	/**
 	 * 														=======	PAGINATION	Computer =======
 	 */
@@ -88,7 +86,6 @@ public enum DaoComputer implements Dao<Computer>{
 
 		return listComputer;
 	}
-
 	/**
 	 * 
 	 * @return
@@ -97,7 +94,6 @@ public enum DaoComputer implements Dao<Computer>{
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
 		int nbComputer=0;
-		System.out.println("coouocu");
 		try(Statement stat = con.getConn().createStatement()) {
 			ResultSet rs=stat.executeQuery(queryNbComputer);
 			while(rs.next()) {
@@ -105,14 +101,12 @@ public enum DaoComputer implements Dao<Computer>{
 			}
 			con.closeConn();
 		} catch (SQLException e) {
-
 			logger.error(" error requetes GET ALL : " + e.getMessage());
 		}
 		System.out.println(" nbComputer =" +nbComputer);
 		return nbComputer;
 
 	}
-
 	/**
 	 *                         			 ======= REQUETES SQL AJOUTE UN ORDINATEUR PASSER PAR PARAMETRE ============= 
 	 * @param computer
