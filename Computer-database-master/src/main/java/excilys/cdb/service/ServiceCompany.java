@@ -1,11 +1,11 @@
-package com.excilys.java.cdb.service;
+package main.java.excilys.cdb.service;
 
 import java.util.ArrayList;
 
-import com.excilys.java.cdb.dao.DaoCompany;
-import com.excilys.java.cdb.dao.DaoComputer;
-import com.excilys.java.cdb.model.Company;
-import com.excilys.java.cdb.model.Computer;
+import main.java.excilys.cdb.dao.DaoCompany;
+import main.java.excilys.cdb.dao.DaoComputer;
+import main.java.excilys.cdb.model.Company;
+import main.java.excilys.cdb.model.Computer;
 
 public enum ServiceCompany {
 	INSTANCE;

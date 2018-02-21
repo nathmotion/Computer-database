@@ -1,4 +1,4 @@
-package com.excilys.java.cdb.ihm;
+package main.java.excilys.cdb;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -14,11 +14,11 @@ import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
-import com.excilys.java.cdb.dao.DaoComputer;
-import com.excilys.java.cdb.model.Company;
-import com.excilys.java.cdb.model.Computer;
-import com.excilys.java.cdb.service.ServiceCompany;
-import com.excilys.java.cdb.service.ServiceComputer;
+import main.java.excilys.cdb.dao.DaoComputer;
+import main.java.excilys.cdb.model.Company;
+import main.java.excilys.cdb.model.Computer;
+import main.java.excilys.cdb.service.ServiceCompany;
+import main.java.excilys.cdb.service.ServiceComputer;
 
 public class Ihm {
 	final static Logger logger = Logger.getLogger(Ihm.class);
@@ -43,6 +43,7 @@ public class Ihm {
 			case "1": 
 				int offsetCompany = 0;
 				ArrayList<Company>  tableCompany= servCompany.daoGetPage(offsetCompany);
+				logger.debug(" salut");
 				afficheListCompany(tableCompany);
 				pause(sc);
 				continue;

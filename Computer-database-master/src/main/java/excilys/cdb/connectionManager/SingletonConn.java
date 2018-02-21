@@ -1,4 +1,4 @@
-package com.excilys.java.cdb.connectionManager;
+package main.java.excilys.cdb.connectionManager;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
-import com.excilys.java.cdb.dao.DaoComputer;
+import main.java.excilys.cdb.dao.DaoComputer;
 
 public enum SingletonConn {
 	INSTANCE;

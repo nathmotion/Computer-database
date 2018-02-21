@@ -1,4 +1,4 @@
-package com.excilys.java.cdb.dao;
+package main.java.excilys.cdb.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,9 +9,9 @@ import java.util.Optional;
 
 import org.apache.log4j.Logger;
 
-import com.excilys.java.cdb.connectionManager.SingletonConn;
-import com.excilys.java.cdb.model.Company;
-import com.excilys.java.cdb.model.Computer;
+import main.java.excilys.cdb.connectionManager.SingletonConn;
+import main.java.excilys.cdb.model.Company;
+import main.java.excilys.cdb.model.Computer;
 
 public enum DaoCompany implements Dao<Company>{
 	INSTANCE;

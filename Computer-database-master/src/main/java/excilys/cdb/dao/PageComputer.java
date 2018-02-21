@@ -1,8 +1,8 @@
-package com.excilys.java.cdb.dao;
+package main.java.excilys.cdb.dao;
 
 import java.util.ArrayList;
 
-import com.excilys.java.cdb.model.Computer;
+import main.java.excilys.cdb.model.Computer;
 
 public class PageComputer extends Page<Computer> {
 	

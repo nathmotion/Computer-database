@@ -1,9 +1,9 @@
-package com.excilys.java.cdb.dao;
+package main.java.excilys.cdb.dao;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
-import com.excilys.java.cdb.connectionManager.SingletonConn;
+import main.java.excilys.cdb.connectionManager.SingletonConn;
 
 public interface Dao<T>{
 	

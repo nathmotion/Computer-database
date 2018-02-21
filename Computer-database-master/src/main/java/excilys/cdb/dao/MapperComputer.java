@@ -1,4 +1,4 @@
-package com.excilys.java.cdb.dao;
+package main.java.excilys.cdb.dao;
 
 public class MapperComputer {
 

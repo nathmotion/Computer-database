@@ -1,4 +1,4 @@
-package com.excilys.java.cdb.model;
+package main.java.excilys.cdb.model;
 
 public class Company {
 

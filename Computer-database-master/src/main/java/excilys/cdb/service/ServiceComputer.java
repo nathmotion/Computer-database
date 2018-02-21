@@ -1,10 +1,10 @@
-package com.excilys.java.cdb.service;
+package main.java.excilys.cdb.service;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
-import com.excilys.java.cdb.dao.DaoComputer;
-import com.excilys.java.cdb.model.Computer;
+import main.java.excilys.cdb.dao.DaoComputer;
+import main.java.excilys.cdb.model.Computer;
 
 public enum ServiceComputer {
 	INSTANCE;
