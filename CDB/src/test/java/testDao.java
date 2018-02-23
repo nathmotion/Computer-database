@@ -22,7 +22,9 @@ import main.java.excilys.cdb.connectionmanager.SingletonConn;
 import main.java.excilys.cdb.dao.DaoComputer;
 import main.java.excilys.cdb.model.Computer;
 
-
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({SingletonConn.class})
+@PowerMockIgnore({"javax.management.*"})
 public class testDao {
 	final static Logger LOGGER = Logger.getLogger(DaoComputer.class);
 	final static String QUERY_GET_ALL ="SELECT id, name, introduced, discontinued, company_id FROM computer";
@@ -38,7 +40,7 @@ public class testDao {
 	@Before
 	public void setUp(){
 		SingletonConn conn = SingletonConn.INSTANCE;
-	//	conn.initConn(); pas sur ?!
+		conn.initConn();
 		try(Statement stmnt = conn.createStatement();){
 			stmnt.execute(QUERY_CREATE_TABLE);
 			conn.getConn().commit();
@@ -64,8 +66,28 @@ public class testDao {
 	@Test
 	public void testgetAll() {
 
+		/*Mockito.when(mockResultSet.next()).thenReturn(true).thenReturn(false);
+			Mockito.when(mockResultSet.getLong("id")).thenReturn((long)50);
+			Mockito.when(mockResultSet.getString("name")).thenReturn("mon test");
+			Mockito.when(mockResultSet.getTimestamp("date introduced")).thenReturn(Timestamp.valueOf(LocalDate.now().atStartOfDay()));
+			Mockito.when(mockResultSet.getTimestamp("date discontinued")).thenReturn(Timestamp.valueOf(LocalDate.now().atStartOfDay()));
+			Mockito.when(mockResultSet.getLong("company_id")).thenReturn((long)2);	
+
+			Computer computer = new Computer();
+			computer.setId(mockResultSet.getLong("id"));
+			computer.setName(mockResultSet.getString("name"));
+			computer.setIntroduced(mockResultSet.getTimestamp("date introduced"));
+			computer.setDiscontinued(mockResultSet.getTimestamp("date discontinued"));
+			computer.setCompany_id(mockResultSet.getLong("company_id"));
+			ArrayList<Computer> testComputersrs=  new ArrayList<Computer>();
+			testComputersrs.add(computer);
+
+			Mockito.when(mockStmnt.executeQuery(QUERY_GET_ALL)).thenReturn(mockResultSet);
+			Mockito.when(mockSingletonConn.createStatement()).thenReturn(mockStmnt);
+		 */
 		ArrayList<Computer> testComputers=  new ArrayList<Computer>();
 		testComputers.add(new Computer((long) 50,"mon test",Timestamp.valueOf(LocalDate.now().atStartOfDay()),Timestamp.valueOf(LocalDate.now().atStartOfDay()),(long)2));
+		//assertEquals(testComputers.get(0), testComputersrs.get(0));
 
 
 	}
