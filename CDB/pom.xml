@@ -5,6 +5,7 @@
 	<artifactId>CDB</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
+
 	<properties>
 		<junit-version>4.12</junit-version>
 		<log4j-api-version>2.10.0</log4j-api-version>
@@ -16,9 +17,11 @@
 		<log4j-core-version>2.10.0</log4j-core-version>
 		<slf4j-api-version>1.7.21</slf4j-api-version>
 		<hsql-version>2.4.0</hsql-version>
+		<jstlVersion>1.2</jstlVersion>
+		<servletVersion>3.0.1</servletVersion>
+		<jspVersion>2.2</jspVersion>
 	</properties>
 	<build>
-		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -26,13 +29,6 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>3.0.0</version>
-				<configuration>
-					<warSourceDirectory>WebContent</warSourceDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -99,6 +95,21 @@
 			<version>${hsql-version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp.jstl</groupId>
+			<artifactId>jstl-api</artifactId>
+			<version>${jstlVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servletVersion}</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>jasper</artifactId>
+			<version>6.0.32</version>
+		</dependency> -->
 	</dependencies>
 
 	<dependencyManagement>
