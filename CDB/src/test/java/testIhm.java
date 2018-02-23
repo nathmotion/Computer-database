@@ -8,14 +8,10 @@ import java.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import main.java.excilys.cdb.ihm.Ihm;
 import main.java.excilys.cdb.service.ServiceComputer;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ServiceComputer.class})
-@PowerMockIgnore({"javax.management.*"})
 public class testIhm {
 
 	@Mock
