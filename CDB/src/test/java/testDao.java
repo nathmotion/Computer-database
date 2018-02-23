@@ -14,7 +14,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 
@@ -22,9 +21,7 @@ import main.java.excilys.cdb.connectionmanager.SingletonConn;
 import main.java.excilys.cdb.dao.DaoComputer;
 import main.java.excilys.cdb.model.Computer;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({SingletonConn.class})
-@PowerMockIgnore({"javax.management.*"})
+
 public class testDao {
 	final static Logger LOGGER = Logger.getLogger(DaoComputer.class);
 	final static String QUERY_GET_ALL ="SELECT id, name, introduced, discontinued, company_id FROM computer";
