@@ -12,12 +12,11 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class MyServletInterface
  */
 @WebServlet("/dashboard")
-public class MyServletInterface extends HttpServlet {
+public class dashboardServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println(" lolllllooll ");
 		request.getRequestDispatcher("WEB-INF/views/dashboard.jsp").forward(request, response);
 	}
 

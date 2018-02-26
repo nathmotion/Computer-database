@@ -26,10 +26,14 @@ public enum SingletonConn {
 	        username = bundle.getString("login");
 	        password = bundle.getString("password");
 	        url = bundle.getString("url");
+	       
 	        
 		try {
+			 Class.forName("com.mysql.jdbc.Driver");
 			conn= DriverManager.getConnection(url, username, password);
 		} catch (SQLException e) {
+			logger.error(" Connection fail ....  "+e.getMessage());
+		} catch (ClassNotFoundException e) {
 			logger.error(" Connection fail ....  "+e.getMessage());
 		}
 	}
