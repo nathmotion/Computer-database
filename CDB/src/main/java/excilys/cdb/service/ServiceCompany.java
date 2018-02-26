@@ -1,7 +1,6 @@
 package main.java.excilys.cdb.service;
 
 import java.util.ArrayList;
-
 import main.java.excilys.cdb.dao.DaoCompany;
 import main.java.excilys.cdb.model.Company;
 
@@ -10,10 +9,12 @@ public enum ServiceCompany {
 
 	private DaoCompany daoCompany ;
 
+
 	ServiceCompany(){
 	}
 
 	public ArrayList<Company> daoGetAllEntities() {
+		
 		daoCompany = DaoCompany.INSTANCE;
 		return daoCompany.getAll();
 	}

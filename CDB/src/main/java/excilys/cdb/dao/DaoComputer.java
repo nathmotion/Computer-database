@@ -8,7 +8,8 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Optional;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import main.java.excilys.cdb.connectionmanager.SingletonConn;
 import main.java.excilys.cdb.model.Computer;
@@ -18,7 +19,7 @@ import main.java.excilys.cdb.model.Computer;
 public enum DaoComputer implements Dao<Computer>{
 	INSTANCE;
 
-	final static Logger LOGGER = Logger.getLogger(DaoComputer.class);
+	final static Logger LOGGER = LogManager.getLogger(DaoComputer.class);
 	final static String QUERY_GET_ALL ="SELECT id, name, introduced, discontinued, company_id FROM computer  ";
 	final static String QUERY_BY_ID = "SELECT id, name, introduced, discontinued, company_id FROM computer  WHERE id=?";
 	final static String QUERY_UPDATE = "UPDATE computer SET name= ?, introduced=? , discontinued=? ,company_id= ? WHERE id =?";

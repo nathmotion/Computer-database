@@ -5,67 +5,78 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public enum SingletonConn {
 	INSTANCE;
 
-	final Logger logger=Logger.getLogger(SingletonConn.class);
+	final static Logger LOGGER = LogManager.getLogger(SingletonConn.class);
 	// url 
-	private final String url;
+	private String url;
 	// username
 	private String username;
 	// password
 	private String password;
 	// objet connection
 	private Connection conn ;
+	private String driver;
 
 	SingletonConn(){
-		
-		 ResourceBundle bundle = ResourceBundle.getBundle("userInfoDB");
-	        username = bundle.getString("login");
-	        password = bundle.getString("password");
-	        url = bundle.getString("url");
-	       
-	        
+
+		ResourceBundle bundle = ResourceBundle.getBundle("userInfoDB");
+		username = bundle.getString("login");
+		password = bundle.getString("password");
+		url = bundle.getString("url");
+		driver= bundle.getString("driver");
+	
 		try {
-			 Class.forName("com.mysql.jdbc.Driver");
+			Class.forName(driver);
 			conn= DriverManager.getConnection(url, username, password);
 		} catch (SQLException e) {
-			logger.error(" Connection fail ....  "+e.getMessage());
+			System.out.println(" sql Connection fail ....  "+e.getMessage());
 		} catch (ClassNotFoundException e) {
-			logger.error(" Connection fail ....  "+e.getMessage());
+			System.out.println(" Connection fail ....  "+e.getMessage());
 		}
 	}
 
 	public void initConn() {
-		
-		ResourceBundle bundle = ResourceBundle.getBundle("connection");
-        username = bundle.getString("login");
-        password = bundle.getString("password");
-        
+		ResourceBundle bundle = ResourceBundle.getBundle("userInfoDB");
+		username = bundle.getString("login");
+		password = bundle.getString("password");
+		url = bundle.getString("url");
+		driver= bundle.getString("driver");
 		try {
+			Class.forName(driver);
 			conn= DriverManager.getConnection(url, username, password);
-		} catch (SQLException e) {
-			logger.error("conn :"+e.getMessage());
+		}catch (SQLException e) {
+			LOGGER.error("conn :"+e.getMessage());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
+	
 	public void initConn(String url, String user, String pass) {
+		ResourceBundle bundle = ResourceBundle.getBundle("userInfoDB");
+		driver= bundle.getString("driver");
 		try {
+			Class.forName(driver);
 			conn=DriverManager.getConnection(url,user,pass);
-		} catch (SQLException e) {
-			logger.error("conn : "+e.getMessage());
+		} catch (SQLException e ) {
+			LOGGER.error("conn : "+e.getMessage());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
 	public void closeConn() {
 		try {
 			conn.close();
 		} catch (SQLException e) {
-			logger.error("close : "+e.getMessage());
+			LOGGER.error("close : "+e.getMessage());
 		}
 	}
 
-	
+
 	public String getUrl() {
 		return url;
 	}
@@ -89,7 +100,7 @@ public enum SingletonConn {
 		try {
 			return conn.createStatement();
 		} catch (SQLException e) {
-			logger.error(" statement creation :" + e.getMessage());
+			LOGGER.error(" statement creation :" + e.getMessage());
 		}
 		return null;
 	}

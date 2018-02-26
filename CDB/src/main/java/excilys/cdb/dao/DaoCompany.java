@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import org.apache.log4j.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import main.java.excilys.cdb.connectionmanager.SingletonConn;
 import main.java.excilys.cdb.model.Company;
@@ -18,7 +20,7 @@ public enum DaoCompany implements Dao<Company>{
 
 	private final  String queryGetAll ="SELECT id,name FROM company  ";
 	private final  String queryGetPage= "SELECT id, name FROM company LIMIT ? , ?";
-	private final  Logger logger = Logger.getLogger(DaoCompany.class);
+	final static Logger LOGGER = LogManager.getLogger(DaoCompany.class);
 
 	DaoCompany(){
 
@@ -40,7 +42,7 @@ public enum DaoCompany implements Dao<Company>{
 			}
 			con.closeConn();
 		} catch (SQLException e) {
-			logger.error(" error requetes GET ALL : " + e.getMessage());
+			LOGGER.error(" error requetes GET ALL : " + e.getMessage());
 		}
 		return listCompany;
 	}
@@ -66,7 +68,7 @@ public enum DaoCompany implements Dao<Company>{
 			con.closeConn();
 		} catch (SQLException e) {
 
-			logger.error(" error requetes GET ALL : " + e.getMessage());
+			LOGGER.error(" error requetes GET ALL : " + e.getMessage());
 		}
 
 		return listCompany;
