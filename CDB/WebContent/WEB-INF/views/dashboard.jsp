@@ -76,9 +76,7 @@
 							</td>
 							<td>${ computer.date_introduced }</td>
 							<td>${ computer.date_discontinued }</td>
-							<td><c:forEach items="${ ListeCompany }" var="company">
-									<c:if test="${ company.id == computer.company_id }">${ company.name }</c:if>
-								</c:forEach></td>
+							<td>${ computer.companyName }</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -97,7 +95,7 @@
 				<li><a href="#">3</a></li>
 				<li><a href="#">4</a></li>
 				<li><a href="#">5</a></li>
-				<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				<li><a href="dashbord?next" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
 

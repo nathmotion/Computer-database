@@ -6,12 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import main.java.excilys.cdb.connectionmanager.SingletonConn;
 import main.java.excilys.cdb.model.Company;
+import main.java.excilys.cdb.model.Computer;
 
 
 
@@ -20,6 +22,8 @@ public enum DaoCompany implements Dao<Company>{
 
 	private final  String queryGetAll ="SELECT id,name FROM company  ";
 	private final  String queryGetPage= "SELECT id, name FROM company LIMIT ? , ?";
+	private final  String QUERY_BY_ID= "SELECT name FROM company  WHERE id=?";
+
 	final static Logger LOGGER = LogManager.getLogger(DaoCompany.class);
 
 	DaoCompany(){
@@ -72,6 +76,30 @@ public enum DaoCompany implements Dao<Company>{
 		}
 
 		return listCompany;
+	}
+	/**
+	 * 										===== REQUETES SQL 	RECUPERE UN ORDINATEUR PASSER PAR PARAMETRE ===========
+	 * @param id
+	 * @return
+	 */
+	public Optional<Company> findById(int id){
+		Company company = null;
+		SingletonConn con= SingletonConn.INSTANCE;		
+		con.initConn();
+
+		try(PreparedStatement stat= con.getConn().prepareStatement(QUERY_BY_ID)){
+			stat.setInt(1,id);																									
+			ResultSet rs=stat.executeQuery();
+
+			while(rs.next()) {
+				company =new Company((long) id,rs.getString("name"));
+			}
+			con.closeConn();
+		} catch (SQLException e) {
+			LOGGER.error(" error requetes GET ALL : " + e.getMessage());
+		}
+		Optional<Company> op= Optional.ofNullable(company);
+		return op;
 	}
 
 }

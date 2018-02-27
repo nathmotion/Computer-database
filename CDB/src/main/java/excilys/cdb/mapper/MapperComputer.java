@@ -4,13 +4,18 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 import main.java.excilys.cdb.dto.DtoComputer;
+import main.java.excilys.cdb.model.Company;
 import main.java.excilys.cdb.model.Computer;
 
 public enum MapperComputer {
 	INSTANCE;
 
 	public Computer mapToEntity(DtoComputer dtoComputer) {
-		Computer computer = new Computer(Long.valueOf(dtoComputer.id),dtoComputer.name, Timestamp.valueOf(dtoComputer.date_introduced),Timestamp.valueOf(dtoComputer.date_discontinued),Long.valueOf(dtoComputer.company_id));
+		Company company = new Company();
+		company.setId(Long.valueOf(dtoComputer.companyId));
+		company.setName(dtoComputer.companyName);
+		
+		Computer computer = new Computer(Long.valueOf(dtoComputer.id),dtoComputer.name, Timestamp.valueOf(dtoComputer.date_introduced),Timestamp.valueOf(dtoComputer.date_discontinued),company);
 		return computer;
 	}
 	
@@ -39,7 +44,8 @@ public enum MapperComputer {
 			dtoComputer.date_discontinued="";
 
 		}
-		dtoComputer.company_id=String.valueOf(computer.getCompany_id());
+		dtoComputer.companyId=String.valueOf(computer.getCompany().getId());
+		dtoComputer.companyName=computer.getCompany().getName();
 		return  dtoComputer ;
 	}
 }

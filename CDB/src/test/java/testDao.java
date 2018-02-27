@@ -81,7 +81,6 @@ public class testDao {
 			Mockito.when(mockSingletonConn.createStatement()).thenReturn(mockStmnt);
 		 */
 		ArrayList<Computer> testComputers=  new ArrayList<Computer>();
-		testComputers.add(new Computer((long) 50,"mon test",Timestamp.valueOf(LocalDate.now().atStartOfDay()),Timestamp.valueOf(LocalDate.now().atStartOfDay()),(long)2));
 		//assertEquals(testComputers.get(0), testComputersrs.get(0));
 
 

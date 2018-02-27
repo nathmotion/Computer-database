@@ -52,7 +52,7 @@ public class dashboardServlet extends HttpServlet {
 		
 		request.setAttribute("ListeCompany",listeDtoCompany);
 		request.setAttribute("ListeComputer",listeDtoComputers);
-		request.setAttribute("nbComputer", count);
+		request.setAttribute("nbComputer",count);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}
 

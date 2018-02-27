@@ -128,7 +128,7 @@ public class Ihm {
 			System.out.println("name: "+computer.getName());
 			System.out.println("introduced: "+computer.getIntroduced());
 			System.out.println("discontinued: "+computer.getDiscontinued());
-			System.out.println("company_id: "+computer.getCompany_id());
+			System.out.println("company_id: "+computer.getCompany().getId());
 		}
 		else {
 			System.out.println("Aucun Computer n'a été trouver avec cet id = "+ id);
@@ -152,7 +152,7 @@ public class Ihm {
 			System.out.println("name: "+computer.getName());
 			System.out.println("introduced: "+computer.getIntroduced());
 			System.out.println("discontinued: "+computer.getDiscontinued());
-			System.out.println("company_id: "+computer.getCompany_id());
+			System.out.println("company_id: "+computer.getCompany().getId());
 			miseajourOrdinateur(servcomputer,sc, computer);
 		}
 		else {
@@ -231,7 +231,7 @@ public class Ihm {
 				System.out.println("Entrez le nouveau id de l'ordinateur :");
 				Long id = sc.nextLong();
 				sc.nextLine();
-				computer.setCompany_id(id);
+				computer.getCompany().setId(id);;
 				servComputer.daoUpdate(computer);	
 				continue;
 
@@ -333,7 +333,7 @@ public class Ihm {
 				LOGGER.error(" le format de la date discontinued saisie est mauvais ou ce sont pas des nombres  ");
 			}
 		}
-		computer.setCompany_id(company_id);
+		computer.getCompany().setId(company_id);;
 		servComputer.daoCreate(computer);
 	}
 

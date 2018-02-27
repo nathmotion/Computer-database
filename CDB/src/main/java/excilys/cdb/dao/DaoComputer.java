@@ -12,7 +12,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import main.java.excilys.cdb.connectionmanager.SingletonConn;
+import main.java.excilys.cdb.model.Company;
 import main.java.excilys.cdb.model.Computer;
+import main.java.excilys.cdb.service.ServiceCompany;
 
 
 
@@ -20,12 +22,12 @@ public enum DaoComputer implements Dao<Computer>{
 	INSTANCE;
 
 	final static Logger LOGGER = LogManager.getLogger(DaoComputer.class);
-	final static String QUERY_GET_ALL ="SELECT id, name, introduced, discontinued, company_id FROM computer  ";
-	final static String QUERY_BY_ID = "SELECT id, name, introduced, discontinued, company_id FROM computer  WHERE id=?";
+	final static String QUERY_GET_ALL ="SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name, company.id FROM computer LEFT JOIN company ON company_id = company.id ";
+	final static String QUERY_BY_ID = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE id=?";
 	final static String QUERY_UPDATE = "UPDATE computer SET name= ?, introduced=? , discontinued=? ,company_id= ? WHERE id =?";
 	final static String QUERY_CREATE= "INSERT INTO computer ( name, introduced, discontinued ,company_id) VALUES (?, ?, ?, ?)";
 	final static String QUERY_DELETE= "DELETE FROM computer WHERE id =?";
-	final static String QUERY_GET_PAGE= "SELECT id, name, introduced, discontinued, company_id FROM computer LIMIT ? , ?";
+	final static String QUERY_GET_PAGE= "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name LEFT JOIN Company ON company_id = company.id FROM computer LIMIT ? , ?";
 	final static String QUERY_NB_ELEMENT="SELECT count(*) as nbcomputer FROM computer";
 	/**
 	 *              						======== REQUETES SQL 	RECUPERE LA LISTE DES COMPUTER   ==============
@@ -42,7 +44,10 @@ public enum DaoComputer implements Dao<Computer>{
 			ResultSet rs=stat.executeQuery(QUERY_GET_ALL);
 
 			while(rs.next()) {
-				iComputer=new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));
+				Company company=new Company();
+				company.setName(rs.getString("company.name"));
+				company.setId(rs.getLong("company_id"));
+				iComputer=new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),company);
 				listComputer.add(iComputer);
 			}
 			con.closeConn();
@@ -67,7 +72,10 @@ public enum DaoComputer implements Dao<Computer>{
 			ResultSet rs=stat.executeQuery();
 
 			while(rs.next()) {
-				iComputer=new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));
+				Company company=new Company();
+				company.setName(rs.getString("company.name"));
+				company.setId(rs.getLong("company_id"));
+				iComputer=new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),company);				
 				listComputer.add(iComputer);
 			}
 			con.closeConn();
@@ -124,8 +132,8 @@ public enum DaoComputer implements Dao<Computer>{
 			else {
 				ps.setTimestamp(3,null);
 			}
-			if(computer.getCompany_id()!=0) {
-				ps.setLong(4, computer.getCompany_id());
+			if(!computer.getCompany().equals(null)) {
+				ps.setLong(4, computer.getCompany().getId());
 			}else {
 				ps.setNull(4, Types.INTEGER);
 			}
@@ -165,8 +173,8 @@ public enum DaoComputer implements Dao<Computer>{
 			else {
 				ps.setTimestamp(3,null);
 			}
-			if(computer.getCompany_id()!=0) {
-				ps.setLong(4, computer.getCompany_id());
+			if(!computer.getCompany().equals(null)) {
+				ps.setLong(4, computer.getCompany().getId());
 			}else {
 				ps.setNull(4, Types.INTEGER);
 			}
@@ -209,7 +217,7 @@ public enum DaoComputer implements Dao<Computer>{
 	 * @return
 	 */
 	public Optional<Computer> findById(int id){
-		Computer icomputer = null;
+		Computer iComputer = null;
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
 
@@ -218,13 +226,16 @@ public enum DaoComputer implements Dao<Computer>{
 			ResultSet rs=stat.executeQuery();
 
 			while(rs.next()) {
-				icomputer =new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),rs.getLong("company_id"));
+				Company company=new Company();
+				company.setName(rs.getString("company.name"));
+				company.setId(rs.getLong("company_id"));
+				iComputer=new Computer(rs.getLong("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),company);				
 			}
 			con.closeConn();
 		} catch (SQLException e) {
 			LOGGER.error(" error requetes GET ALL : " + e.getMessage());
 		}
-		Optional<Computer> op= Optional.ofNullable(icomputer);
+		Optional<Computer> op= Optional.ofNullable(iComputer);
 		return op;
 	}
 }
