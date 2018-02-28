@@ -61,15 +61,16 @@ public class AddComputerServlet extends HttpServlet {
 		String stringDateIntro = request.getParameter(DATE_INTRO);
 		String stringDateDisc= request.getParameter(DATE_DISC);
 		String stringCompanyId = request.getParameter(COMPANY_ID);
-		System.out.println(" get post !!"+ stringName);
 		validations(stringName,stringDateIntro,stringDateDisc,stringCompanyId);
+		
 		if(listError.size()<=0) {
 			DtoComputer dtoComputer= new DtoComputer();
-			dtoComputer.companyName=stringName;
+			System.out.println(" get post !!"+ stringName);
+			dtoComputer.name=stringName;
 			dtoComputer.date_introduced=stringDateIntro;
 			dtoComputer.date_discontinued=stringDateDisc;
 			dtoComputer.companyId=stringCompanyId;
-
+			
 			Computer computer =mapperComputer.mapToEntity(dtoComputer);
 			serviceComputer.daoCreate(computer);
 		}

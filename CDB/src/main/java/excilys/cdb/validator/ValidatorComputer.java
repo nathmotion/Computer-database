@@ -8,6 +8,7 @@ public enum ValidatorComputer {
 	
 	public void validationName(String name)throws NullPointerException {
 		if(name.isEmpty() || name.equals(null) || name.equals("") ) {
+			System.out.println("petit problem");
 			throw new NullPointerException(" name est vide ! ");
 		}		
 	}

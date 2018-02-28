@@ -14,9 +14,25 @@ public enum MapperComputer {
 		Company company = new Company();
 		company.setId(Long.valueOf(dtoComputer.companyId));
 		company.setName(dtoComputer.companyName);
-
-		Computer computer = new Computer(Long.valueOf(dtoComputer.id),dtoComputer.name, Timestamp.valueOf(dtoComputer.date_introduced),Timestamp.valueOf(dtoComputer.date_discontinued),company);
-		return computer;
+		System.out.println(dtoComputer);
+		Computer computer = new Computer();
+		if( (dtoComputer.date_introduced!=null || dtoComputer.date_discontinued!=null) ) {
+			computer.setDiscontinued(null);
+			computer.setIntroduced(null);
+		}
+		else {
+			computer.setDiscontinued(Timestamp.valueOf(dtoComputer.date_discontinued));
+			computer.setIntroduced(Timestamp.valueOf(dtoComputer.date_introduced));
+		}
+		if(dtoComputer.id!=null) {
+			computer.setId(Long.valueOf(dtoComputer.id));
+		}else {
+			computer.setId((long)0);
+		}
+		System.out.println("    name "+dtoComputer.name);
+		computer.setName(dtoComputer.name);
+		computer.setCompany(company);
+			return computer;
 	}
 
 	public DtoComputer mapToDto(Computer computer) {
