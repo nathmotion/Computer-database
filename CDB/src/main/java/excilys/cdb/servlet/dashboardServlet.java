@@ -23,33 +23,32 @@ import main.java.excilys.cdb.service.ServiceComputer;
  */
 @WebServlet("/dashboard.html")
 public class dashboardServlet extends HttpServlet {
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+	MapperCompany mapCompany= MapperCompany.INSTANCE;
+	MapperComputer mapComputer= MapperComputer.INSTANCE;
+	ServiceComputer serviceComputer= ServiceComputer.INSTANCE;
+	ServiceCompany serviceCompany = ServiceCompany.INSTANCE;
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		ServiceComputer serviceComputer= ServiceComputer.INSTANCE;
-		ServiceCompany serviceCompany = ServiceCompany.INSTANCE;
+
+
 		int count = serviceComputer.daoGetNbComputer();
 		ArrayList<Computer> computers=serviceComputer.daoGetAllEntities(); 
-		ArrayList<DtoComputer> listeDtoComputers=  new ArrayList<DtoComputer>();
+		ArrayList<DtoComputer> listeDtoComputers=  new ArrayList<>();
 		ArrayList<Company> companys=serviceCompany.daoGetAllEntities();
-		ArrayList<DtoCompany> listeDtoCompany= new ArrayList<DtoCompany>();
-		
+		ArrayList<DtoCompany> listeDtoCompany= new ArrayList<>();
+
 		for(Company company:companys){
 			DtoCompany dtoCompany= new DtoCompany();
-			MapperCompany mapCompany= MapperCompany.INSTANCE;
 			dtoCompany =mapCompany.mapToDto(company);
 			listeDtoCompany.add(dtoCompany);
 		}
-		
+
 		for(Computer computer:computers){
 			DtoComputer dtoComputer= new DtoComputer();
-			MapperComputer mapComputer= MapperComputer.INSTANCE;
 			dtoComputer =mapComputer.mapToDto(computer);
 			listeDtoComputers.add(dtoComputer);
 		}
-		
+
 		request.setAttribute("ListeCompany",listeDtoCompany);
 		request.setAttribute("ListeComputer",listeDtoComputers);
 		request.setAttribute("nbComputer",count);
