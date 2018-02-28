@@ -9,13 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import main.java.excilys.cdb.dto.DtoCompany;
 import main.java.excilys.cdb.dto.DtoComputer;
-import main.java.excilys.cdb.mapper.MapperCompany;
 import main.java.excilys.cdb.mapper.MapperComputer;
-import main.java.excilys.cdb.model.Company;
 import main.java.excilys.cdb.model.Computer;
-import main.java.excilys.cdb.service.ServiceCompany;
 import main.java.excilys.cdb.service.ServiceComputer;
 
 /**
@@ -23,10 +19,8 @@ import main.java.excilys.cdb.service.ServiceComputer;
  */
 @WebServlet("/dashboard.html")
 public class dashboardServlet extends HttpServlet {
-	MapperCompany mapCompany= MapperCompany.INSTANCE;
 	MapperComputer mapComputer= MapperComputer.INSTANCE;
 	ServiceComputer serviceComputer= ServiceComputer.INSTANCE;
-	ServiceCompany serviceCompany = ServiceCompany.INSTANCE;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -34,27 +28,16 @@ public class dashboardServlet extends HttpServlet {
 		int count = serviceComputer.daoGetNbComputer();
 		ArrayList<Computer> computers=serviceComputer.daoGetAllEntities(); 
 		ArrayList<DtoComputer> listeDtoComputers=  new ArrayList<>();
-		ArrayList<Company> companys=serviceCompany.daoGetAllEntities();
-		ArrayList<DtoCompany> listeDtoCompany= new ArrayList<>();
-
-		for(Company company:companys){
-			DtoCompany dtoCompany= new DtoCompany();
-			dtoCompany =mapCompany.mapToDto(company);
-			listeDtoCompany.add(dtoCompany);
-		}
-
+	
 		for(Computer computer:computers){
 			DtoComputer dtoComputer= new DtoComputer();
 			dtoComputer =mapComputer.mapToDto(computer);
 			listeDtoComputers.add(dtoComputer);
 		}
 
-		request.setAttribute("ListeCompany",listeDtoCompany);
 		request.setAttribute("ListeComputer",listeDtoComputers);
 		request.setAttribute("nbComputer",count);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}
-
-
-
+// page to go index => (indexPage - 1) * limit
 }

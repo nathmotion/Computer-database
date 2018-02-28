@@ -6,9 +6,9 @@ import javax.naming.NamingException;
 public enum ValidatorComputer {
 	INSTANCE;
 	
-	public void validationName(String name)throws NamingException {
-		if(name.isEmpty() || name.equals("")) {
-			throw new NamingException(" name est vide ! ");
+	public void validationName(String name)throws NullPointerException {
+		if(name.isEmpty() || name.equals(null) || name.equals("") ) {
+			throw new NullPointerException(" name est vide ! ");
 		}		
 	}
 	
