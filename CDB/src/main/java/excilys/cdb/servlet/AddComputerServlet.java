@@ -61,6 +61,7 @@ public class AddComputerServlet extends HttpServlet {
 		String stringDateIntro = request.getParameter(DATE_INTRO);
 		String stringDateDisc= request.getParameter(DATE_DISC);
 		String stringCompanyId = request.getParameter(COMPANY_ID);
+		
 		validations(stringName,stringDateIntro,stringDateDisc,stringCompanyId);
 
 		if(listError.size()<=0) {
@@ -69,7 +70,7 @@ public class AddComputerServlet extends HttpServlet {
 			dtoComputer.date_introduced=stringDateIntro;
 			dtoComputer.date_discontinued=stringDateDisc;
 			dtoComputer.companyId=stringCompanyId;
-
+			//listError = new ArrayList();
 			Computer computer =mapperComputer.mapToEntity(dtoComputer);
 			serviceComputer.daoCreate(computer);
 		}
@@ -81,28 +82,28 @@ public class AddComputerServlet extends HttpServlet {
 			validatorComputer.validationName(name);
 		} catch (NullPointerException e) {
 			LOGGER.error(e.getMessage());
-			listError.add(e.getMessage());
+			listError.add("name saissie non valide !");
 		}
 
 		try {
 			validatorComputer.validationDateIntro(dateIntro);
 		}catch(IllegalArgumentException e) {
 			LOGGER.error(e.getMessage());
-			listError.add(e.getMessage());
+			listError.add(" Date introduced pas valide");
 		}
 
 		try {
 			validatorComputer.validationDateDisc(dateDisc);
 		}catch(DateTimeException e) {
 			LOGGER.error(e.getMessage());
-			listError.add(e.getMessage());
+			listError.add("Date disconnected n'ont valide ! ");
 		}
 
 		try {
 			validatorComputer.validationCompany_id(companyId);
 		}catch(DateTimeException e) {
 			LOGGER.error(e.getMessage());
-			listError.add(e.getMessage());
+			listError.add(" Id company pas trouvé  !");
 		}
 	}
 }

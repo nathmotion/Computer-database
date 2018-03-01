@@ -2,6 +2,7 @@ package main.java.excilys.cdb.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,10 +24,11 @@ public class dashboardServlet extends HttpServlet {
 	ServiceComputer serviceComputer= ServiceComputer.INSTANCE;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		int count = serviceComputer.daoGetNbComputer();
 		ArrayList<Computer> computers=serviceComputer.daoGetAllEntities(); 
 		ArrayList<DtoComputer> listeDtoComputers=  new ArrayList<>();
-	
+
 		for(Computer computer:computers){
 			DtoComputer dtoComputer= new DtoComputer();
 			dtoComputer =mapComputer.mapToDto(computer);
@@ -36,10 +38,15 @@ public class dashboardServlet extends HttpServlet {
 		request.setAttribute("nbComputer",count);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}
-	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-				getParameter("selection");
-		doGet(request,response);
+		ArrayList<String> selection =new ArrayList<String>(Arrays.asList(request.getParameter("selection").split(",")));
+		for(String idString :selection) {
+			Long idComputer = Long.valueOf(idString);
+			Computer computer= new Computer();
+			computer.setId(idComputer);
+			serviceComputer.daoDelete(computer);
+		}
 	}
-// page to go index => (indexPage - 1) * limit
+	// page to go index => (indexPage - 1) * limit
 }

@@ -62,7 +62,6 @@ public enum MapperComputer {
 		}else {
 			dtoComputer.date_discontinued="";
 		}
-		
 		dtoComputer.companyId=String.valueOf(computer.getCompany().getId());
 		dtoComputer.companyName=computer.getCompany().getName();
 		return  dtoComputer ;

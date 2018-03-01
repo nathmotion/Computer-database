@@ -23,28 +23,34 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
+					<c:forEach items="${errors}" var="error">
+					<h3>${error}</h3>
+					<br>
+					</c:forEach>
 					<form action="addComputer.html" method="POST">
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" id="computerName" name="computerName"
-									placeholder="Computer name">
+									type="text" class="form-control" id="computerName"
+									name="computerName" placeholder="Computer name" required>
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
-									type="date" class="form-control" id="introduced" name="introduced"
-									placeholder="Introduced date">
+									type="date" class="form-control" id="introduced"
+									name="introduced" placeholder="Introduced date">
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
-									type="date" class="form-control" id="discontinued" name="discontinued"
-									placeholder="Discontinued date">
+									type="date" class="form-control" id="discontinued"
+									name="discontinued" placeholder="Discontinued date">
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> <select
 									class="form-control" id="companyId" name="companyId">
+									<option value="0">Aucune</option>
 									<c:forEach items="${ListeCompany}" var="company">
-										<option value="${company.id}">${company.id} - ${company.name}</option>
+										<option value="${company.id}">${company.id}-
+											${company.name}</option>
 									</c:forEach>
 								</select>
 							</div>
@@ -61,6 +67,6 @@
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/dashboard.js"></script>
-	
+
 </body>
 </html>

@@ -16,18 +16,25 @@ public enum ValidatorComputer {
 	}
 	
 	public void validationDateIntro(String date) throws DateTimeParseException {
-		dateIntroTmp = LocalDate.parse(date);
-	}
-	
-	public void validationDateDisc(String date) throws DateTimeException {
-		LocalDate dateDisc = LocalDate.parse(date);
-		if(dateIntroTmp.getYear()>dateDisc.getYear()) {
-			throw new DateTimeException("Date discontinued est avant la date de introduced");
+		System.out.println(" lol "+ date);
+		if(date!=null && !date.equals("") && !date.isEmpty()) {
+			dateIntroTmp = LocalDate.parse(date);
 		}
 	}
 	
+	public void validationDateDisc(String date) throws DateTimeException {
+		LocalDate dateDisc=null;
+		if(date!=null  && !date.equals("") && date.isEmpty()){
+			dateDisc=LocalDate.parse(date);
+			if(dateIntroTmp.getYear()>dateDisc.getYear()) {
+				throw new DateTimeException("Date discontinued est avant la date de introduced");
+			}
+		}
+		
+	}
+	
 	public void validationCompany_id(String id) throws IllegalArgumentException {
-		if(id== null) {
+		if(id== null && id.equals("") && id.isEmpty() ){
 			throw new IllegalArgumentException(" company id est null ");
 		}
 	}

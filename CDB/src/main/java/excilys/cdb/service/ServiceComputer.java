@@ -31,14 +31,14 @@ public enum ServiceComputer {
 		return daocomputer.create(computer);
 	}
 
-	public boolean daoUpdate(Computer computer) {
+	public void daoUpdate(Computer computer) {
 		daocomputer = DaoComputer.INSTANCE;
-		return daocomputer.update(computer);
+		 daocomputer.update(computer);
 	}
 
-	public boolean daoDelete(Computer computer) {
+	public void daoDelete(Computer computer) {
 		daocomputer = DaoComputer.INSTANCE;
-		return daocomputer.delete(computer);
+		daocomputer.delete(computer);
 	}
 	
 	public Optional<Computer> daoFindById(int id){

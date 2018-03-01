@@ -51,7 +51,7 @@
 
 						<th class="editMode" style="width: 60px; height: 22px;"><input
 							type="checkbox" id="selectall" /> <span
-							style="vertical-align: top;"> - <a href="dashboard.html"
+							style="vertical-align: top;"> - <a href="#"
 								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
@@ -70,8 +70,8 @@
 					<c:forEach items="${ ListeComputer }" var="computer">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="${computer}"></td>
-							<td><a href="editComputer.html" onclick="">${ computer.name }</a>
+								class="cb" value="${computer.id}"></td>
+							<td><a href="editComputer.html" onclick="" >${ computer.name }</a>
 							</td>
 							<td>${ computer.date_introduced }</td>
 							<td>${ computer.date_discontinued }</td>
@@ -86,7 +86,7 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="dashboard?action=previous" aria-label="Previous"> <span
+				<li><a href="dashboard.html?action=previous" aria-label="Previous"> <span
 						aria-hidden="true">&laquo;</span>
 				</a></li>
 				<li><a href="dashboard?page=1">1</a></li>

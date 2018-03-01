@@ -103,7 +103,6 @@ public enum DaoComputer implements Dao<Computer>{
 		} catch (SQLException e) {
 			LOGGER.error(" error requetes GET ALL : " + e.getMessage());
 		}
-		System.out.println(" nbComputer =" +nbComputer);
 		return nbComputer;
 	}
 	/**
@@ -152,7 +151,7 @@ public enum DaoComputer implements Dao<Computer>{
 	 * @param computer
 	 * @return
 	 */
-	public boolean update(Computer computer) {
+	public void update(Computer computer) {
 
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
@@ -182,11 +181,9 @@ public enum DaoComputer implements Dao<Computer>{
 			ps.executeUpdate();
 			con.closeConn();
 			System.out.println("mise a jour reussi ... ");
-			return true;
 		} catch (SQLException e) {
 			LOGGER.error(" error requete Update  : " + e.getMessage());
 		}
-		return false;
 	}
 
 	/**
@@ -194,7 +191,7 @@ public enum DaoComputer implements Dao<Computer>{
 	 * @param computer
 	 * @return
 	 */
-	public boolean delete(Computer computer) {
+	public void delete(Computer computer) {
 
 		SingletonConn con= SingletonConn.INSTANCE;		
 		con.initConn();
@@ -204,11 +201,9 @@ public enum DaoComputer implements Dao<Computer>{
 			ps.executeUpdate();
 			con.closeConn();
 			System.out.println("Suppression reussi ... ");
-			return true;
 		} catch (SQLException e) {
 			LOGGER.error(" error requete DELETE  : " + e.getMessage());
 		}
-		return false;
 	}
 
 	/**
