@@ -1,6 +1,7 @@
 package main.java.excilys.cdb.servlet;
 
 import java.io.IOException;
+import java.time.DateTimeException;
 import java.util.ArrayList;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
@@ -28,12 +29,11 @@ import main.java.excilys.cdb.validator.ValidatorComputer;
 public class AddComputerServlet extends HttpServlet {
 	final static Logger LOGGER = LogManager.getLogger(DaoComputer.class);
 	final String view = "/WEB-INF/views/addComputer.jsp";
-	
 	public final String COMPUTER_NAME= "computerName";
 	public final String DATE_INTRO= "introduced";
 	public final String DATE_DISC= "discontinued";
 	public final String COMPANY_ID= "companyId";
-
+	
 	ArrayList<String> listError = new ArrayList<>();
 	MapperCompany mapCompany= MapperCompany.INSTANCE;
 	ServiceCompany serviceCompany = ServiceCompany.INSTANCE;
@@ -44,7 +44,7 @@ public class AddComputerServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		ArrayList<Company> companys=serviceCompany.daoGetAllEntities();
 		ArrayList<DtoCompany> listeDtoCompany= new ArrayList<>();
-		
+
 		for(Company company:companys){
 			DtoCompany dtoCompany= new DtoCompany();
 			dtoCompany =mapCompany.mapToDto(company);
@@ -62,15 +62,14 @@ public class AddComputerServlet extends HttpServlet {
 		String stringDateDisc= request.getParameter(DATE_DISC);
 		String stringCompanyId = request.getParameter(COMPANY_ID);
 		validations(stringName,stringDateIntro,stringDateDisc,stringCompanyId);
-		
+
 		if(listError.size()<=0) {
 			DtoComputer dtoComputer= new DtoComputer();
-			System.out.println(" get post !!"+ stringName);
 			dtoComputer.name=stringName;
 			dtoComputer.date_introduced=stringDateIntro;
 			dtoComputer.date_discontinued=stringDateDisc;
 			dtoComputer.companyId=stringCompanyId;
-			
+
 			Computer computer =mapperComputer.mapToEntity(dtoComputer);
 			serviceComputer.daoCreate(computer);
 		}
@@ -85,12 +84,23 @@ public class AddComputerServlet extends HttpServlet {
 			listError.add(e.getMessage());
 		}
 
-		validatorComputer.validationDateIntro(dateIntro);
-		validatorComputer.validationDateDisc(dateDisc);
-	
+		try {
+			validatorComputer.validationDateIntro(dateIntro);
+		}catch(IllegalArgumentException e) {
+			LOGGER.error(e.getMessage());
+			listError.add(e.getMessage());
+		}
+
+		try {
+			validatorComputer.validationDateDisc(dateDisc);
+		}catch(DateTimeException e) {
+			LOGGER.error(e.getMessage());
+			listError.add(e.getMessage());
+		}
+
 		try {
 			validatorComputer.validationCompany_id(companyId);
-		}catch(IllegalArgumentException e) {
+		}catch(DateTimeException e) {
 			LOGGER.error(e.getMessage());
 			listError.add(e.getMessage());
 		}

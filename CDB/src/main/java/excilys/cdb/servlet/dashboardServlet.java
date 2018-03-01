@@ -23,8 +23,6 @@ public class dashboardServlet extends HttpServlet {
 	ServiceComputer serviceComputer= ServiceComputer.INSTANCE;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
 		int count = serviceComputer.daoGetNbComputer();
 		ArrayList<Computer> computers=serviceComputer.daoGetAllEntities(); 
 		ArrayList<DtoComputer> listeDtoComputers=  new ArrayList<>();
@@ -34,10 +32,14 @@ public class dashboardServlet extends HttpServlet {
 			dtoComputer =mapComputer.mapToDto(computer);
 			listeDtoComputers.add(dtoComputer);
 		}
-
 		request.setAttribute("ListeComputer",listeDtoComputers);
 		request.setAttribute("nbComputer",count);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				getParameter("selection");
+		doGet(request,response);
 	}
 // page to go index => (indexPage - 1) * limit
 }

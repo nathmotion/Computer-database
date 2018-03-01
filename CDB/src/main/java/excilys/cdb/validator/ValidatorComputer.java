@@ -1,24 +1,29 @@
 package main.java.excilys.cdb.validator;
 
+import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import javax.naming.NamingException;
 
 public enum ValidatorComputer {
 	INSTANCE;
 	
+	LocalDate dateIntroTmp;
+	
 	public void validationName(String name)throws NullPointerException {
 		if(name.isEmpty() || name.equals(null) || name.equals("") ) {
-			System.out.println("petit problem");
 			throw new NullPointerException(" name est vide ! ");
 		}		
 	}
 	
 	public void validationDateIntro(String date) throws DateTimeParseException {
-		
+		dateIntroTmp = LocalDate.parse(date);
 	}
 	
-	public void validationDateDisc(String date) throws DateTimeParseException {
-		
+	public void validationDateDisc(String date) throws DateTimeException {
+		LocalDate dateDisc = LocalDate.parse(date);
+		if(dateIntroTmp.getYear()>dateDisc.getYear()) {
+			throw new DateTimeException("Date discontinued est avant la date de introduced");
+		}
 	}
 	
 	public void validationCompany_id(String id) throws IllegalArgumentException {

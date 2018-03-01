@@ -20,7 +20,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${nbComputer}Computersfound</h1>
+			<h1 id="homeTitle">${nbComputer} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -38,8 +38,7 @@
 				</div>
 			</div>
 		</div>
-
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteForm" action="dashboard.html" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -52,7 +51,7 @@
 
 						<th class="editMode" style="width: 60px; height: 22px;"><input
 							type="checkbox" id="selectall" /> <span
-							style="vertical-align: top;"> - <a href="editComputerServlet.html"
+							style="vertical-align: top;"> - <a href="dashboard.html"
 								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
@@ -71,7 +70,7 @@
 					<c:forEach items="${ ListeComputer }" var="computer">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="0"></td>
+								class="cb" value="${computer}"></td>
 							<td><a href="editComputer.html" onclick="">${ computer.name }</a>
 							</td>
 							<td>${ computer.date_introduced }</td>
@@ -105,9 +104,9 @@
 				<button type="button" class="btn btn-default">100</button>
 			</div>
 	</footer>
-	<script src="../js/jquery.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/dashboard.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/dashboard.js"></script>
 
 </body>
 </html>
