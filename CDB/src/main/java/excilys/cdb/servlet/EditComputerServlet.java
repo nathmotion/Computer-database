@@ -13,13 +13,12 @@ public class EditComputerServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String selection =request.getParameter("cmpedit");
-		System.out.println(selection);	
+		System.out.println("get"+selection);	
 		request.getRequestDispatcher("WEB-INF/views/editComputer.jsp").forward(request, response);
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String selection =request.getParameter("cmpedit");
 		System.out.println(" post "+selection);	
-		doGet(request,response);
 	}
 
 }

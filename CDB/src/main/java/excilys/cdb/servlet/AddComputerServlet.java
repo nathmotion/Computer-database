@@ -33,7 +33,7 @@ public class AddComputerServlet extends HttpServlet {
 	public final String DATE_INTRO= "introduced";
 	public final String DATE_DISC= "discontinued";
 	public final String COMPANY_ID= "companyId";
-	
+
 	ArrayList<String> listError = new ArrayList<>();
 	MapperCompany mapCompany= MapperCompany.INSTANCE;
 	ServiceCompany serviceCompany = ServiceCompany.INSTANCE;
@@ -42,16 +42,7 @@ public class AddComputerServlet extends HttpServlet {
 	ServiceComputer serviceComputer = ServiceComputer.INSTANCE;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
-		ArrayList<Company> companys=serviceCompany.daoGetAllEntities();
-		ArrayList<DtoCompany> listeDtoCompany= new ArrayList<>();
-
-		for(Company company:companys){
-			DtoCompany dtoCompany= new DtoCompany();
-			dtoCompany =mapCompany.mapToDto(company);
-			listeDtoCompany.add(dtoCompany);
-		}
-		request.setAttribute("ListeCompany",listeDtoCompany);
-		request.setAttribute("errors", listError);
+		request= affichageCompany(request);
 		this.getServletContext().getRequestDispatcher(view).forward(request, response);
 	}
 
@@ -61,7 +52,7 @@ public class AddComputerServlet extends HttpServlet {
 		String stringDateIntro = request.getParameter(DATE_INTRO);
 		String stringDateDisc= request.getParameter(DATE_DISC);
 		String stringCompanyId = request.getParameter(COMPANY_ID);
-		
+
 		validations(stringName,stringDateIntro,stringDateDisc,stringCompanyId);
 
 		if(listError.size()<=0) {
@@ -70,40 +61,53 @@ public class AddComputerServlet extends HttpServlet {
 			dtoComputer.date_introduced=stringDateIntro;
 			dtoComputer.date_discontinued=stringDateDisc;
 			dtoComputer.companyId=stringCompanyId;
-			//listError = new ArrayList();
 			Computer computer =mapperComputer.mapToEntity(dtoComputer);
 			serviceComputer.daoCreate(computer);
 		}
-		doGet(request,response);
+		request.setAttribute("errors", listError);
+		request=affichageCompany(request);
+		this.getServletContext().getRequestDispatcher(view).forward(request, response);	
 	}
 
+	public HttpServletRequest affichageCompany(HttpServletRequest request) {
+		ArrayList<Company> companys=serviceCompany.daoGetAllEntities();
+		ArrayList<DtoCompany> listeDtoCompany= new ArrayList<>();
+
+		for(Company company:companys){
+			DtoCompany dtoCompany= new DtoCompany();
+			dtoCompany = mapCompany.mapToDto(company);
+			listeDtoCompany.add(dtoCompany);
+		}
+		request.setAttribute("ListeCompany",listeDtoCompany);
+		return request;
+	}
 	public void validations(String name, String dateIntro,String dateDisc, String companyId) {
 		try {
 			validatorComputer.validationName(name);
 		} catch (NullPointerException e) {
 			LOGGER.error(e.getMessage());
-			listError.add("name saissie non valide !");
+			listError.add("nom saisie non valide !");
 		}
 
 		try {
 			validatorComputer.validationDateIntro(dateIntro);
-		}catch(IllegalArgumentException e) {
+		} catch(IllegalArgumentException e) {
 			LOGGER.error(e.getMessage());
-			listError.add(" Date introduced pas valide");
+			listError.add("La date d'introducion n'est pas valide");
 		}
 
 		try {
 			validatorComputer.validationDateDisc(dateDisc);
-		}catch(DateTimeException e) {
+		} catch(DateTimeException e) {
 			LOGGER.error(e.getMessage());
-			listError.add("Date disconnected n'ont valide ! ");
+			listError.add("la date de retrait n'ont valide ! ");
 		}
 
 		try {
 			validatorComputer.validationCompany_id(companyId);
-		}catch(DateTimeException e) {
+		} catch(DateTimeException e) {
 			LOGGER.error(e.getMessage());
-			listError.add(" Id company pas trouvé  !");
+			listError.add("l'Id de la company n'as pas été trouver  !");
 		}
 	}
 }

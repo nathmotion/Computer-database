@@ -19,23 +19,12 @@ import main.java.excilys.cdb.service.ServiceComputer;
  * Servlet implementation class MyServletInterface
  */
 @WebServlet("/dashboard.html")
-public class dashboardServlet extends HttpServlet {
+public class DashboardServlet extends HttpServlet {
 	MapperComputer mapComputer= MapperComputer.INSTANCE;
 	ServiceComputer serviceComputer= ServiceComputer.INSTANCE;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		int count = serviceComputer.daoGetNbComputer();
-		ArrayList<Computer> computers=serviceComputer.daoGetAllEntities(); 
-		ArrayList<DtoComputer> listeDtoComputers=  new ArrayList<>();
-
-		for(Computer computer:computers){
-			DtoComputer dtoComputer= new DtoComputer();
-			dtoComputer =mapComputer.mapToDto(computer);
-			listeDtoComputers.add(dtoComputer);
-		}
-		request.setAttribute("ListeComputer",listeDtoComputers);
-		request.setAttribute("nbComputer",count);
+		request=affichagePage(request);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}
 
@@ -47,6 +36,23 @@ public class dashboardServlet extends HttpServlet {
 			computer.setId(idComputer);
 			serviceComputer.daoDelete(computer);
 		}
-	}
+		request=affichagePage(request);
+		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+	}	
+	
 	// page to go index => (indexPage - 1) * limit
+	public HttpServletRequest affichagePage(HttpServletRequest request) {
+		int count = serviceComputer.daoGetNbComputer();
+		ArrayList<Computer> computers=serviceComputer.daoGetAllEntities(); 
+		ArrayList<DtoComputer> listeDtoComputers=  new ArrayList<>();
+
+		for(Computer computer:computers){
+			DtoComputer dtoComputer= new DtoComputer();
+			dtoComputer =mapComputer.mapToDto(computer);
+			listeDtoComputers.add(dtoComputer);
+		}
+		request.setAttribute("ListeComputer",listeDtoComputers);
+		request.setAttribute("nbComputer",count);
+		return request;
+	}
 }

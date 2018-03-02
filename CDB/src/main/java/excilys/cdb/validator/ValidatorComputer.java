@@ -30,7 +30,6 @@ public enum ValidatorComputer {
 				throw new DateTimeException("Date discontinued est avant la date de introduced");
 			}
 		}
-		
 	}
 	
 	public void validationCompany_id(String id) throws IllegalArgumentException {

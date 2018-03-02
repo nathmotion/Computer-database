@@ -36,14 +36,14 @@ public class testDao {
 	public void setUp(){
 		SingletonConn conn = SingletonConn.INSTANCE;
 		conn.initConn();
-		try(Statement stmnt = conn.createStatement();){
+		try(Statement stmnt = conn.createStatement()){
 			stmnt.execute(QUERY_CREATE_TABLE);
 			conn.getConn().commit();
 			stmnt.executeUpdate(QUERY_INSERT_COMPUTER1);
 			stmnt.executeUpdate(QUERY_INSERT_COMPUTER2);
 			stmnt.executeUpdate(QUERY_INSERT_COMPUTER3);
 			conn.getConn().commit();
-		}catch(SQLException e) {
+		} catch(SQLException e) {
 			LOGGER.error("erreur de creation de base de donnée ");
 		}
 
