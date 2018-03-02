@@ -9,6 +9,7 @@ public class DtoComputer {
 	public String date_discontinued;
 	public String companyId ;
 	public String companyName;
+	
 	public DtoComputer() {
 		
 	}

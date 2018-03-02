@@ -81,6 +81,7 @@ public class AddComputerServlet extends HttpServlet {
 		request.setAttribute("ListeCompany",listeDtoCompany);
 		return request;
 	}
+	
 	public void validations(String name, String dateIntro,String dateDisc, String companyId) {
 		try {
 			validatorComputer.validationName(name);
@@ -97,10 +98,11 @@ public class AddComputerServlet extends HttpServlet {
 		}
 
 		try {
+			System.out.println("Validation Date discontinued");
 			validatorComputer.validationDateDisc(dateDisc);
 		} catch(DateTimeException e) {
 			LOGGER.error(e.getMessage());
-			listError.add("la date de retrait n'ont valide ! ");
+			listError.add("la date de retrait non valide ! ");
 		}
 
 		try {

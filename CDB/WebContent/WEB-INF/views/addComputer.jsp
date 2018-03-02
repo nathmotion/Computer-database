@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <html>
 <head>
 <title>Computer Database</title>
@@ -24,7 +23,7 @@
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
 					<c:forEach items="${errors}" var="error">
-					<h3>${error}</h3>
+					<h3 style="color:red;">${error}</h3>
 					<br>
 					</c:forEach>
 					<form action="addComputer.html" method="POST">

@@ -1,10 +1,19 @@
 package main.java.excilys.cdb.dao;
 
-public abstract class Page<T>  {
+import java.util.ArrayList;
 
-	public abstract int getNbElements();
+public class Page<T>  {
+	
+	private int offset=5;
+	private	ArrayList<T> page;
+		
+	public int getNbElements() {
+		return 0;
+	}
 
-	public abstract void setNbElements(int nbElements);
+	public void setNbElements(int nbElements) {
+	}
 
-	public abstract void add(T t);
+	public void add(T t) {
+	}
 }
