@@ -22,27 +22,29 @@ import main.java.excilys.cdb.service.ServiceComputer;
  */
 @WebServlet("/dashboard.html")
 public class DashboardServlet extends HttpServlet {
-	MapperComputer mapComputer= MapperComputer.INSTANCE;
-	ServiceComputer serviceComputer= ServiceComputer.INSTANCE;
-	int offset = 0 ;
-	int limitPage = 10; 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request=affichagePage(request);
+	MapperComputer mapComputer = MapperComputer.INSTANCE;
+	ServiceComputer serviceComputer = ServiceComputer.INSTANCE;
+	int offset = 0;
+	int limitPage = 10;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request = affichagePage(request);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ArrayList<String> selection =new ArrayList<String>(Arrays.asList(request.getParameter("selection").split(",")));
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		ArrayList<String> selection = new ArrayList<String>(Arrays.asList(request.getParameter("selection").split(",")));
 		gestionDelete(selection);
-		request=affichagePage(request);
+		request = affichagePage(request);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
-	}	
+	}
 
-
-	public void gestionDelete(ArrayList<String> selection){
-		for(String idString :selection) {
+	public void gestionDelete(ArrayList<String> selection) {
+		for (String idString : selection) {
 			Long idComputer = Long.parseLong(idString);
-			Computer computer= new Computer();
+			Computer computer = new Computer();
 			computer.setId(idComputer);
 			serviceComputer.daoDelete(computer);
 		}
@@ -52,36 +54,36 @@ public class DashboardServlet extends HttpServlet {
 	public HttpServletRequest affichagePage(HttpServletRequest request) {
 		int count = serviceComputer.daoGetNbComputer();
 		String selectionPage = request.getParameter("page");
-		if(selectionPage==null) {
-			selectionPage="0";
+		if (selectionPage == null) {
+			selectionPage = "0";
 		}
-		switch(selectionPage) {
+		switch (selectionPage) {
 		case "next":
-			if(offset+limitPage<count) {
-				offset= offset+limitPage;
+			if (offset + limitPage < count) {
+				offset = offset + limitPage;
 			}
 			break;
 
 		case "previous":
-			if(offset+limitPage>limitPage) {
-				offset = offset-limitPage;
+			if (offset + limitPage > limitPage) {
+				offset = offset - limitPage;
 			}
 			break;
-		default :offset=0;
-				limitPage=10;
+		default:
+			offset = 0;
+			limitPage = 10;
 		}
 
+		Page<Computer> page = serviceComputer.daoGetPage(offset, limitPage);
+		ArrayList<DtoComputer> listeDtoComputers = new ArrayList<>();
 
-		Page<Computer> page=serviceComputer.daoGetPage(offset,limitPage);
-		ArrayList<DtoComputer> listeDtoComputers=  new ArrayList<>();
-
-		for(Computer computer:page.getPage()){
-			DtoComputer dtoComputer= new DtoComputer();
-			dtoComputer =mapComputer.mapToDto(computer);
+		for (Computer computer : page.getPage()) {
+			DtoComputer dtoComputer = new DtoComputer();
+			dtoComputer = mapComputer.mapToDto(computer);
 			listeDtoComputers.add(dtoComputer);
 		}
-		request.setAttribute("ListeComputer",listeDtoComputers);
-		request.setAttribute("nbComputer",count);
+		request.setAttribute("ListeComputer", listeDtoComputers);
+		request.setAttribute("nbComputer", count);
 		return request;
 	}
 

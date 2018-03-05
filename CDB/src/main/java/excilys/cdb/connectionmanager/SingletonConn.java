@@ -12,31 +12,31 @@ public enum SingletonConn {
 	INSTANCE;
 
 	final static Logger LOGGER = LogManager.getLogger(SingletonConn.class);
-	// url 
+	// url
 	private String url;
 	// username
 	private String username;
 	// password
 	private String password;
 	// objet connection
-	private Connection conn ;
+	private Connection conn;
 	private String driver;
 
-	SingletonConn(){
+	SingletonConn() {
 
 		ResourceBundle bundle = ResourceBundle.getBundle("userInfoDB");
 		username = bundle.getString("login");
 		password = bundle.getString("password");
 		url = bundle.getString("url");
-		driver= bundle.getString("driver");
-	
+		driver = bundle.getString("driver");
+
 		try {
 			Class.forName(driver);
-			conn= DriverManager.getConnection(url, username, password);
+			conn = DriverManager.getConnection(url, username, password);
 		} catch (SQLException e) {
-			System.out.println(" sql Connection fail ....  "+e.getMessage());
+			System.out.println(" sql Connection fail ....  " + e.getMessage());
 		} catch (ClassNotFoundException e) {
-			System.out.println(" Connection fail ....  "+e.getMessage());
+			System.out.println(" Connection fail ....  " + e.getMessage());
 		}
 	}
 
@@ -45,37 +45,37 @@ public enum SingletonConn {
 		username = bundle.getString("login");
 		password = bundle.getString("password");
 		url = bundle.getString("url");
-		driver= bundle.getString("driver");
+		driver = bundle.getString("driver");
 		try {
 			Class.forName(driver);
-			conn= DriverManager.getConnection(url, username, password);
-		}catch (SQLException e) {
-			LOGGER.error("conn :"+e.getMessage());
+			conn = DriverManager.getConnection(url, username, password);
+		} catch (SQLException e) {
+			LOGGER.error("conn :" + e.getMessage());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void initConn(String url, String user, String pass) {
 		ResourceBundle bundle = ResourceBundle.getBundle("userInfoDB");
-		driver= bundle.getString("driver");
+		driver = bundle.getString("driver");
 		try {
 			Class.forName(driver);
-			conn=DriverManager.getConnection(url,user,pass);
-		} catch (SQLException e ) {
-			LOGGER.error("conn : "+e.getMessage());
+			conn = DriverManager.getConnection(url, user, pass);
+		} catch (SQLException e) {
+			LOGGER.error("conn : " + e.getMessage());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
+
 	public void closeConn() {
 		try {
 			conn.close();
 		} catch (SQLException e) {
-			LOGGER.error("close : "+e.getMessage());
+			LOGGER.error("close : " + e.getMessage());
 		}
 	}
-
 
 	public String getUrl() {
 		return url;
@@ -88,6 +88,7 @@ public enum SingletonConn {
 	public String getPassword() {
 		return password;
 	}
+
 	public Connection getConn() {
 		return conn;
 	}

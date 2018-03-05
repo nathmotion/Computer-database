@@ -29,61 +29,65 @@ import main.java.excilys.cdb.validator.ValidatorComputer;
 public class AddComputerServlet extends HttpServlet {
 	final static Logger LOGGER = LogManager.getLogger(DaoComputer.class);
 	final String view = "/WEB-INF/views/addComputer.jsp";
-	public final String COMPUTER_NAME= "computerName";
-	public final String DATE_INTRO= "introduced";
-	public final String DATE_DISC= "discontinued";
-	public final String COMPANY_ID= "companyId";
+	public final String COMPUTER_NAME = "computerName";
+	public final String DATE_INTRO = "introduced";
+	public final String DATE_DISC = "discontinued";
+	public final String COMPANY_ID = "companyId";
 
 	ArrayList<String> listError = new ArrayList<>();
-	MapperCompany mapCompany= MapperCompany.INSTANCE;
+	MapperCompany mapCompany = MapperCompany.INSTANCE;
 	ServiceCompany serviceCompany = ServiceCompany.INSTANCE;
-	ValidatorComputer validatorComputer= ValidatorComputer.INSTANCE;
+	ValidatorComputer validatorComputer = ValidatorComputer.INSTANCE;
 	MapperComputer mapperComputer = MapperComputer.INSTANCE;
 	ServiceComputer serviceComputer = ServiceComputer.INSTANCE;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
-		request= affichageCompany(request);
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request = affichageCompany(request);
 		this.getServletContext().getRequestDispatcher(view).forward(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String stringName= request.getParameter(COMPUTER_NAME);
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String stringName = request.getParameter(COMPUTER_NAME);
 		String stringDateIntro = request.getParameter(DATE_INTRO);
-		String stringDateDisc= request.getParameter(DATE_DISC);
+		String stringDateDisc = request.getParameter(DATE_DISC);
 		String stringCompanyId = request.getParameter(COMPANY_ID);
-		
-		validations(stringName,stringDateIntro,stringDateDisc,stringCompanyId);
-		gestionCreation(stringName,stringDateIntro,stringDateDisc,stringCompanyId);
+
+		validations(stringName, stringDateIntro, stringDateDisc, stringCompanyId);
+		gestionCreation(stringName, stringDateIntro, stringDateDisc, stringCompanyId);
 		request.setAttribute("errors", listError);
-		request=affichageCompany(request);
-		this.getServletContext().getRequestDispatcher(view).forward(request, response);	
+		request = affichageCompany(request);
+		this.getServletContext().getRequestDispatcher(view).forward(request, response);
 	}
 
 	public HttpServletRequest affichageCompany(HttpServletRequest request) {
-		ArrayList<Company> companys=serviceCompany.daoGetAllEntities();
-		ArrayList<DtoCompany> listeDtoCompany= new ArrayList<>();
+		ArrayList<Company> companys = serviceCompany.daoGetAllEntities();
+		ArrayList<DtoCompany> listeDtoCompany = new ArrayList<>();
 
-		for(Company company:companys){
-			DtoCompany dtoCompany= new DtoCompany();
+		for (Company company : companys) {
+			DtoCompany dtoCompany = new DtoCompany();
 			dtoCompany = mapCompany.mapToDto(company);
 			listeDtoCompany.add(dtoCompany);
 		}
-		request.setAttribute("ListeCompany",listeDtoCompany);
+		request.setAttribute("ListeCompany", listeDtoCompany);
 		return request;
 	}
-	
-	public void gestionCreation(String stringName,String stringDateIntro,String stringDateDisc,String stringCompanyId) {
-		if(listError.size()<=0) {
-			DtoComputer dtoComputer= new DtoComputer();
-			dtoComputer.name=stringName;
-			dtoComputer.date_introduced=stringDateIntro;
-			dtoComputer.date_discontinued=stringDateDisc;
-			dtoComputer.companyId=stringCompanyId;
-			Computer computer =mapperComputer.mapToEntity(dtoComputer);
+
+	public void gestionCreation(String stringName, String stringDateIntro, String stringDateDisc,
+			String stringCompanyId) {
+		if (listError.size() <= 0) {
+			DtoComputer dtoComputer = new DtoComputer();
+			dtoComputer.name = stringName;
+			dtoComputer.date_introduced = stringDateIntro;
+			dtoComputer.date_discontinued = stringDateDisc;
+			dtoComputer.companyId = stringCompanyId;
+			Computer computer = mapperComputer.mapToEntity(dtoComputer);
 			serviceComputer.daoCreate(computer);
 		}
 	}
-	public void validations(String name, String dateIntro,String dateDisc, String companyId) {
+
+	public void validations(String name, String dateIntro, String dateDisc, String companyId) {
 		try {
 			validatorComputer.validationName(name);
 		} catch (NullPointerException e) {
@@ -93,7 +97,7 @@ public class AddComputerServlet extends HttpServlet {
 
 		try {
 			validatorComputer.validationDateIntro(dateIntro);
-		} catch(IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			LOGGER.error(e.getMessage());
 			listError.add("La date d'introducion n'est pas valide");
 		}
@@ -101,14 +105,14 @@ public class AddComputerServlet extends HttpServlet {
 		try {
 			System.out.println("Validation Date discontinued");
 			validatorComputer.validationDateDisc(dateDisc);
-		} catch(DateTimeException e) {
+		} catch (DateTimeException e) {
 			LOGGER.error(e.getMessage());
 			listError.add(e.getMessage());
 		}
 
 		try {
 			validatorComputer.validationCompany_id(companyId);
-		} catch(DateTimeException e) {
+		} catch (DateTimeException e) {
 			LOGGER.error(e.getMessage());
 			listError.add("l'Id de la company n'as pas été trouver  !");
 		}

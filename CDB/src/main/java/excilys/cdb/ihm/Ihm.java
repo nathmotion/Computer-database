@@ -20,46 +20,47 @@ public class Ihm {
 	final static Logger LOGGER = LogManager.getLogger(Ihm.class);
 	ServiceCompany servCompany = ServiceCompany.INSTANCE;
 	ServiceComputer servComputer = ServiceComputer.INSTANCE;
-	Scanner sc =  new Scanner(System.in);
+	Scanner sc = new Scanner(System.in);
 	static String choix;
 
 	public static void main(String[] args) {
-		Ihm myCLI= new Ihm();
+		Ihm myCLI = new Ihm();
 		myCLI.startCLI();
 	}
-	/**
-	 * 												================	 C L I   ================
-	 */
-	public void  startCLI() {
 
-		do {	
+	/**
+	 * ================ C L I ================
+	 */
+	public void startCLI() {
+
+		do {
 			printMenu();
 			choix = sc.nextLine();
-			switch(choix){
-			case "1": 
-				ArrayList<Company>  tableCompany= servCompany.daoGetAllEntities();
+			switch (choix) {
+			case "1":
+				ArrayList<Company> tableCompany = servCompany.daoGetAllEntities();
 				LOGGER.debug(" salut");
 				afficheListCompany(tableCompany);
 				pause(sc);
 				continue;
 
-			case "2" :
+			case "2":
 				int offset = 0;
-				int nbComputer =servComputer.daoGetNbComputer();
+				int nbComputer = servComputer.daoGetNbComputer();
 				do {
-					Page<Computer> pageComputer= servComputer.daoGetPage(offset,10);
+					Page<Computer> pageComputer = servComputer.daoGetPage(offset, 10);
 					afficheListComputer(pageComputer.getPage());
-					offset = optionPage(sc,offset,nbComputer);
-				}while(!choix.equals("quit"));
+					offset = optionPage(sc, offset, nbComputer);
+				} while (!choix.equals("quit"));
 				continue;
 
-			case "3" :
-				afficheFindbyId(sc,servComputer);
+			case "3":
+				afficheFindbyId(sc, servComputer);
 				pause(sc);
 				continue;
 
-			case "4" :
-				affichageAjoutOrdinateur(sc,servComputer);
+			case "4":
+				affichageAjoutOrdinateur(sc, servComputer);
 				pause(sc);
 				continue;
 
@@ -68,8 +69,8 @@ public class Ihm {
 				pause(sc);
 				continue;
 
-			case "6" :
-				affichageSupprOrdinateur(sc,servComputer);
+			case "6":
+				affichageSupprOrdinateur(sc, servComputer);
 				pause(sc);
 				continue;
 
@@ -77,42 +78,46 @@ public class Ihm {
 				System.out.println(" Bye ...");
 				continue;
 
-			default : 
+			default:
 				System.out.println(" L'option que vous avez choisie n'est pas dans la liste de choix ");
 				pause(sc);
 				clearConsole(20);
 			}
 
-		}while(!choix.equals("exit"));
+		} while (!choix.equals("exit"));
 	}
 
 	/**
-	 * 										=============	AFFICHE DE LA LISTE DES COMPUTER	=============
+	 * ============= AFFICHE DE LA LISTE DES COMPUTER =============
+	 * 
 	 * @param tableComputer
 	 */
 	public static void afficheListComputer(ArrayList<Computer> tableComputer) {
 		clearConsole(20);
 		afficheMenu(" LISTE DES ORDINATEURS ");
-		tableComputer.forEach((computer ->{
-			System.out.println("id: "+computer.getId());
-			System.out.println("name: "+computer.getName());
+		tableComputer.forEach((computer -> {
+			System.out.println("id: " + computer.getId());
+			System.out.println("name: " + computer.getName());
 		}));
 	}
 
-	/**	
-	 * 										=============	AFFICHE LA LISTE DES COMPANY 	=============
+	/**
+	 * ============= AFFICHE LA LISTE DES COMPANY =============
+	 * 
 	 * @param tableCompany
 	 */
 	public static void afficheListCompany(ArrayList<Company> tableCompany) {
 		clearConsole(20);
 		afficheMenu(" LISTE DES COMPANY ");
-		tableCompany.forEach((company ->{
-			System.out.println("id: "+company.getId());
-			System.out.println("name: "+company.getName());
+		tableCompany.forEach((company -> {
+			System.out.println("id: " + company.getId());
+			System.out.println("name: " + company.getName());
 		}));
 	}
+
 	/**
-	 *  										=============	AFFICHAGE DU RESULTATS RECHERCHE PAR ID 	=============
+	 * ============= AFFICHAGE DU RESULTATS RECHERCHE PAR ID =============
+	 * 
 	 * @param sc
 	 * @param servComputer
 	 */
@@ -120,90 +125,90 @@ public class Ihm {
 		System.out.println("Veullez saisir l' id de l'ordinateur ");
 		int id = sc.nextInt();
 		sc.nextLine();
-		Optional<Computer> opcomputer = servComputer.daoFindById(id)	;
+		Optional<Computer> opcomputer = servComputer.daoFindById(id);
 
-		if(opcomputer.isPresent())
-		{
+		if (opcomputer.isPresent()) {
 			Computer computer = opcomputer.get();
-			System.out.println("id: "+computer.getId());
-			System.out.println("name: "+computer.getName());
-			System.out.println("introduced: "+computer.getIntroduced());
-			System.out.println("discontinued: "+computer.getDiscontinued());
-			System.out.println("company_id: "+computer.getCompany().getId());
-		}
-		else {
-			System.out.println("Aucun Computer n'a été trouver avec cet id = "+ id);
+			System.out.println("id: " + computer.getId());
+			System.out.println("name: " + computer.getName());
+			System.out.println("introduced: " + computer.getIntroduced());
+			System.out.println("discontinued: " + computer.getDiscontinued());
+			System.out.println("company_id: " + computer.getCompany().getId());
+		} else {
+			System.out.println("Aucun Computer n'a été trouver avec cet id = " + id);
 		}
 	}
+
 	/**
-	 * 										=============	AFFICHAGE DU MENU DE MISE JOUR D'UN ORDINATEUR	 	=============
+	 * ============= AFFICHAGE DU MENU DE MISE JOUR D'UN ORDINATEUR =============
+	 * 
 	 * @param sc
 	 * @param servcomputer
 	 */
 	public static void affichageMiseAjourOrdinateur(Scanner sc, ServiceComputer servcomputer) {
 		afficheMenu(" MISE A JOUR D'UN ORDINATEUR");
 		System.out.println("Entrez l'id de l'ordinateur a mettre a jour : ");
-		int id= sc.nextInt();
+		int id = sc.nextInt();
 		sc.nextLine();
 		Optional<Computer> optcomputer = servcomputer.daoFindById(id);
-		if(optcomputer.isPresent())
-		{
+		if (optcomputer.isPresent()) {
 			Computer computer = optcomputer.get();
-			System.out.println("id: "+computer.getId());
-			System.out.println("name: "+computer.getName());
-			System.out.println("introduced: "+computer.getIntroduced());
-			System.out.println("discontinued: "+computer.getDiscontinued());
-			System.out.println("company_id: "+computer.getCompany().getId());
-			miseajourOrdinateur(servcomputer,sc, computer);
-		}
-		else {
-			System.out.println("Aucun Computer n'a été trouver avec cet id = "+ id);
+			System.out.println("id: " + computer.getId());
+			System.out.println("name: " + computer.getName());
+			System.out.println("introduced: " + computer.getIntroduced());
+			System.out.println("discontinued: " + computer.getDiscontinued());
+			System.out.println("company_id: " + computer.getCompany().getId());
+			miseajourOrdinateur(servcomputer, sc, computer);
+		} else {
+			System.out.println("Aucun Computer n'a été trouver avec cet id = " + id);
 		}
 	}
+
 	/**
-	 * 										=============	GESTION DU CLI D'AJOUT	D'UN ORDINATEUR	 	=============
+	 * ============= GESTION DU CLI D'AJOUT D'UN ORDINATEUR =============
+	 * 
 	 * @param servComputer
 	 * @param name
 	 * @param date_introduced
 	 * @param date_discontinued
 	 * @param company_id
 	 */
-	public static void miseajourOrdinateur(ServiceComputer servComputer,Scanner sc,Computer computer) {
+	public static void miseajourOrdinateur(ServiceComputer servComputer, Scanner sc, Computer computer) {
 		System.out.println("Que voulez vous modifier  : ");
 		System.out.println("	1)Name		2)Date Introduced		3)Date Discontinued		4)Company id");
 		String choice = sc.nextLine();
 
 		do {
-			switch(choice) {
+			switch (choice) {
 
-			case "1" :
+			case "1":
 				System.out.println("Entrez le nouveau name de l'ordinateur :");
 				choice = sc.nextLine();
 				computer.setName(choice);
 				servComputer.daoUpdate(computer);
 
-			case "2" :
+			case "2":
 				System.out.println("Entrez l'année la date d'introduction du nouveau ordinateur: ");
 				String year = sc.nextLine();
 				System.out.println("Entrez le mois la date d'introduction du nouveau ordinateur: ");
 				String month = sc.nextLine();
 				System.out.println("Entrez le jour la date d'introduction du nouveau ordinateur: ");
 				String day = sc.nextLine();
-				String string_date_introduced =year+"-"+month+"-"+day;
+				String string_date_introduced = year + "-" + month + "-" + day;
 
-				try{
+				try {
 					LocalDate date_introduced = LocalDate.parse(string_date_introduced);
-					if( date_introduced.getYear()<(int) 1970 ) {
+					if (date_introduced.getYear() < (int) 1970) {
 						System.out.println(" Une des Dates saissies est inferieur a 1970  ");
-						choix="0";
+						choix = "0";
 						break;
 					}
 					computer.setIntroduced(convertLocalDatetoTimestamp(date_introduced));
 					servComputer.daoUpdate(computer);
-				}catch(DateTimeParseException e) {
+				} catch (DateTimeParseException e) {
 					LOGGER.error(" le format de la date introduced saisie est mauvais ou ce sont pas des nombres  ");
 				}
-				continue ;
+				continue;
 
 			case "3":
 				System.out.println("Entrez l'année la date d'introduction du nouveau ordinateur: ");
@@ -212,18 +217,18 @@ public class Ihm {
 				String monthdisc = sc.nextLine();
 				System.out.println("Entrez le jour la date d'introduction du nouveau ordinateur: ");
 				String daydisc = sc.nextLine();
-				String string_date_discontinued=yeardisc+"-"+monthdisc+"-"+daydisc;
+				String string_date_discontinued = yeardisc + "-" + monthdisc + "-" + daydisc;
 
 				try {
 					LocalDate date_discontinued = LocalDate.parse(string_date_discontinued);
 					computer.setIntroduced(convertLocalDatetoTimestamp(date_discontinued));
-					servComputer.daoUpdate(computer);		
-					if( date_discontinued.getYear()<(int) 1970) {
+					servComputer.daoUpdate(computer);
+					if (date_discontinued.getYear() < (int) 1970) {
 						System.out.println(" Une des Dates saissies est inferieur a 1970  ");
-						choix="0";
+						choix = "0";
 						break;
 					}
-				}catch(DateTimeParseException e) {
+				} catch (DateTimeParseException e) {
 					LOGGER.error(" le format de la date discontinued saisie est mauvais ou ce sont pas des nombres  ");
 				}
 				continue;
@@ -232,18 +237,20 @@ public class Ihm {
 				System.out.println("Entrez le nouveau id de l'ordinateur :");
 				Long id = sc.nextLong();
 				sc.nextLine();
-				computer.getCompany().setId(id);;
-				servComputer.daoUpdate(computer);	
+				computer.getCompany().setId(id);
+				;
+				servComputer.daoUpdate(computer);
 				continue;
 
-			default: 
+			default:
 				System.out.println(" commande saissie incomprehensible ");
 			}
-		}while(!choice.equals("1") || !choice.equals("2") || !choice.equals("3") || !choice.equals("4"));
+		} while (!choice.equals("1") || !choice.equals("2") || !choice.equals("3") || !choice.equals("4"));
 	}
 
 	/**
-	 * 										=============	AFFICHAGE DU MENU D'AJOUT	D'UN ORDINATEUR	 	=============
+	 * ============= AFFICHAGE DU MENU D'AJOUT D'UN ORDINATEUR =============
+	 * 
 	 * @param sc
 	 * @param servcomputer
 	 */
@@ -276,70 +283,73 @@ public class Ihm {
 		sc.nextLine();
 
 		try {
-			if(!yeardisc.equals("")){
-				if( Integer.parseInt(year)>Integer.parseInt(yeardisc)) {
-					System.out.println(" Date de discontinued est inferieur "+  Integer.parseInt(year)+" > "+ Integer.parseInt(yeardisc) );
+			if (!yeardisc.equals("")) {
+				if (Integer.parseInt(year) > Integer.parseInt(yeardisc)) {
+					System.out.println(" Date de discontinued est inferieur " + Integer.parseInt(year) + " > "
+							+ Integer.parseInt(yeardisc));
 					return;
 				}
-				if(Integer.parseInt(yeardisc)<1970) {
+				if (Integer.parseInt(yeardisc) < 1970) {
 					System.out.println(" Une des Dates saissies est inferieur a 1970  ");
 					return;
 				}
 			}
-			if(Integer.parseInt(year)<1970) {
+			if (Integer.parseInt(year) < 1970) {
 				System.out.println(" Une des Dates saissies est inferieur a 1970  ");
 				return;
 			}
-		}catch(NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			LOGGER.error("Année saisie n'est pas du bon format ou pas un nombre");
 			return;
 		}
-		String date_introduced =year+"-"+month+"-"+day;
-		String date_discontinued = yeardisc+"-"+monthdisc+"-"+daydisc;
-		ajoutOrdinateur(servcomputer,name,date_introduced,date_discontinued,company_id);
+		String date_introduced = year + "-" + month + "-" + day;
+		String date_discontinued = yeardisc + "-" + monthdisc + "-" + daydisc;
+		ajoutOrdinateur(servcomputer, name, date_introduced, date_discontinued, company_id);
 	}
 
 	/**
-	 * 										=============	GESTION DU CLI D'AJOUT	D'UN ORDINATEUR	 	=============
+	 * ============= GESTION DU CLI D'AJOUT D'UN ORDINATEUR =============
+	 * 
 	 * @param servComputer
 	 * @param name
 	 * @param date_introduced
 	 * @param date_discontinued
 	 * @param company_id
 	 */
-	public static void ajoutOrdinateur(ServiceComputer servComputer,String name, String string_date_introduced, String string_date_discontinued,Long company_id) {
-		Computer computer= new Computer();
+	public static void ajoutOrdinateur(ServiceComputer servComputer, String name, String string_date_introduced,
+			String string_date_discontinued, Long company_id) {
+		Computer computer = new Computer();
 		computer.setName(name);
 
-		if(string_date_introduced.equals("--")) {
+		if (string_date_introduced.equals("--")) {
 			computer.setIntroduced(Timestamp.valueOf(LocalDateTime.now()));
-		}
-		else{
+		} else {
 			try {
-				LocalDate date_introduced=LocalDate.parse(string_date_introduced);
+				LocalDate date_introduced = LocalDate.parse(string_date_introduced);
 				computer.setIntroduced(convertLocalDatetoTimestamp(date_introduced));
-			}catch(DateTimeParseException e) {
+			} catch (DateTimeParseException e) {
 				LOGGER.error(" le format de la date continued saisie est mauvais ou ce sont pas des nombres  ");
 			}
 		}
 
-		if(string_date_discontinued.equals("--")) {
+		if (string_date_discontinued.equals("--")) {
 			computer.setDiscontinued(null);
-		}
-		else {
+		} else {
 			try {
 				LocalDate date_discontinued = LocalDate.parse(string_date_discontinued);
 				computer.setDiscontinued(convertLocalDatetoTimestamp(date_discontinued));
-			}catch(DateTimeParseException e) {
+			} catch (DateTimeParseException e) {
 				LOGGER.error(" le format de la date discontinued saisie est mauvais ou ce sont pas des nombres  ");
 			}
 		}
-		computer.getCompany().setId(company_id);;
+		computer.getCompany().setId(company_id);
+		;
 		servComputer.daoCreate(computer);
 	}
 
 	/**
-	 * 										=============	AFFICHAGE DU MENU SUPPR. D'UN ORDINATEUR	 	=============
+	 * ============= AFFICHAGE DU MENU SUPPR. D'UN ORDINATEUR =============
+	 * 
 	 * @param sc
 	 * @param servComputer
 	 */
@@ -353,18 +363,19 @@ public class Ihm {
 		servComputer.daoDelete(computer);
 	}
 
-	/**	
-	 *										=============	CONVERSITION LOCALDATE TO TIMESTAMP	 	=============
+	/**
+	 * ============= CONVERSITION LOCALDATE TO TIMESTAMP =============
+	 * 
 	 * @param stringDate
 	 * @return
 	 */
-	public static Timestamp convertLocalDatetoTimestamp(LocalDate Date) {	
+	public static Timestamp convertLocalDatetoTimestamp(LocalDate Date) {
 		Timestamp timestamp = Timestamp.valueOf(Date.atStartOfDay());
 		return timestamp;
 	}
 
 	/**
-	 *  										=============	AFFICHAGE DU MENU		=============
+	 * ============= AFFICHAGE DU MENU =============
 	 */
 	public static void printMenu() {
 		afficheMenu(" M E N U ");
@@ -374,8 +385,10 @@ public class Ihm {
 		System.out.println("5) mise à jour d'un ordinateur					6) Supprimer un ordinateur ");
 		System.out.println("Saisir votre choix : ");
 	}
+
 	/**
-	 * 										=============	AFFICHAGE DE PAUSE 	=============
+	 * ============= AFFICHAGE DE PAUSE =============
+	 * 
 	 * @param sc
 	 */
 	public static void pause(Scanner sc) {
@@ -383,46 +396,51 @@ public class Ihm {
 		sc.nextLine();
 		clearConsole(20);
 	}
+
 	/**
-	 * 										=============	AFFICHAGE D'OPTION DE LA PAGE	 	=============
+	 * ============= AFFICHAGE D'OPTION DE LA PAGE =============
+	 * 
 	 * @param sc
 	 * @param offset
 	 * @return
 	 */
-	public static int optionPage(Scanner sc,int offset, int nbComputer) {
-		int pagecourant = (offset/10)+1;
-		int totalPage = nbComputer/10;
+	public static int optionPage(Scanner sc, int offset, int nbComputer) {
+		int pagecourant = (offset / 10) + 1;
+		int totalPage = nbComputer / 10;
 
-		System.out.println("					"+pagecourant+"/"+totalPage+"			");
+		System.out.println("					" + pagecourant + "/" + totalPage + "			");
 		System.out.println("			quit : for exit			enter: for continue	");
-		choix =sc.nextLine();
+		choix = sc.nextLine();
 
-		if(!choix.equals("quit")) {
-			if(pagecourant<totalPage) {
-				offset+=10;
+		if (!choix.equals("quit")) {
+			if (pagecourant < totalPage) {
+				offset += 10;
 			}
 		}
 		clearConsole(20);
 		return offset;
 	}
+
 	/**
-	 * 										=============	AFFICHAGE DU MENU D'AJOUT	D'UN ORDINATEUR	 	=============
+	 * ============= AFFICHAGE DU MENU D'AJOUT D'UN ORDINATEUR =============
+	 * 
 	 * @param l
 	 */
-	public final static void clearConsole(int l){
-		
-		for(int clear = 0; clear < l; clear++)
-		{
-			System.out.println() ;
+	public final static void clearConsole(int l) {
+
+		for (int clear = 0; clear < l; clear++) {
+			System.out.println();
 		}
 	}
+
 	/**
-	  										=============	AFFICHAGE DES ENTETES DE MENU	 	=============
+	 * ============= AFFICHAGE DES ENTETES DE MENU =============
+	 * 
 	 * @param menu
 	 */
 	public static void afficheMenu(String menu) {
 		clearConsole(20);
-		System.out.println(" 					========= "+menu+" ===========					");
+		System.out.println(" 					========= " + menu + " ===========					");
 		clearConsole(3);
 	}
 }

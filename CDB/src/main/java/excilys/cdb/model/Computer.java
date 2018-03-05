@@ -14,12 +14,12 @@ public class Computer {
 
 	}
 
-	public Computer(Long id, String name, Timestamp introduction, Timestamp discontinuation,Company company_id) {
-		this.id=id;
+	public Computer(Long id, String name, Timestamp introduction, Timestamp discontinuation, Company company_id) {
+		this.id = id;
 		this.name = name;
 		this.introduced = introduction;
 		this.discontinued = discontinuation;
-		this.company=company_id;
+		this.company = company_id;
 
 	}
 
@@ -27,46 +27,37 @@ public class Computer {
 		return id;
 	}
 
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 
 	public Company getCompany() {
 		return company;
 	}
 
-
 	public void setCompany(Company company_id) {
 		this.company = company_id;
 	}
-
 
 	public String getName() {
 		return name;
 	}
 
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 
 	public Timestamp getIntroduced() {
 		return introduced;
 	}
 
-
 	public void setIntroduced(Timestamp introduction) {
 		this.introduced = introduction;
 	}
 
-
 	public Timestamp getDiscontinued() {
 		return discontinued;
 	}
-
 
 	public void setDiscontinued(Timestamp discontinuation) {
 		discontinued = discontinuation;
@@ -74,8 +65,8 @@ public class Computer {
 
 	@Override
 	public String toString() {
-		return "\nComputer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
-				+ ", company_id=" + company + "] \n";
+		return "\nComputer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued="
+				+ discontinued + ", company_id=" + company + "] \n";
 	}
 
 	@Override
@@ -126,7 +117,5 @@ public class Computer {
 			return false;
 		return true;
 	}
-
-
 
 }

@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="mylib" uri="/WEB-INF/taglib.tld"  %> 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,7 +21,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${nbComputer}Computers found</h1>
+			<h1 id="homeTitle">${nbComputer} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -88,9 +87,7 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="dashboard.html?page=previous"
-					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-				</a></li>
+				<li><mylib:link target="dashboard.html" offset="${offset+1}" limit="${limit}" /></li>
 				<li><a href="dashboard.html?page=1">1</a></li>
 				<li><a href="#">2</a></li>
 				<li><a href="#">3</a></li>
@@ -111,6 +108,4 @@
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/dashboard.js"></script>
-<mylib:link target="dashboard.html" offset="${requestScope.page.current + 1}" limit="${requestScope.page.limit}" ... />   
-<mylib:pagination page="${requestScope.page.current}" page-count="${requestScope.page.count}" ... /> </body>
 </html>
