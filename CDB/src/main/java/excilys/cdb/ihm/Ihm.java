@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import main.java.excilys.cdb.dao.Page;
 import main.java.excilys.cdb.model.Company;
 import main.java.excilys.cdb.model.Computer;
 import main.java.excilys.cdb.service.ServiceCompany;
@@ -35,8 +37,7 @@ public class Ihm {
 			choix = sc.nextLine();
 			switch(choix){
 			case "1": 
-				int offsetCompany = 0;
-				ArrayList<Company>  tableCompany= servCompany.daoGetPage(offsetCompany);
+				ArrayList<Company>  tableCompany= servCompany.daoGetAllEntities();
 				LOGGER.debug(" salut");
 				afficheListCompany(tableCompany);
 				pause(sc);
@@ -46,8 +47,8 @@ public class Ihm {
 				int offset = 0;
 				int nbComputer =servComputer.daoGetNbComputer();
 				do {
-					ArrayList<Computer> tableComputer= servComputer.daoGetPage(offset);
-					afficheListComputer(tableComputer);
+					Page<Computer> pageComputer= servComputer.daoGetPage(offset,10);
+					afficheListComputer(pageComputer.getPage());
 					offset = optionPage(sc,offset,nbComputer);
 				}while(!choix.equals("quit"));
 				continue;

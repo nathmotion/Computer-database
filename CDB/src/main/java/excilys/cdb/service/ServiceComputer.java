@@ -4,45 +4,43 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import main.java.excilys.cdb.dao.DaoComputer;
+import main.java.excilys.cdb.dao.Page;
 import main.java.excilys.cdb.model.Computer;
 
 public enum ServiceComputer {
 	INSTANCE;
 	
-	private DaoComputer daocomputer ;
+	private DaoComputer daocomputer= DaoComputer.INSTANCE;
 
 	ServiceComputer(){
 	}
 
 	public ArrayList<Computer> daoGetAllEntities() {
-		return DaoComputer.INSTANCE.getAll();
+		return daocomputer.getAll();
 	}
 
-	public ArrayList<Computer> daoGetPage(int offset){
-		return DaoComputer.INSTANCE.getPage(offset);
+	public Page<Computer> daoGetPage(int offset, int limitPage){
+		Page<Computer> page= new Page<Computer>(offset,daocomputer.getPage(offset,limitPage));
+		return page;
 	}
 	
 	public int daoGetNbComputer() {
-		return DaoComputer.INSTANCE.getNbComputer();
+		return daocomputer.getNbComputer();
 	}
 
 	public boolean daoCreate(Computer computer) {
-		daocomputer= DaoComputer.INSTANCE;
 		return daocomputer.create(computer);
 	}
 
 	public void daoUpdate(Computer computer) {
-		daocomputer = DaoComputer.INSTANCE;
-		 daocomputer.update(computer);
+		daocomputer.update(computer);
 	}
 
 	public void daoDelete(Computer computer) {
-		daocomputer = DaoComputer.INSTANCE;
 		daocomputer.delete(computer);
 	}
 	
 	public Optional<Computer> daoFindById(int id){
-		daocomputer = DaoComputer.INSTANCE;
 		return daocomputer.findById(id);
 	}
 }

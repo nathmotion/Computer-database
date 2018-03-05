@@ -55,7 +55,7 @@ public enum DaoCompany implements Dao<Company>{
 	 *												 ========	REQUETE SQL    RECUPERE COMPANY PAR PAGE	========
 	 */
 	@Override
-	public ArrayList<Company> getPage(int offset) {
+	public ArrayList<Company> getPage(int offset,int limitPage) {
 		Company company = null ;
 		ArrayList<Company> listCompany = new ArrayList<Company>();
 		SingletonConn con= SingletonConn.INSTANCE;		

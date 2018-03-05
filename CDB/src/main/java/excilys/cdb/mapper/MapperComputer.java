@@ -13,7 +13,7 @@ public enum MapperComputer {
 
 	public Computer mapToEntity(DtoComputer dtoComputer) {
 		Company company = new Company();
-		company.setId(Long.valueOf(dtoComputer.companyId));
+		company.setId(Long.parseLong(dtoComputer.companyId));
 		company.setName(dtoComputer.companyName);
 		Computer computer = new Computer();
 		if( dtoComputer.date_introduced==null || dtoComputer.date_introduced.equals("") ) {
@@ -27,13 +27,12 @@ public enum MapperComputer {
 		}
 		else {
 			LocalDate parseTmpDate= LocalDate.parse(dtoComputer.date_discontinued);
-			System.out.println(" date"+parseTmpDate);
 			computer.setDiscontinued(Timestamp.valueOf((parseTmpDate.atStartOfDay())));
 
 		}
 		
 		if(dtoComputer.id!=null) {
-			computer.setId(Long.valueOf(dtoComputer.id));
+			computer.setId(Long.parseLong(dtoComputer.id));
 		}else {
 			computer.setId((long)0);
 		}
@@ -46,7 +45,7 @@ public enum MapperComputer {
 	public DtoComputer mapToDto(Computer computer)	 {
 		DtoComputer dtoComputer = new DtoComputer();
 		dtoComputer.name=computer.getName();
-		dtoComputer.id=String.valueOf(computer.getId());
+		dtoComputer.id=computer.getId().toString();
 		Optional<Timestamp> timeIntroOptional = Optional.ofNullable(computer.getIntroduced());
 		Optional<Timestamp> timeDiscOptional = Optional.ofNullable(computer.getDiscontinued());
 
@@ -62,7 +61,7 @@ public enum MapperComputer {
 		}else {
 			dtoComputer.date_discontinued="";
 		}
-		dtoComputer.companyId=String.valueOf(computer.getCompany().getId());
+		dtoComputer.companyId=(computer.getCompany().getId().toString());
 		dtoComputer.companyName=computer.getCompany().getName();
 		return  dtoComputer ;
 	}

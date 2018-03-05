@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="mylib" uri="/WEB-INF/taglib.tld"  %> 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +22,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${nbComputer} Computers found</h1>
+			<h1 id="homeTitle">${nbComputer}Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -71,7 +73,7 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.id}"></td>
-							<td><a href="editComputer.html?id=${computer.id}" onclick="" >${ computer.name }</a>
+							<td><a href="editComputer.html?id=${computer.id}" onclick="">${ computer.name }</a>
 							</td>
 							<td>${ computer.date_introduced }</td>
 							<td>${ computer.date_discontinued }</td>
@@ -86,27 +88,29 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="dashboard.html?action=previous" aria-label="Previous"> <span
-						aria-hidden="true">&laquo;</span>
+				<li><a href="dashboard.html?page=previous"
+					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li>
-				<li><a href="dashboard?page=1">1</a></li>
+				<li><a href="dashboard.html?page=1">1</a></li>
 				<li><a href="#">2</a></li>
 				<li><a href="#">3</a></li>
 				<li><a href="#">4</a></li>
 				<li><a href="#">5</a></li>
-				<li><a href="dashboard?action=next" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				<li><a href="dashboard.html?page=next" aria-label="Next"> <span
+						aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<button type="button" class="btn btn-default">10</button>
+				<button type="button" class="btn btn-default" onClick=()>10</button>
 				<button type="button" class="btn btn-default">50</button>
 				<button type="button" class="btn btn-default">100</button>
 			</div>
+		</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/dashboard.js"></script>
-
-</body>
+<mylib:link target="dashboard.html" offset="${requestScope.page.current + 1}" limit="${requestScope.page.limit}" ... />   
+<mylib:pagination page="${requestScope.page.current}" page-count="${requestScope.page.count}" ... /> </body>
 </html>

@@ -24,7 +24,7 @@ public enum DaoComputer implements Dao<Computer> {
 	final static String QUERY_UPDATE = "UPDATE computer SET name= ?, introduced=? , discontinued=? ,company_id= ? WHERE id =?";
 	final static String QUERY_CREATE = "INSERT INTO computer ( name, introduced, discontinued ,company_id) VALUES (?, ?, ?, ?)";
 	final static String QUERY_DELETE = "DELETE FROM computer WHERE id =?";
-	final static String QUERY_GET_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name LEFT JOIN Company ON company_id = company.id FROM computer LIMIT ? , ?";
+	final static String QUERY_GET_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  LIMIT ? , ?";
 	final static String QUERY_NB_ELEMENT = "SELECT count(*) as nbcomputer FROM computer";
 
 	/**
@@ -60,7 +60,7 @@ public enum DaoComputer implements Dao<Computer> {
 	 * ======= PAGINATION Computer =======
 	 */
 	@Override
-	public ArrayList<Computer> getPage(int offset) {
+	public ArrayList<Computer> getPage(int offset, int limitPage) {
 		Computer iComputer = null;
 		ArrayList<Computer> listComputer = new ArrayList<Computer>();
 		SingletonConn con = SingletonConn.INSTANCE;
@@ -68,7 +68,7 @@ public enum DaoComputer implements Dao<Computer> {
 
 		try (PreparedStatement stat = con.getConn().prepareStatement(QUERY_GET_PAGE)) {
 			stat.setInt(1, offset);
-			stat.setInt(2, 10);
+			stat.setInt(2, limitPage);
 			ResultSet rs = stat.executeQuery();
 
 			while (rs.next()) {
@@ -81,7 +81,7 @@ public enum DaoComputer implements Dao<Computer> {
 			}
 			con.closeConn();
 		} catch (SQLException e) {
-			LOGGER.error(" error requetes GET ALL : " + e.getMessage());
+			LOGGER.error(" error requetes GET Page : " + e.getMessage());
 		}
 		return listComputer;
 	}
@@ -103,7 +103,7 @@ public enum DaoComputer implements Dao<Computer> {
 			}
 			con.closeConn();
 		} catch (SQLException e) {
-			LOGGER.error(" error requetes GET ALL : " + e.getMessage());
+			LOGGER.error(" error requetes GET nbComputer : " + e.getMessage());
 		}
 		return nbComputer;
 	}

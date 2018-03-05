@@ -10,23 +10,22 @@ public enum ValidatorComputer {
 	LocalDate dateIntroTmp;
 
 	public void validationName(String name)throws NullPointerException {
-		if(name.isEmpty() || name.equals(null) || name.equals("") ) {
-			throw new NullPointerException(" name est vide ! ");
+		if(name.equals(null) || name.equals("") ) {
+			throw new NullPointerException(" Le nom de l'ordinateur n'as pas été saisie ou incorrect ! ");
 		}		
 	}
 
 	public void validationDateIntro(String date) throws DateTimeParseException {
-		if(date!=null && !date.equals("") && !date.isEmpty()) {
+		if(date!=null && !date.equals("")) {
 			dateIntroTmp = LocalDate.parse(date);
 		}
 	}
 
 	public void validationDateDisc(String date) throws DateTimeException {
 		LocalDate dateDisc=null;
-		if(date!=null  && !date.equals("") && !date.isEmpty()){
+		if(date!=null  && !date.equals("")){
 			dateDisc=LocalDate.parse(date);
-			System.out.println("date intro"+dateIntroTmp.getYear()+">"+dateDisc.getYear());
-			if(dateIntroTmp.getYear()>dateDisc.getYear()) {
+			if(dateIntroTmp.isBefore(dateDisc)) {
 				throw new DateTimeException("la date de discontinued est avant la date de introduced");
 			}
 		}
@@ -34,8 +33,8 @@ public enum ValidatorComputer {
 	}
 
 	public void validationCompany_id(String id) throws IllegalArgumentException {
-		if(id== null && id.equals("") && !id.isEmpty() ){
-			throw new IllegalArgumentException(" company id est null ");
+		if(id== null && id.equals("")){
+			throw new IllegalArgumentException(" L'ID de la \"company\" est null ");
 		}
 	}
 }

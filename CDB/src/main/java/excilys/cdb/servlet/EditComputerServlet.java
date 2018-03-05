@@ -43,7 +43,7 @@ public class EditComputerServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String selection =request.getParameter("id");
-		Optional<Computer> optComputer= serviceComputer.daoFindById(Integer.valueOf(selection));
+		Optional<Computer> optComputer= serviceComputer.daoFindById(Integer.parseInt(selection));
 		request=affichagePage(request);
 		if(optComputer.isPresent()) {
 			Computer computer=optComputer.get();

@@ -47,23 +47,13 @@ public class AddComputerServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		String stringName= request.getParameter(COMPUTER_NAME);
 		String stringDateIntro = request.getParameter(DATE_INTRO);
 		String stringDateDisc= request.getParameter(DATE_DISC);
 		String stringCompanyId = request.getParameter(COMPANY_ID);
-
+		
 		validations(stringName,stringDateIntro,stringDateDisc,stringCompanyId);
-
-		if(listError.size()<=0) {
-			DtoComputer dtoComputer= new DtoComputer();
-			dtoComputer.name=stringName;
-			dtoComputer.date_introduced=stringDateIntro;
-			dtoComputer.date_discontinued=stringDateDisc;
-			dtoComputer.companyId=stringCompanyId;
-			Computer computer =mapperComputer.mapToEntity(dtoComputer);
-			serviceComputer.daoCreate(computer);
-		}
+		gestionCreation(stringName,stringDateIntro,stringDateDisc,stringCompanyId);
 		request.setAttribute("errors", listError);
 		request=affichageCompany(request);
 		this.getServletContext().getRequestDispatcher(view).forward(request, response);	
@@ -82,6 +72,17 @@ public class AddComputerServlet extends HttpServlet {
 		return request;
 	}
 	
+	public void gestionCreation(String stringName,String stringDateIntro,String stringDateDisc,String stringCompanyId) {
+		if(listError.size()<=0) {
+			DtoComputer dtoComputer= new DtoComputer();
+			dtoComputer.name=stringName;
+			dtoComputer.date_introduced=stringDateIntro;
+			dtoComputer.date_discontinued=stringDateDisc;
+			dtoComputer.companyId=stringCompanyId;
+			Computer computer =mapperComputer.mapToEntity(dtoComputer);
+			serviceComputer.daoCreate(computer);
+		}
+	}
 	public void validations(String name, String dateIntro,String dateDisc, String companyId) {
 		try {
 			validatorComputer.validationName(name);
@@ -102,7 +103,7 @@ public class AddComputerServlet extends HttpServlet {
 			validatorComputer.validationDateDisc(dateDisc);
 		} catch(DateTimeException e) {
 			LOGGER.error(e.getMessage());
-			listError.add("la date de retrait non valide ! ");
+			listError.add(e.getMessage());
 		}
 
 		try {

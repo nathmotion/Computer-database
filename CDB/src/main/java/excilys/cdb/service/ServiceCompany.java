@@ -19,9 +19,6 @@ public enum ServiceCompany {
 		return daoCompany.getAll();
 	}
 
-	public ArrayList<Company> daoGetPage(int offset){
-		daoCompany = DaoCompany.INSTANCE;
-		return daoCompany.getPage(offset);
-	}
+	
 
 }
