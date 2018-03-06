@@ -11,11 +11,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import main.java.excilys.cdb.dao.Page;
 import main.java.excilys.cdb.dto.DtoComputer;
 import main.java.excilys.cdb.mapper.MapperComputer;
 import main.java.excilys.cdb.model.Computer;
+import main.java.excilys.cdb.model.Page;
 import main.java.excilys.cdb.service.ServiceComputer;
+import main.java.excilys.cdb.taglib.PageTag;
 
 /**
  * Servlet implementation class MyServletInterface
@@ -24,6 +25,7 @@ import main.java.excilys.cdb.service.ServiceComputer;
 public class DashboardServlet extends HttpServlet {
 	MapperComputer mapComputer = MapperComputer.INSTANCE;
 	ServiceComputer serviceComputer = ServiceComputer.INSTANCE;
+	PageTag paginationTag = new PageTag();
 	int offset = 0;
 	int limitPage = 10;
 
@@ -35,7 +37,8 @@ public class DashboardServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		ArrayList<String> selection = new ArrayList<String>(Arrays.asList(request.getParameter("selection").split(",")));
+		ArrayList<String> selection = new ArrayList<String>(
+				Arrays.asList(request.getParameter("selection").split(",")));
 		gestionDelete(selection);
 		request = affichagePage(request);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
@@ -73,8 +76,8 @@ public class DashboardServlet extends HttpServlet {
 			offset = 0;
 			limitPage = 10;
 		}
-
-		Page<Computer> page = serviceComputer.daoGetPage(offset, limitPage);
+		Page<Computer> page = new Page<Computer>(offset, limitPage);
+		page = serviceComputer.daoGetPage(page);
 		ArrayList<DtoComputer> listeDtoComputers = new ArrayList<>();
 
 		for (Computer computer : page.getPage()) {
@@ -82,6 +85,7 @@ public class DashboardServlet extends HttpServlet {
 			dtoComputer = mapComputer.mapToDto(computer);
 			listeDtoComputers.add(dtoComputer);
 		}
+		request.setAttribute("page", page);
 		request.setAttribute("ListeComputer", listeDtoComputers);
 		request.setAttribute("nbComputer", count);
 		return request;

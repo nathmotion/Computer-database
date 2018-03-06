@@ -10,9 +10,9 @@ import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import main.java.excilys.cdb.dao.Page;
 import main.java.excilys.cdb.model.Company;
 import main.java.excilys.cdb.model.Computer;
+import main.java.excilys.cdb.model.Page;
 import main.java.excilys.cdb.service.ServiceCompany;
 import main.java.excilys.cdb.service.ServiceComputer;
 
@@ -48,7 +48,8 @@ public class Ihm {
 				int offset = 0;
 				int nbComputer = servComputer.daoGetNbComputer();
 				do {
-					Page<Computer> pageComputer = servComputer.daoGetPage(offset, 10);
+					Page<Computer> pageComputer = new Page<Computer>(offset, 10);
+					pageComputer = servComputer.daoGetPage(pageComputer);
 					afficheListComputer(pageComputer.getPage());
 					offset = optionPage(sc, offset, nbComputer);
 				} while (!choix.equals("quit"));

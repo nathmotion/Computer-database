@@ -15,15 +15,23 @@
 	<tag>
 		<name>link</name>
 		<tag-class>main.java.excilys.cdb.taglib.PageTag</tag-class>
-		<body-content>JSP</body-content>
+		<body-content>empty</body-content>
 		<attribute>
-			<name>offset</name>
+			<name>action</name>
 			<required>true</required>
-			<name>limit</name>
+			<rtexprvalue>true</rtexprvalue>
+
+		</attribute>
+		<attribute>
+			<name>page</name>
 			<required> true</required>
+			<rtexprvalue>true</rtexprvalue>
+
+		</attribute>
+		<attribute>
 			<name> target</name>
 			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
-
 	</tag>
 </taglib>

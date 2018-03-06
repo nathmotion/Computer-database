@@ -1,5 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="mylib" uri="/WEB-INF/taglib.tld"  %> 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="mylib" uri="/WEB-INF/taglib.tld"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,7 +24,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${nbComputer} Computers found</h1>
+			<h1 id="homeTitle">${nbComputer}Computersfound</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -87,15 +90,15 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><mylib:link target="dashboard.html" offset="${offset+1}" limit="${limit}" /></li>
+				<li><mylib:link target="dashboard.html" page="${page}"
+						action="previous" /></li>
 				<li><a href="dashboard.html?page=1">1</a></li>
 				<li><a href="#">2</a></li>
 				<li><a href="#">3</a></li>
 				<li><a href="#">4</a></li>
 				<li><a href="#">5</a></li>
-				<li><a href="dashboard.html?page=next" aria-label="Next"> <span
-						aria-hidden="true">&raquo;</span>
-				</a></li>
+				<li><mylib:link target="dashboard.html" page="${page}"
+						action="next" /></li>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">

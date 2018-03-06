@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import main.java.excilys.cdb.dao.DaoComputer;
-import main.java.excilys.cdb.dao.Page;
 import main.java.excilys.cdb.model.Computer;
+import main.java.excilys.cdb.model.Page;
 
 public enum ServiceComputer {
 	INSTANCE;
@@ -19,8 +19,8 @@ public enum ServiceComputer {
 		return daocomputer.getAll();
 	}
 
-	public Page<Computer> daoGetPage(int offset, int limitPage){
-		Page<Computer> page= new Page<Computer>(offset,daocomputer.getPage(offset,limitPage));
+	public Page<Computer> daoGetPage(Page<Computer> page){
+		page = new Page<Computer>(page.getOffset(),daocomputer.getPage(page.getOffset(),page.getLimit()));
 		return page;
 	}
 	
