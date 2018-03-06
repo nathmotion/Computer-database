@@ -26,8 +26,7 @@ public class DashboardServlet extends HttpServlet {
 	MapperComputer mapComputer = MapperComputer.INSTANCE;
 	ServiceComputer serviceComputer = ServiceComputer.INSTANCE;
 	PageTag paginationTag = new PageTag();
-	int offset = 0;
-	int limitPage = 10;
+	Page<Computer> page = new Page<Computer>(0, 0, 10);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -53,34 +52,36 @@ public class DashboardServlet extends HttpServlet {
 		}
 	}
 
-	// page to go index => (indexPage - 1) * limit
 	public HttpServletRequest affichagePage(HttpServletRequest request) {
 		int count = serviceComputer.daoGetNbComputer();
-		String selectionPage = request.getParameter("page");
-		if (selectionPage == null) {
-			selectionPage = "0";
+		String action = request.getParameter("actionpage");
+		String stringLimite= request.getParameter("limit");
+		if (action == null) {
+			action = "";
 		}
-		switch (selectionPage) {
+		if(stringLimite!=null) {
+			page.limit=Integer.parseInt(stringLimite);
+		}
+		
+		switch (action) {
 		case "next":
-			if (offset + limitPage < count) {
-				offset = offset + limitPage;
+			if (page.current + 1 < (count / page.limit)) {
+				page.offset = page.offset + page.limit;
+				page.current = (page.getOffset() / page.getLimit()) + 1;
 			}
 			break;
 
 		case "previous":
-			if (offset + limitPage > limitPage) {
-				offset = offset - limitPage;
+			if (page.current - 1 > 0) {
+				page.offset = page.offset - page.limit;
+				page.current = (page.getOffset() / page.getLimit()) + 1;
 			}
 			break;
-		default:
-			offset = 0;
-			limitPage = 10;
 		}
-		Page<Computer> page = new Page<Computer>(offset, limitPage);
 		page = serviceComputer.daoGetPage(page);
 		ArrayList<DtoComputer> listeDtoComputers = new ArrayList<>();
-
-		for (Computer computer : page.getPage()) {
+		System.out.println();
+		for (Computer computer : page.elementsPage) {
 			DtoComputer dtoComputer = new DtoComputer();
 			dtoComputer = mapComputer.mapToDto(computer);
 			listeDtoComputers.add(dtoComputer);

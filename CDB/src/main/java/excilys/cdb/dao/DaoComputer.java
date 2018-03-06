@@ -133,7 +133,7 @@ public enum DaoComputer implements Dao<Computer> {
 			} else {
 				ps.setTimestamp(3, null);
 			}
-			if (!computer.getCompany().equals(null)) {
+			if (!computer.getCompany().equals(null) && computer.getCompany().getId()!=0 && computer.getCompany().getId()!=null) {
 				ps.setLong(4, computer.getCompany().getId());
 			} else {
 				ps.setNull(4, Types.INTEGER);
@@ -172,7 +172,7 @@ public enum DaoComputer implements Dao<Computer> {
 			} else {
 				ps.setTimestamp(3, null);
 			}
-			if (!computer.getCompany().equals(null)) {
+			if (!computer.getCompany().equals(null) && computer.getCompany().getId()!=0 && computer.getCompany().getId()!=null) {
 				ps.setLong(4, computer.getCompany().getId());
 			} else {
 				ps.setNull(4, Types.INTEGER);

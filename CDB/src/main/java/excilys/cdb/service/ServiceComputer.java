@@ -20,7 +20,7 @@ public enum ServiceComputer {
 	}
 
 	public Page<Computer> daoGetPage(Page<Computer> page){
-		page = new Page<Computer>(page.getOffset(),daocomputer.getPage(page.getOffset(),page.getLimit()));
+		page.elementsPage=daocomputer.getPage(page.getOffset(),page.getLimit());
 		return page;
 	}
 	

@@ -24,7 +24,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${nbComputer}Computersfound</h1>
+			<h1 id="homeTitle">${nbComputer} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -102,9 +102,9 @@
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<button type="button" class="btn btn-default" onClick=()>10</button>
-				<button type="button" class="btn btn-default">50</button>
-				<button type="button" class="btn btn-default">100</button>
+				<input type="button" class="btn btn-default" onClick="location.href='dashboard.html?limit=10'" value="10"/>
+				<input type="button" class="btn btn-default" onClick="location.href='dashboard.html?limit=50'" value="50"/>
+				<input type="button" class="btn btn-default" onClick="location.href='dashboard.html?limit=100'" value="100"/>
 			</div>
 		</div>
 	</footer>

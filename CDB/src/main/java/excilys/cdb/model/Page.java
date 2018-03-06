@@ -5,23 +5,31 @@ import java.util.ArrayList;
 public class Page<T> {
 
 	public int offset = 5;
-	public ArrayList<T> page;
+	public ArrayList<T> elementsPage;
 	public int limit = 10;
 	public int current;
 
 	public Page(int offset, ArrayList<T> page) {
 		this.offset = offset;
-		this.page = page;
+		this.elementsPage = page;
 	}
 
 	public Page() {
 
 	}
-
+	
+	public Page(int current, int offset,  int limit ) {
+		this.offset=offset;
+		this.current=current;
+		this.limit=limit;
+	}
+	
 	public int atPage(int numPage) {
-		return (numPage - 1) * limit;
+		current = (numPage - 1) * limit;
+		return current;
 
 	}
+	
 
 	// getters and setters
 	public Page(int offset, int limit) {
@@ -45,12 +53,12 @@ public class Page<T> {
 		this.limit = limit;
 	}
 
-	public ArrayList<T> getPage() {
-		return page;
+	public ArrayList<T> getElementsPage() {
+		return elementsPage;
 	}
 
-	public void setPage(ArrayList<T> list) {
-		this.page = list;
+	public void setElementsPage(ArrayList<T> list) {
+		this.elementsPage = list;
 	}
 
 	public int getNbElements() {
