@@ -50,7 +50,7 @@ public class Ihm {
 				do {
 					Page<Computer> pageComputer = new Page<Computer>(offset, 10);
 					pageComputer = servComputer.daoGetPage(pageComputer);
-					afficheListComputer(pageComputer.getPage());
+				//	afficheListComputer(pageComputer.getPage());
 					offset = optionPage(sc, offset, nbComputer);
 				} while (!choix.equals("quit"));
 				continue;

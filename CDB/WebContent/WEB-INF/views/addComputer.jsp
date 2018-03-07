@@ -26,7 +26,7 @@
 					<h3 style="color:red;">${error}</h3>
 					<br>
 					</c:forEach>
-					<form action="addComputer.html" method="POST">
+					<form action="addComputer.html" method="POST" id="formAddComputer">
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name</label> <input
@@ -36,12 +36,12 @@
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
 									type="date" class="form-control" id="introduced"
-									name="introduced" placeholder="Introduced date">
+									name="introduced" placeholder="Introduced date" min="1970-01-01">
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
 									type="date" class="form-control" id="discontinued"
-									name="discontinued" placeholder="Discontinued date">
+									name="discontinued" placeholder="Discontinued date" min="1970-01-01">
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> <select
@@ -66,6 +66,7 @@
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/dashboard.js"></script>
-
+	 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 </body>
 </html>
