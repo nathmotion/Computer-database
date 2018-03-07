@@ -1,4 +1,4 @@
-package main.java.excilys.cdb.servlet;
+package main.java.excilys.cdb.controllers;
 
 import java.io.IOException;
 import java.time.DateTimeException;
@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import main.java.excilys.cdb.dao.DaoComputer;
 import main.java.excilys.cdb.dto.DtoCompany;
 import main.java.excilys.cdb.dto.DtoComputer;
+import main.java.excilys.cdb.exceptions.InvalidDateException;
 import main.java.excilys.cdb.mapper.MapperCompany;
 import main.java.excilys.cdb.mapper.MapperComputer;
 import main.java.excilys.cdb.model.Company;
@@ -82,9 +83,11 @@ public class AddComputerServlet extends HttpServlet {
 			dtoComputer.date_introduced = stringDateIntro;
 			dtoComputer.date_discontinued = stringDateDisc;
 			dtoComputer.companyId = stringCompanyId;
+			listError.clear();
 			Computer computer = mapperComputer.mapToEntity(dtoComputer);
 			serviceComputer.daoCreate(computer);
 		}
+
 	}
 
 	public void validations(String name, String dateIntro, String dateDisc, String companyId) {
@@ -104,8 +107,8 @@ public class AddComputerServlet extends HttpServlet {
 
 		try {
 			System.out.println("Validation Date discontinued");
-			validatorComputer.validationDateDisc(dateDisc);
-		} catch (DateTimeException e) {
+			validatorComputer.validationDateDisc(dateIntro, dateDisc);
+		} catch (InvalidDateException e) {
 			LOGGER.error(e.getMessage());
 			listError.add(e.getMessage());
 		}

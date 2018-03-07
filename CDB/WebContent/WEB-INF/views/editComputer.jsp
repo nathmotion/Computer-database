@@ -36,7 +36,7 @@
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
 									type="date" class="form-control" id="introduced"
-									name="introduced" value="${computer.date_introduced }">
+									name="introduced" value="${computer.date_introduced}">
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input

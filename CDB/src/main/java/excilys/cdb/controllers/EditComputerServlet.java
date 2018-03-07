@@ -1,4 +1,4 @@
-package main.java.excilys.cdb.servlet;
+package main.java.excilys.cdb.controllers;
 
 import java.io.IOException;
 import java.time.DateTimeException;
@@ -17,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 import main.java.excilys.cdb.dao.DaoComputer;
 import main.java.excilys.cdb.dto.DtoCompany;
 import main.java.excilys.cdb.dto.DtoComputer;
+import main.java.excilys.cdb.exceptions.InvalidDateException;
 import main.java.excilys.cdb.mapper.MapperCompany;
 import main.java.excilys.cdb.mapper.MapperComputer;
 import main.java.excilys.cdb.model.Company;
@@ -31,7 +32,7 @@ public class EditComputerServlet extends HttpServlet {
 	ArrayList<String> listError = new ArrayList();
 	final ServiceComputer serviceComputer = ServiceComputer.INSTANCE;
 	final ServiceCompany serviceCompany = ServiceCompany.INSTANCE;
-
+	private int idComputer;
 	final MapperCompany mapCompany = MapperCompany.INSTANCE;
 	final MapperComputer mapComputer = MapperComputer.INSTANCE;
 	ValidatorComputer validatorComputer = ValidatorComputer.INSTANCE;
@@ -44,10 +45,12 @@ public class EditComputerServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String selection = request.getParameter("id");
+		idComputer=Integer.parseInt(selection);
 		Optional<Computer> optComputer = serviceComputer.daoFindById(Integer.parseInt(selection));
 		request = affichagePage(request);
 		if (optComputer.isPresent()) {
 			DtoComputer dtoComputer = mapComputer.mapToDto(optComputer.get());
+			System.out.println("date "+ dtoComputer.date_introduced);
 			request.setAttribute("computer", dtoComputer);
 		} else {
 			LOGGER.error("  L'item computer" + selection + " n'est pas trouve");
@@ -61,7 +64,16 @@ public class EditComputerServlet extends HttpServlet {
 			throws ServletException, IOException {
 		editRequest(request);
 		request.setAttribute("errors", listError);
-		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+		Optional<Computer> optComputer = serviceComputer.daoFindById(idComputer);
+		if (optComputer.isPresent()) {
+			DtoComputer dtoComputer = mapComputer.mapToDto(optComputer.get());
+			request.setAttribute("computer", dtoComputer);
+		} else {
+			LOGGER.error("  L'item computer" + idComputer	 + " n'est pas trouve");
+			request.setAttribute("error", "Computer not found");
+			request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+		}
+		this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
 	}
 
 	public void editRequest(HttpServletRequest request) {
@@ -76,9 +88,11 @@ public class EditComputerServlet extends HttpServlet {
 			Company company = new Company(Long.valueOf(stringCompanyId), "");
 			DtoComputer dtoComputer = new DtoComputer(stringId, stringName, stringDateIntro, stringDateDisc, company);
 			Computer computer = mapComputer.mapToEntity(dtoComputer);
+			System.out.println("date "+ computer.getIntroduced());
 			serviceComputer.daoUpdate(computer);
 			request = affichagePage(request);
 		}
+		listError.clear();
 	}
 
 	public HttpServletRequest affichagePage(HttpServletRequest request) {
@@ -110,20 +124,20 @@ public class EditComputerServlet extends HttpServlet {
 		try {
 			validatorComputer.validationName(name);
 		} catch (NullPointerException e) {
-			LOGGER.error(e.getMessage());
+			LOGGER.error("nom saisie non valide !");
 			listError.add("nom saisie non valide !");
 		}
 
 		try {
 			validatorComputer.validationDateIntro(dateIntro);
 		} catch (IllegalArgumentException e) {
-			LOGGER.error(e.getMessage());
+			LOGGER.error("La date d'introducion n'est pas valide");
 			listError.add("La date d'introducion n'est pas valide");
 		}
 
 		try {
-			validatorComputer.validationDateDisc(dateDisc);
-		} catch (DateTimeException e) {
+			validatorComputer.validationDateDisc(dateIntro,dateDisc);
+		} catch (InvalidDateException e) {
 			LOGGER.error(e.getMessage());
 			listError.add("la date de retrait n'ont valide ! ");
 		}

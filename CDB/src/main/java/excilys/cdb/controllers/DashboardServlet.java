@@ -1,4 +1,4 @@
-package main.java.excilys.cdb.servlet;
+package main.java.excilys.cdb.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,7 +65,7 @@ public class DashboardServlet extends HttpServlet {
 		
 		switch (action) {
 		case "next":
-			if (page.current + 1 < (count / page.limit)) {
+			if (page.current <= Math.ceil((count / page.limit))) {
 				page.offset = page.offset + page.limit;
 				page.current = (page.getOffset() / page.getLimit()) + 1;
 			}

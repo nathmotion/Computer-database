@@ -22,10 +22,12 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
+					<h3 id="errors">
 					<c:forEach items="${errors}" var="error">
-					<h3 style="color:red;">${error}</h3>
+					${error}
 					<br>
 					</c:forEach>
+					</h3>
 					<form action="addComputer.html" method="POST" id="formAddComputer">
 						<fieldset>
 							<div class="form-group">

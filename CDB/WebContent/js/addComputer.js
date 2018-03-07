@@ -21,3 +21,8 @@ $(document).ready(function(){
 
 	})
 });
+$(document).ready(function(){
+	$(".errors").ready(function(){
+		this.style ="color:red";
+	})
+});
