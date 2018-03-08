@@ -27,6 +27,7 @@ public class DashboardServlet extends HttpServlet {
 	ServiceComputer serviceComputer = ServiceComputer.INSTANCE;
 	PageTag paginationTag = new PageTag();
 	Page<Computer> page = new Page<Computer>(0, 0, 10);
+	String searchName;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -39,6 +40,7 @@ public class DashboardServlet extends HttpServlet {
 		ArrayList<String> selection = new ArrayList<String>(
 				Arrays.asList(request.getParameter("selection").split(",")));
 		gestionDelete(selection);
+		searchName = null;
 		request = affichagePage(request);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}
@@ -53,18 +55,48 @@ public class DashboardServlet extends HttpServlet {
 	}
 
 	public HttpServletRequest affichagePage(HttpServletRequest request) {
-		int count = serviceComputer.daoGetNbComputer();
 		String action = request.getParameter("actionpage");
-		String stringLimite= request.getParameter("limit");
+		String stringLimite = request.getParameter("limit");
+		String searchExpression = request.getParameter("searchName");
+		String searchFlag = request.getParameter("search");
+		int count = serviceComputer.daoGetNbComputer();
+		if (searchFlag != null) {
+			if (Boolean.parseBoolean(searchFlag) == false) {
+				searchName = null;
+			}
+		}
 		if (action == null) {
 			action = "";
 		}
-		if(stringLimite!=null) {
-			page.limit=Integer.parseInt(stringLimite);
-			page.offset=0;
+		if (stringLimite != null) {
+			page.limit = Integer.parseInt(stringLimite);
+			page.offset = 0;
 			page.current = (page.getOffset() / page.getLimit()) + 1;
 		}
-		
+		if (searchExpression != null) {
+			searchName = searchExpression;
+		}
+
+		if (searchName == null) {
+			page = serviceComputer.daoGetPage(page);
+		} else {
+			count = serviceComputer.daoGetNbComputerSearch(searchName);
+			page = serviceComputer.daoGetPageByName(page, searchName);
+		}
+		actionPage(action, count);
+		ArrayList<DtoComputer> listeDtoComputers = new ArrayList<>();
+		for (Computer computer : page.elementsPage) {
+			DtoComputer dtoComputer = new DtoComputer();
+			dtoComputer = mapComputer.mapToDto(computer);
+			listeDtoComputers.add(dtoComputer);
+		}
+		request.setAttribute("page", page);
+		request.setAttribute("ListeComputer", listeDtoComputers);
+		request.setAttribute("nbComputer", count);
+		return request;
+	}
+
+	public void actionPage(String action, int count) {
 		switch (action) {
 		case "next":
 			if (page.current <= Math.ceil((count / page.limit))) {
@@ -80,18 +112,5 @@ public class DashboardServlet extends HttpServlet {
 			}
 			break;
 		}
-		page = serviceComputer.daoGetPage(page);
-		ArrayList<DtoComputer> listeDtoComputers = new ArrayList<>();
-		System.out.println();
-		for (Computer computer : page.elementsPage) {
-			DtoComputer dtoComputer = new DtoComputer();
-			dtoComputer = mapComputer.mapToDto(computer);
-			listeDtoComputers.add(dtoComputer);
-		}
-		request.setAttribute("page", page);
-		request.setAttribute("ListeComputer", listeDtoComputers);
-		request.setAttribute("nbComputer", count);
-		return request;
 	}
-
 }

@@ -91,13 +91,13 @@ public enum DaoCompany implements InterfaceDao<Company> {
 	@Override
 	public void update(Company t) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void delete(Company t) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -106,6 +106,16 @@ public enum DaoCompany implements InterfaceDao<Company> {
 		return null;
 	}
 
-	
+	@Override
+	public ArrayList<Company> getSearch(int offset, int limitPage, String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getNbElementSearch(String name) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 }

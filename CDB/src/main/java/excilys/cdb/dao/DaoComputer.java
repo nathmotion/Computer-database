@@ -26,6 +26,8 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 	final static String QUERY_DELETE = "DELETE FROM computer WHERE id =?";
 	final static String QUERY_GET_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  LIMIT ? , ?";
 	final static String QUERY_NB_ELEMENT = "SELECT count(*) as nbcomputer FROM computer";
+	final static String QUERY_BY_NAME = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ? LIMIT ? , ?";
+	final static String QUERY_NB_ELEMENT_BY_NAME = "SELECT count(*) as nbcomputer FROM computer WHERE computer.name LIKE ?";
 
 	/**
 	 * ======== REQUETES SQL RECUPERE LA LISTE DES COMPUTER ==============
@@ -47,6 +49,7 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 				company.setId(rs.getLong("company_id"));
 				iComputer = new Computer(rs.getLong("id"), rs.getString("name"), rs.getTimestamp("introduced"),
 						rs.getTimestamp("discontinued"), company);
+				System.out.println("computer " + iComputer.toString());
 				listComputer.add(iComputer);
 			}
 			con.closeConn();
@@ -121,7 +124,7 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 
 		try (PreparedStatement ps = con.getConn().prepareStatement(QUERY_CREATE)) {
 			ps.setString(1, computer.getName());
-
+		
 			if (computer.getIntroduced() != null) {
 
 				ps.setTimestamp(2, computer.getIntroduced());
@@ -133,7 +136,8 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 			} else {
 				ps.setTimestamp(3, null);
 			}
-			if (!computer.getCompany().equals(null) && computer.getCompany().getId()!=0 && computer.getCompany().getId()!=null) {
+			if (!computer.getCompany().equals(null) && computer.getCompany().getId() != 0
+					&& computer.getCompany().getId() != null) {
 				ps.setLong(4, computer.getCompany().getId());
 			} else {
 				ps.setNull(4, Types.INTEGER);
@@ -172,7 +176,8 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 			} else {
 				ps.setTimestamp(3, null);
 			}
-			if (!computer.getCompany().equals(null) && computer.getCompany().getId()!=0 && computer.getCompany().getId()!=null) {
+			if (!computer.getCompany().equals(null) && computer.getCompany().getId() != 0
+					&& computer.getCompany().getId() != null) {
 				ps.setLong(4, computer.getCompany().getId());
 			} else {
 				ps.setNull(4, Types.INTEGER);
@@ -235,5 +240,53 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 		}
 		Optional<Computer> op = Optional.ofNullable(iComputer);
 		return op;
+	}
+	
+	@Override
+	public ArrayList<Computer> getSearch(int offset, int limitPage, String name) {
+		Computer iComputer = null;
+		ArrayList<Computer> listComputer = new ArrayList<Computer>();
+		SingletonConn con = SingletonConn.INSTANCE;
+		con.initConn();
+
+		try (PreparedStatement stat = con.getConn().prepareStatement(QUERY_BY_NAME)) {
+			stat.setString(1, name+'%');
+			stat.setString(2, name+'%');
+			stat.setInt(3, offset);
+			stat.setInt(4, limitPage);
+			ResultSet rs = stat.executeQuery();
+			while (rs.next()) {
+				Company company = new Company();
+				company.setName(rs.getString("company.name"));
+				company.setId(rs.getLong("company_id"));
+				iComputer = new Computer(rs.getLong("id"), rs.getString("name"), rs.getTimestamp("introduced"),
+						rs.getTimestamp("discontinued"), company);
+				listComputer.add(iComputer);
+			}
+			con.closeConn();
+		} catch (SQLException e) {
+			LOGGER.error(" error requetes GET Page : " + e.getMessage());
+		}
+		return listComputer;
+	}
+
+	@Override
+	public int getNbElementSearch(String name) {
+		SingletonConn con = SingletonConn.INSTANCE;
+		con.initConn();
+		int nbComputer = 0;
+
+		try (PreparedStatement stat = con.getConn().prepareStatement(QUERY_NB_ELEMENT_BY_NAME)) {
+			stat.setString(1,name+'%');
+			ResultSet rs = stat.executeQuery();
+
+			while (rs.next()) {
+				nbComputer = rs.getInt("nbcomputer");
+			}
+			con.closeConn();
+		} catch (SQLException e) {
+			LOGGER.error(" error requetes GET nbComputer : " + e.getMessage());
+		}
+		return nbComputer;
 	}
 }

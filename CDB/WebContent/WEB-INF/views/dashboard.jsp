@@ -17,7 +17,7 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.html"> Application -
+			<a class="navbar-brand" href="dashboard.html?search=false"> Application -
 				Computer Database </a>
 		</div>
 	</header>
@@ -27,9 +27,8 @@
 			<h1 id="homeTitle">${nbComputer} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="#" method="GET" class="form-inline">
-
-						<input type="search" id="searchbox" name="search"
+					<form id="searchForm" action="dashboard.html" method="GET" class="form-inline">
+						<input type="search" id="searchbox" name="searchName"
 							class="form-control" placeholder="Search name" /> <input
 							type="submit" id="searchsubmit" value="Filter by name"
 							class="btn btn-primary" />

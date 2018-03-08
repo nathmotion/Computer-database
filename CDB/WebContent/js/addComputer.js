@@ -9,7 +9,7 @@ $(document).submit(function(){
 		}
 });
 
-$(document).ready(function(){
+$(document).submit(function(){
 	$("#formAddComputer").validate({
 		rules:{
 			computerName:{

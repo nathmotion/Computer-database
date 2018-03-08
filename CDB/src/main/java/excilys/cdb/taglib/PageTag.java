@@ -38,10 +38,10 @@ public class PageTag extends SimpleTagSupport {
 				out.println("<a href=\"dashboard.html?gopage="+(page.current-1)+"\" >"+(page.current-1) + "</a>");
 			}
 			out.println("<a href=\"#\"> - </a>");
-			if(page.current<nbPage-1) {
+			if(page.current<nbPage) {
 				out.println("<a href=\"dashboard.html?gopage="+(page.current+1)+"\" >"+(page.current+1) + "</a>");
 			}
-			if(page.current<nbPage-2) {
+			if(page.current<nbPage-1) {
 				out.println("<a href=\"dashboard.html?gopage="+(page.current+2)+"\" >"+(page.current+2) + "</a>");
 			}	
 		}

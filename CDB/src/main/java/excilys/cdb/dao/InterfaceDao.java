@@ -12,5 +12,7 @@ public interface InterfaceDao<T>{
 	public void update(T t);
 	public void delete(T t);
 	public Optional<T> findById(int id);
+	public ArrayList<T> getSearch(int offset,int limitPage,String name);
+	public int getNbElementSearch(String name);
 }
 

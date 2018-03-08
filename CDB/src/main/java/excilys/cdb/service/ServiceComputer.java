@@ -24,6 +24,13 @@ public enum ServiceComputer {
 		page.elementsPage=daocomputer.getPage(page.getOffset(),page.getLimit());
 		return page;
 	}
+	public Page<Computer> daoGetPageByName(Page<Computer> page,String name){
+		page.elementsPage=daocomputer.getSearch(page.getOffset(),page.getLimit(),name);
+		return page;
+	}
+	public int daoGetNbComputerSearch(String name) {
+		return daocomputer.getNbElementSearch(name);
+	}
 	
 	public int daoGetNbComputer() {
 		return daocomputer.getNbElement();
