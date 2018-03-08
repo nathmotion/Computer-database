@@ -90,15 +90,9 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><mylib:link target="dashboard.html" page="${page}"
-						action="previous" /></li>
-				<li><a href="dashboard.html?page=1">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li><mylib:link target="dashboard.html" page="${page}"
-						action="next" /></li>
+				<li><mylib:link target="dashboard.html" page="${page}" action="previous" /></li>
+				<li><mylib:link target="dashboard.html" page="${page}" action="numpage" nbElement="${nbComputer}"/></li>
+				<li><mylib:link target="dashboard.html" page="${page}" action="next" /></li>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">

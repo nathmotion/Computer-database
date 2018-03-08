@@ -113,11 +113,5 @@ public class AddComputerServlet extends HttpServlet {
 			listError.add(e.getMessage());
 		}
 
-		try {
-			validatorComputer.validationCompany_id(companyId);
-		} catch (DateTimeException e) {
-			LOGGER.error(e.getMessage());
-			listError.add("l'Id de la company n'as pas été trouver  !");
-		}
 	}
 }

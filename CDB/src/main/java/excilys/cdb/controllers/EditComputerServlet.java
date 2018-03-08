@@ -142,11 +142,5 @@ public class EditComputerServlet extends HttpServlet {
 			listError.add("la date de retrait n'ont valide ! ");
 		}
 
-		try {
-			validatorComputer.validationCompany_id(companyId);
-		} catch (DateTimeException e) {
-			LOGGER.error(e.getMessage());
-			listError.add("l'Id de la company n'as pas été trouver  !");
-		}
 	}
 }

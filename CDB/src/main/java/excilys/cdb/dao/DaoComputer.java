@@ -15,7 +15,7 @@ import main.java.excilys.cdb.model.Company;
 import main.java.excilys.cdb.model.Computer;
 import main.java.excilys.cdb.service.ServiceCompany;
 
-public enum DaoComputer implements Dao<Computer> {
+public enum DaoComputer implements InterfaceDao<Computer> {
 	INSTANCE;
 
 	final static Logger LOGGER = LogManager.getLogger(DaoComputer.class);
@@ -90,7 +90,7 @@ public enum DaoComputer implements Dao<Computer> {
 	 * 
 	 * @return
 	 */
-	public int getNbComputer() {
+	public int getNbElement() {
 		SingletonConn con = SingletonConn.INSTANCE;
 		con.initConn();
 		int nbComputer = 0;

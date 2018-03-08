@@ -14,12 +14,11 @@ import main.java.excilys.cdb.connectionmanager.SingletonConn;
 import main.java.excilys.cdb.model.Company;
 import main.java.excilys.cdb.model.Computer;
 
-public enum DaoCompany implements Dao<Company> {
+public enum DaoCompany implements InterfaceDao<Company> {
 	INSTANCE;
 
 	private final String queryGetAll = "SELECT id,name FROM company  ";
 	private final String queryGetPage = "SELECT id, name FROM company LIMIT ? , ?";
-	private final String QUERY_BY_ID = "SELECT name FROM company  WHERE id=?";
 
 	final static Logger LOGGER = LogManager.getLogger(DaoCompany.class);
 
@@ -77,30 +76,36 @@ public enum DaoCompany implements Dao<Company> {
 		return listCompany;
 	}
 
-	/**
-	 * ===== REQUETES SQL RECUPERE UN ORDINATEUR PASSER PAR PARAMETRE ===========
-	 * 
-	 * @param id
-	 * @return
-	 */
-	public Optional<Company> findById(int id) {
-		Company company = null;
-		SingletonConn con = SingletonConn.INSTANCE;
-		con.initConn();
-
-		try (PreparedStatement stat = con.getConn().prepareStatement(QUERY_BY_ID)) {
-			stat.setInt(1, id);
-			ResultSet rs = stat.executeQuery();
-
-			while (rs.next()) {
-				company = new Company((long) id, rs.getString("name"));
-			}
-			con.closeConn();
-		} catch (SQLException e) {
-			LOGGER.error(" error requetes GET ALL : " + e.getMessage());
-		}
-		Optional<Company> op = Optional.ofNullable(company);
-		return op;
+	@Override
+	public int getNbElement() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
+
+	@Override
+	public boolean create(Company t) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void update(Company t) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Company t) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Optional<Company> findById(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 
 }

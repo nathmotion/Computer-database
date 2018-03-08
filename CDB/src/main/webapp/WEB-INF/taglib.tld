@@ -29,8 +29,12 @@
 
 		</attribute>
 		<attribute>
-			<name> target</name>
+			<name>target</name>
 			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>nbElement</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>

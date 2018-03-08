@@ -36,9 +36,4 @@ public enum ValidatorComputer {
 
 	}
 
-	public void validationCompany_id(String id) throws IllegalArgumentException {
-		if (id == null && id.equals("")) {
-			throw new IllegalArgumentException(" L'ID de la \"company\" est null ");
-		}
-	}
 }

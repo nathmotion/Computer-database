@@ -61,6 +61,8 @@ public class DashboardServlet extends HttpServlet {
 		}
 		if(stringLimite!=null) {
 			page.limit=Integer.parseInt(stringLimite);
+			page.offset=0;
+			page.current = (page.getOffset() / page.getLimit()) + 1;
 		}
 		
 		switch (action) {

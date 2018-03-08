@@ -3,6 +3,7 @@ package main.java.excilys.cdb.service;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import main.java.excilys.cdb.dao.InterfaceDao;
 import main.java.excilys.cdb.dao.DaoComputer;
 import main.java.excilys.cdb.model.Computer;
 import main.java.excilys.cdb.model.Page;
@@ -10,7 +11,7 @@ import main.java.excilys.cdb.model.Page;
 public enum ServiceComputer {
 	INSTANCE;
 	
-	private DaoComputer daocomputer= DaoComputer.INSTANCE;
+	private InterfaceDao<Computer> daocomputer= DaoComputer.INSTANCE;
 
 	ServiceComputer(){
 	}
@@ -25,7 +26,7 @@ public enum ServiceComputer {
 	}
 	
 	public int daoGetNbComputer() {
-		return daocomputer.getNbComputer();
+		return daocomputer.getNbElement();
 	}
 
 	public boolean daoCreate(Computer computer) {
