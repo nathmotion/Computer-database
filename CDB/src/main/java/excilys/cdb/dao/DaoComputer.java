@@ -71,8 +71,7 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 				Company company = new Company();
 				company.setName(rs.getString("company.name"));
 				company.setId(rs.getLong("company_id"));
-				iComputer = new Computer(rs.getLong("id"), rs.getString("name"), rs.getTimestamp("introduced"),
-						rs.getTimestamp("discontinued"), company);
+				iComputer = new Computer(rs.getLong("id"), rs.getString("name"), rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"), company);
 				listComputer.add(iComputer);
 			}
 			con.closeConn();
@@ -287,4 +286,5 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 		}
 		return nbComputer;
 	}
+	
 }

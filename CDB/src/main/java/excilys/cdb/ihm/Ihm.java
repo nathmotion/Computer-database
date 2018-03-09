@@ -50,7 +50,7 @@ public class Ihm {
 				do {
 					Page<Computer> pageComputer = new Page<Computer>(offset, 10);
 					pageComputer = servComputer.daoGetPage(pageComputer);
-				//	afficheListComputer(pageComputer.getPage());
+					afficheListComputer(pageComputer);
 					offset = optionPage(sc, offset, nbComputer);
 				} while (!choix.equals("quit"));
 				continue;
@@ -74,6 +74,8 @@ public class Ihm {
 				affichageSupprOrdinateur(sc, servComputer);
 				pause(sc);
 				continue;
+			case "7":
+					
 
 			case "exit":
 				System.out.println(" Bye ...");
@@ -93,10 +95,10 @@ public class Ihm {
 	 * 
 	 * @param tableComputer
 	 */
-	public static void afficheListComputer(ArrayList<Computer> tableComputer) {
+	public static void afficheListComputer(Page<Computer> page) {
 		clearConsole(20);
 		afficheMenu(" LISTE DES ORDINATEURS ");
-		tableComputer.forEach((computer -> {
+		page.getElementsPage().forEach((computer -> {
 			System.out.println("id: " + computer.getId());
 			System.out.println("name: " + computer.getName());
 		}));
@@ -347,7 +349,22 @@ public class Ihm {
 		;
 		servComputer.daoCreate(computer);
 	}
-
+	
+	/**
+	 * ============= AFFICHAGE DU MENU SUPPR. D'UN COMPANY =============
+	 * 
+	 * @param sc
+	 * @param servComputer
+	 */
+	public static void affichageSupprCompany(Scanner sc, ServiceCompany servCompany) {
+		afficheMenu("SUPPR . D'UNE COMPANIE ");
+		System.out.println("Veuillez saisir l'id de la companie que vous souhaiter suppr.: ");
+		Long id = sc.nextLong();
+		sc.nextLine();
+		Company company = new Company();
+		company.setId(id);
+		servCompany.daoDelete(company);
+	}
 	/**
 	 * ============= AFFICHAGE DU MENU SUPPR. D'UN ORDINATEUR =============
 	 * 
@@ -383,7 +400,8 @@ public class Ihm {
 		System.out.println();
 		System.out.println("1) Afficher liste des compagnies				2) Afficher liste des ordinateurs ");
 		System.out.println("3) Affiches les détails Ordinateur				4) Ajouter un ordinateur ");
-		System.out.println("5) mise à jour d'un ordinateur					6) Supprimer un ordinateur ");
+		System.out.println("5) Mise à jour d'un ordinateur					6) Supprimer un ordinateur ");
+		System.out.println("7) Supprimer une compagnie");
 		System.out.println("Saisir votre choix : ");
 	}
 

@@ -36,12 +36,12 @@
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
 									type="date" class="form-control" id="introduced"
-									name="introduced" value="${computer.date_introduced}">
+									name="introduced" value="${computer.date_introduced}" min="1970-01-01">
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
 									type="date" class="form-control" id="discontinued"
-									name="discontinued" value="${computer.date_discontinued }">
+									name="discontinued" value="${computer.date_discontinued }" min="1970-01-01">
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> <select

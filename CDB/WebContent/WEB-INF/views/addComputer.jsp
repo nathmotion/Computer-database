@@ -22,12 +22,10 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
-					<h3 id="errors">
 					<c:forEach items="${errors}" var="error">
-					${error}
+					<h3 class="errors" style='color:red' >${error}</h3>
 					<br>
 					</c:forEach>
-					</h3>
 					<form action="addComputer.html" method="POST" id="formAddComputer">
 						<fieldset>
 							<div class="form-group">
@@ -57,7 +55,7 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Add" class="btn btn-primary">
+							<input type="submit" value="Add" id="addButton" class="btn btn-primary">
 							or <a href="dashboard.html" class="btn btn-default">Cancel</a>
 						</div>
 					</form>
@@ -65,9 +63,11 @@
 			</div>
 		</div>
 	</section>
+	
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-	<script src="js/dashboard.js"></script>
+	<script src="js/addComputer.js"></script>
+
 	 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 </body>

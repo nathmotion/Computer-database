@@ -25,10 +25,10 @@ public enum SingletonConn {
 	private HikariProxyConnection conn;
 	private String driver;
 	// Bundle Ressources
-	ResourceBundle bundle = ResourceBundle.getBundle("userInfoDB");
+	private ResourceBundle bundle = ResourceBundle.getBundle("userInfoDB");
 	// Hikari Connection Pool
-	HikariConfig config = new HikariConfig();
-	HikariDataSource dsConnectionPool;
+	private HikariConfig config = new HikariConfig();
+	private HikariDataSource dsConnectionPool;
 
 	SingletonConn() {
 		username = bundle.getString("login");
@@ -44,19 +44,16 @@ public enum SingletonConn {
 			dsConnectionPool = new HikariDataSource(config);
 			dsConnectionPool.setAutoCommit(false);
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("conn instance :" + e.getMessage());
 		}
 	}
 
 	public void initConn() {
-
 		try {
 			Class.forName(driver);
 			conn = (HikariProxyConnection) dsConnectionPool.getConnection();
-		} catch (SQLException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			LOGGER.error("conn :" + e.getMessage());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		}
 	}
 

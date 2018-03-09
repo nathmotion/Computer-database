@@ -28,8 +28,10 @@ import main.java.excilys.cdb.validator.ValidatorComputer;
 
 @WebServlet("/editComputer.html")
 public class EditComputerServlet extends HttpServlet {
+
+	private static final long serialVersionUID = 1L;
 	final static Logger LOGGER = LogManager.getLogger(DaoComputer.class);
-	ArrayList<String> listError = new ArrayList();
+	ArrayList<String> listError = new ArrayList<String>();
 	final ServiceComputer serviceComputer = ServiceComputer.INSTANCE;
 	final ServiceCompany serviceCompany = ServiceCompany.INSTANCE;
 	private int idComputer;
@@ -38,14 +40,13 @@ public class EditComputerServlet extends HttpServlet {
 	ValidatorComputer validatorComputer = ValidatorComputer.INSTANCE;
 
 	/**
-	 * 	===	DO GET ====
+	 * === DO GET ====
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String selection = request.getParameter(ID);
 		idComputer = Integer.parseInt(selection);
 		Optional<Computer> optComputer = serviceComputer.daoFindById(Integer.parseInt(selection));
-		//request = affichagePage(request);
 		if (optComputer.isPresent()) {
 			DtoComputer dtoComputer = mapComputer.mapToDto(optComputer.get());
 			System.out.println("date " + dtoComputer.date_introduced);
@@ -57,8 +58,9 @@ public class EditComputerServlet extends HttpServlet {
 		}
 		request.getRequestDispatcher(VIEW_EDIT_COMPUTER).forward(request, response);
 	}
+
 	/***
-	 * 	===	DO POST ====
+	 * === DO POST ====
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -77,7 +79,8 @@ public class EditComputerServlet extends HttpServlet {
 	}
 
 	/**
-	 * 	=======	 GESTION DE LA REQUETE DE EDITION  D'UN COMPUTER =======
+	 * ======= GESTION DE LA REQUETE DE EDITION D'UN COMPUTER =======
+	 * 
 	 * @param request
 	 */
 	public void editRequest(HttpServletRequest request) {
@@ -93,42 +96,13 @@ public class EditComputerServlet extends HttpServlet {
 			DtoComputer dtoComputer = new DtoComputer(stringId, stringName, stringDateIntro, stringDateDisc, company);
 			Computer computer = mapComputer.mapToEntity(dtoComputer);
 			serviceComputer.daoUpdate(computer);
-			//request = affichagePage(request);
 		}
 		listError.clear();
 	}
-//	/**
-//	 * 		=========  GESTION D'AFFICHAGE DE LA PAGE DES COMPUTERS ( LORSQU'ON REPASSE 
-//	 * @param request
-//	 * @return
-//	 */
-//	public HttpServletRequest affichagePage(HttpServletRequest request) {
-//		int count = serviceComputer.daoGetNbComputer();
-//
-//		ArrayList<Computer> computers = serviceComputer.daoGetAllEntities();
-//		ArrayList<DtoComputer> listeDtoComputers = new ArrayList<>();
-//
-//		ArrayList<Company> companys = serviceCompany.daoGetAllEntities();
-//		ArrayList<DtoCompany> listeDtoCompany = new ArrayList<>();
-//
-//		for (Computer computer : computers) {
-//			DtoComputer dtoComputer = new DtoComputer();
-//			dtoComputer = mapComputer.mapToDto(computer);
-//			listeDtoComputers.add(dtoComputer);
-//		}
-//		for (Company company : companys) {
-//			DtoCompany dtoCompany = new DtoCompany();
-//			dtoCompany = mapCompany.mapToDto(company);
-//			listeDtoCompany.add(dtoCompany);
-//		}
-//		request.setAttribute("ListeCompany", listeDtoCompany);
-//		request.setAttribute("ListeComputer", listeDtoComputers);
-//		request.setAttribute("nbComputer", count);
-//		return request;
-//	}
 
 	/**
-	 * 	=======	 TESTE ET VALIDE SI LES DONNEES PASSE  PAR LE FORMULAIRE SONT CORRECT =====
+	 * ======= TESTE ET VALIDE SI LES DONNEES PASSE PAR LE FORMULAIRE SONT CORRECT =====
+	 * 
 	 * @param name
 	 * @param dateIntro
 	 * @param dateDisc

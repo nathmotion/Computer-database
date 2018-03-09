@@ -43,7 +43,13 @@ public class PageTag extends SimpleTagSupport {
 			}
 			if(page.current<nbPage-1) {
 				out.println("<a href=\"dashboard.html?gopage="+(page.current+2)+"\" >"+(page.current+2) + "</a>");
-			}	
+			}
+			if(page.current<2) {
+				out.println("<a href=\"dashboard.html?gopage="+(page.current+3)+"\" >"+(page.current+3) + "</a>");
+			}
+			if(page.current<1) {
+				out.println("<a href=\"dashboard.html?gopage="+(page.current+4)+"\" >"+(page.current+4) + "</a>");
+			}
 		}
 	}
 

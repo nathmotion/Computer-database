@@ -42,7 +42,7 @@ public class AddComputerServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request = affichageCompany(request);
-		this.getServletContext().getRequestDispatcher(VIEW_BOARD).forward(request, response);
+		this.getServletContext().getRequestDispatcher(VIEW_ADD_COMPUTER).forward(request, response);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class AddComputerServlet extends HttpServlet {
 		gestionCreation(stringName, stringDateIntro, stringDateDisc, stringCompanyId);
 		request.setAttribute("errors", listError);
 		request = affichageCompany(request);
-		this.getServletContext().getRequestDispatcher(VIEW_BOARD).forward(request, response);
+		this.getServletContext().getRequestDispatcher(VIEW_ADD_COMPUTER).forward(request, response);
 	}
 
 	/**
@@ -128,7 +128,6 @@ public class AddComputerServlet extends HttpServlet {
 		}
 
 		try {
-			System.out.println("Validation Date discontinued");
 			validatorComputer.validationDateDisc(dateIntro, dateDisc);
 		} catch (InvalidDateException e) {
 			LOGGER.error(e.getMessage());
