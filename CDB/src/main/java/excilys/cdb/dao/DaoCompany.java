@@ -1,5 +1,7 @@
 package main.java.excilys.cdb.dao;
 
+import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.*;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,22 +14,14 @@ import org.apache.logging.log4j.Logger;
 
 import main.java.excilys.cdb.connectionmanager.SingletonConn;
 import main.java.excilys.cdb.model.Company;
-import main.java.excilys.cdb.model.Computer;
 
 public enum DaoCompany implements InterfaceDao<Company> {
 	INSTANCE;
 
-	private final String queryGetAll = "SELECT id,name FROM company  ";
-	private final String queryGetPage = "SELECT id, name FROM company LIMIT ? , ?";
-
 	final static Logger LOGGER = LogManager.getLogger(DaoCompany.class);
 
-	DaoCompany() {
-
-	}
-
 	/**
-	 * ======== REQUETE SQL RECUPERE LA LISTE DES COMPAGNIES ========
+	 * ======== REQUETE SQL : RECUPERE LA LISTE DES COMPAGNIES ========
 	 */
 	@Override
 	public ArrayList<Company> getAll() {
@@ -35,8 +29,10 @@ public enum DaoCompany implements InterfaceDao<Company> {
 		ArrayList<Company> listCompany = new ArrayList<Company>();
 		SingletonConn con = SingletonConn.INSTANCE;
 		con.initConn();
+
 		try (Statement s = con.getConn().createStatement();) {
-			ResultSet rs = s.executeQuery(queryGetAll);
+			ResultSet rs = s.executeQuery(QUERY_GET_ALL_COMPANY);
+
 			while (rs.next()) {
 				company = new Company(rs.getLong("id"), rs.getString("name"));
 				listCompany.add(company);
@@ -49,7 +45,7 @@ public enum DaoCompany implements InterfaceDao<Company> {
 	}
 
 	/**
-	 * ======== REQUETE SQL RECUPERE COMPANY PAR PAGE ========
+	 * ======== REQUETE SQL : RECUPERE COMPANY PAR PAGE ========
 	 */
 	@Override
 	public ArrayList<Company> getPage(int offset, int limitPage) {
@@ -57,12 +53,12 @@ public enum DaoCompany implements InterfaceDao<Company> {
 		ArrayList<Company> listCompany = new ArrayList<Company>();
 		SingletonConn con = SingletonConn.INSTANCE;
 		con.initConn();
-		try (PreparedStatement s = con.getConn().prepareStatement(queryGetPage);) {
 
-			s.setInt(1, offset);// pas de optional car pas besoin de faire gaffe au requete vide mais plutot au
-								// objet vide
+		try (PreparedStatement s = con.getConn().prepareStatement(QUERY_GET_PAGE_COMPANY);) {
+			s.setInt(1, offset);
 			s.setInt(2, 10);
 			ResultSet rs = s.executeQuery();
+
 			while (rs.next()) {
 				company = new Company(rs.getLong("id"), rs.getString("name"));
 				listCompany.add(company);
@@ -70,7 +66,7 @@ public enum DaoCompany implements InterfaceDao<Company> {
 			con.closeConn();
 		} catch (SQLException e) {
 
-			LOGGER.error(" error requetes GET ALL : " + e.getMessage());
+			LOGGER.error(" error GET ALL : " + e.getMessage());
 		}
 
 		return listCompany;
@@ -94,10 +90,22 @@ public enum DaoCompany implements InterfaceDao<Company> {
 
 	}
 
+	/**
+	 * ====== SUPPRIME UNE COMPANY =======
+	 */
 	@Override
-	public void delete(Company t) {
-		// TODO Auto-generated method stub
+	public void delete(Company company) {
+		SingletonConn con = SingletonConn.INSTANCE;
+		con.initConn();
 
+		try (PreparedStatement ps = con.getConn().prepareStatement(QUERY_DELETE_COMPANY)) {
+			ps.setLong(1, company.getId());
+			ps.executeUpdate();
+			con.closeConn();
+			LOGGER.info("Suppression Company" + company.getName() + " reussi ");
+		} catch (SQLException e) {
+			LOGGER.error(" error DELETE Company : " + e.getMessage());
+		}
 	}
 
 	@Override

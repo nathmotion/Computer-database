@@ -41,10 +41,9 @@ public enum SingletonConn {
 		config.setMaximumPoolSize(100);
 		try {
 			Class.forName(driver);
-			// conn = DriverManager.getConnection(url, username, password);
 			dsConnectionPool = new HikariDataSource(config);
+			dsConnectionPool.setAutoCommit(false);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -57,7 +56,6 @@ public enum SingletonConn {
 		} catch (SQLException e) {
 			LOGGER.error("conn :" + e.getMessage());
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -70,24 +68,8 @@ public enum SingletonConn {
 		}
 	}
 
-	public String getUrl() {
-		return url;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
 	public Connection getConn() {
 		return conn;
-	}
-
-	public void setConn(Connection conn) {
-		this.conn = (HikariProxyConnection) conn;
 	}
 
 	public java.sql.Statement createStatement() {

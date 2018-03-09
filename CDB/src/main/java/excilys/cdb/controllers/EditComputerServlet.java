@@ -1,7 +1,7 @@
 package main.java.excilys.cdb.controllers;
 
+import static main.java.excilys.cdb.constantes.ConstantesControllers.*;
 import java.io.IOException;
-import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -37,29 +37,29 @@ public class EditComputerServlet extends HttpServlet {
 	final MapperComputer mapComputer = MapperComputer.INSTANCE;
 	ValidatorComputer validatorComputer = ValidatorComputer.INSTANCE;
 
-	public final String COMPUTER_NAME = "computerName";
-	public final String DATE_INTRO = "introduced";
-	public final String DATE_DISC = "discontinued";
-	public final String COMPANY_ID = "companyId";
-
+	/**
+	 * 	===	DO GET ====
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String selection = request.getParameter("id");
-		idComputer=Integer.parseInt(selection);
+		String selection = request.getParameter(ID);
+		idComputer = Integer.parseInt(selection);
 		Optional<Computer> optComputer = serviceComputer.daoFindById(Integer.parseInt(selection));
-		request = affichagePage(request);
+		//request = affichagePage(request);
 		if (optComputer.isPresent()) {
 			DtoComputer dtoComputer = mapComputer.mapToDto(optComputer.get());
-			System.out.println("date "+ dtoComputer.date_introduced);
+			System.out.println("date " + dtoComputer.date_introduced);
 			request.setAttribute("computer", dtoComputer);
 		} else {
 			LOGGER.error("  L'item computer" + selection + " n'est pas trouve");
 			request.setAttribute("error", "Computer not found");
-			request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+			request.getRequestDispatcher(VIEW_BOARD).forward(request, response);
 		}
-		request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
+		request.getRequestDispatcher(VIEW_EDIT_COMPUTER).forward(request, response);
 	}
-
+	/***
+	 * 	===	DO POST ====
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		editRequest(request);
@@ -69,15 +69,19 @@ public class EditComputerServlet extends HttpServlet {
 			DtoComputer dtoComputer = mapComputer.mapToDto(optComputer.get());
 			request.setAttribute("computer", dtoComputer);
 		} else {
-			LOGGER.error("  L'item computer" + idComputer	 + " n'est pas trouve");
+			LOGGER.error("  L'item computer" + idComputer + " n'est pas trouve");
 			request.setAttribute("error", "Computer not found");
-			request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+			request.getRequestDispatcher(VIEW_BOARD).forward(request, response);
 		}
-		this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
+		this.getServletContext().getRequestDispatcher(VIEW_EDIT_COMPUTER).forward(request, response);
 	}
 
+	/**
+	 * 	=======	 GESTION DE LA REQUETE DE EDITION  D'UN COMPUTER =======
+	 * @param request
+	 */
 	public void editRequest(HttpServletRequest request) {
-		String stringId = request.getParameter("computerId");
+		String stringId = request.getParameter(COMPANY_ID);
 		String stringName = request.getParameter(COMPUTER_NAME);
 		String stringDateIntro = request.getParameter(DATE_INTRO);
 		String stringDateDisc = request.getParameter(DATE_DISC);
@@ -88,38 +92,48 @@ public class EditComputerServlet extends HttpServlet {
 			Company company = new Company(Long.valueOf(stringCompanyId), "");
 			DtoComputer dtoComputer = new DtoComputer(stringId, stringName, stringDateIntro, stringDateDisc, company);
 			Computer computer = mapComputer.mapToEntity(dtoComputer);
-			System.out.println("date "+ computer.getIntroduced());
 			serviceComputer.daoUpdate(computer);
-			request = affichagePage(request);
+			//request = affichagePage(request);
 		}
 		listError.clear();
 	}
+//	/**
+//	 * 		=========  GESTION D'AFFICHAGE DE LA PAGE DES COMPUTERS ( LORSQU'ON REPASSE 
+//	 * @param request
+//	 * @return
+//	 */
+//	public HttpServletRequest affichagePage(HttpServletRequest request) {
+//		int count = serviceComputer.daoGetNbComputer();
+//
+//		ArrayList<Computer> computers = serviceComputer.daoGetAllEntities();
+//		ArrayList<DtoComputer> listeDtoComputers = new ArrayList<>();
+//
+//		ArrayList<Company> companys = serviceCompany.daoGetAllEntities();
+//		ArrayList<DtoCompany> listeDtoCompany = new ArrayList<>();
+//
+//		for (Computer computer : computers) {
+//			DtoComputer dtoComputer = new DtoComputer();
+//			dtoComputer = mapComputer.mapToDto(computer);
+//			listeDtoComputers.add(dtoComputer);
+//		}
+//		for (Company company : companys) {
+//			DtoCompany dtoCompany = new DtoCompany();
+//			dtoCompany = mapCompany.mapToDto(company);
+//			listeDtoCompany.add(dtoCompany);
+//		}
+//		request.setAttribute("ListeCompany", listeDtoCompany);
+//		request.setAttribute("ListeComputer", listeDtoComputers);
+//		request.setAttribute("nbComputer", count);
+//		return request;
+//	}
 
-	public HttpServletRequest affichagePage(HttpServletRequest request) {
-		int count = serviceComputer.daoGetNbComputer();
-
-		ArrayList<Computer> computers = serviceComputer.daoGetAllEntities();
-		ArrayList<DtoComputer> listeDtoComputers = new ArrayList<>();
-
-		ArrayList<Company> companys = serviceCompany.daoGetAllEntities();
-		ArrayList<DtoCompany> listeDtoCompany = new ArrayList<>();
-
-		for (Computer computer : computers) {
-			DtoComputer dtoComputer = new DtoComputer();
-			dtoComputer = mapComputer.mapToDto(computer);
-			listeDtoComputers.add(dtoComputer);
-		}
-		for (Company company : companys) {
-			DtoCompany dtoCompany = new DtoCompany();
-			dtoCompany = mapCompany.mapToDto(company);
-			listeDtoCompany.add(dtoCompany);
-		}
-		request.setAttribute("ListeCompany", listeDtoCompany);
-		request.setAttribute("ListeComputer", listeDtoComputers);
-		request.setAttribute("nbComputer", count);
-		return request;
-	}
-
+	/**
+	 * 	=======	 TESTE ET VALIDE SI LES DONNEES PASSE  PAR LE FORMULAIRE SONT CORRECT =====
+	 * @param name
+	 * @param dateIntro
+	 * @param dateDisc
+	 * @param companyId
+	 */
 	public void validations(String name, String dateIntro, String dateDisc, String companyId) {
 		try {
 			validatorComputer.validationName(name);
@@ -136,7 +150,7 @@ public class EditComputerServlet extends HttpServlet {
 		}
 
 		try {
-			validatorComputer.validationDateDisc(dateIntro,dateDisc);
+			validatorComputer.validationDateDisc(dateIntro, dateDisc);
 		} catch (InvalidDateException e) {
 			LOGGER.error(e.getMessage());
 			listError.add("la date de retrait n'ont valide ! ");

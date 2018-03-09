@@ -1,9 +1,9 @@
 package main.java.excilys.cdb.controllers;
 
+import static main.java.excilys.cdb.constantes.ConstantesControllers.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,22 +29,32 @@ public class DashboardServlet extends HttpServlet {
 	Page<Computer> page = new Page<Computer>(0, 0, 10);
 	String searchName;
 
+		/**
+		 * ===== DO GET ===== 
+		 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request = affichagePage(request);
-		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+		this.getServletContext().getRequestDispatcher(VIEW_BOARD).forward(request, response);
 	}
 
+	/**
+	 *  =====  DO POST =====
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		ArrayList<String> selection = new ArrayList<String>(
-				Arrays.asList(request.getParameter("selection").split(",")));
+				Arrays.asList(request.getParameter(SELECTION).split(",")));
 		gestionDelete(selection);
 		searchName = null;
 		request = affichagePage(request);
-		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+		this.getServletContext().getRequestDispatcher(VIEW_BOARD).forward(request, response);
 	}
 
+	/**
+	 * 	=====	GESTION DE LA REQUETE DE SUPPRESSION DES COMPUTER =======
+	 * @param selection
+	 */
 	public void gestionDelete(ArrayList<String> selection) {
 		for (String idString : selection) {
 			Long idComputer = Long.parseLong(idString);
@@ -53,12 +63,16 @@ public class DashboardServlet extends HttpServlet {
 			serviceComputer.daoDelete(computer);
 		}
 	}
-
+	/**
+	 * 	========	GESTION D'AFFICHAGE DES PAGE DE COMPUTER ET LA RECHERCHE ======  
+	 * @param request
+	 * @return
+	 */
 	public HttpServletRequest affichagePage(HttpServletRequest request) {
-		String action = request.getParameter("actionpage");
-		String stringLimite = request.getParameter("limit");
-		String searchExpression = request.getParameter("searchName");
-		String searchFlag = request.getParameter("search");
+		String action = request.getParameter(ACTION_PAGE);
+		String stringLimite = request.getParameter(LIMIT);
+		String searchExpression = request.getParameter(SEARCH_NAME);
+		String searchFlag = request.getParameter(FLAG_SEARCH);
 		int count = serviceComputer.daoGetNbComputer();
 		if (searchFlag != null) {
 			if (Boolean.parseBoolean(searchFlag) == false) {
@@ -95,7 +109,11 @@ public class DashboardServlet extends HttpServlet {
 		request.setAttribute("nbComputer", count);
 		return request;
 	}
-
+	/**
+	 * 		=====	GESTION DES ACTIONS DEMANDE POUR AFFICHER LA PAGE DE COMPUTER ====
+	 * @param action
+	 * @param count
+	 */
 	public void actionPage(String action, int count) {
 		switch (action) {
 		case "next":

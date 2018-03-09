@@ -1,5 +1,7 @@
 package main.java.excilys.cdb.dao;
 
+import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.*;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,30 +9,21 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Optional;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import main.java.excilys.cdb.connectionmanager.SingletonConn;
 import main.java.excilys.cdb.model.Company;
 import main.java.excilys.cdb.model.Computer;
-import main.java.excilys.cdb.service.ServiceCompany;
 
 public enum DaoComputer implements InterfaceDao<Computer> {
 	INSTANCE;
 
-	final static Logger LOGGER = LogManager.getLogger(DaoComputer.class);
-	final static String QUERY_GET_ALL = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name, company.id FROM computer LEFT JOIN company ON company_id = company.id ";
-	final static String QUERY_BY_ID = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.id=?";
-	final static String QUERY_UPDATE = "UPDATE computer SET name= ?, introduced=? , discontinued=? ,company_id= ? WHERE id =?";
-	final static String QUERY_CREATE = "INSERT INTO computer ( name, introduced, discontinued ,company_id) VALUES (?, ?, ?, ?)";
-	final static String QUERY_DELETE = "DELETE FROM computer WHERE id =?";
-	final static String QUERY_GET_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  LIMIT ? , ?";
-	final static String QUERY_NB_ELEMENT = "SELECT count(*) as nbcomputer FROM computer";
-	final static String QUERY_BY_NAME = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ? LIMIT ? , ?";
-	final static String QUERY_NB_ELEMENT_BY_NAME = "SELECT count(*) as nbcomputer FROM computer WHERE computer.name LIKE ?";
+	public final static Logger LOGGER = LogManager.getLogger(DaoComputer.class);
 
 	/**
-	 * ======== REQUETES SQL RECUPERE LA LISTE DES COMPUTER ==============
+	 * ====== REQUETES SQL : RECUPERE LA LISTE DES COMPUTER =======
 	 */
 	@Override
 	public ArrayList<Computer> getAll() {
@@ -41,7 +34,7 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 		con.initConn();
 
 		try (Statement stat = con.getConn().createStatement()) {
-			ResultSet rs = stat.executeQuery(QUERY_GET_ALL);
+			ResultSet rs = stat.executeQuery(QUERY_GET_ALL_COMPUTER);
 
 			while (rs.next()) {
 				Company company = new Company();
@@ -60,7 +53,7 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 	}
 
 	/**
-	 * ======= PAGINATION Computer =======
+	 * ======= RECUPERATION D'UNE PAGE DES COMPUTER =======
 	 */
 	@Override
 	public ArrayList<Computer> getPage(int offset, int limitPage) {
@@ -69,7 +62,7 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 		SingletonConn con = SingletonConn.INSTANCE;
 		con.initConn();
 
-		try (PreparedStatement stat = con.getConn().prepareStatement(QUERY_GET_PAGE)) {
+		try (PreparedStatement stat = con.getConn().prepareStatement(QUERY_GET_PAGE_COMPUTER)) {
 			stat.setInt(1, offset);
 			stat.setInt(2, limitPage);
 			ResultSet rs = stat.executeQuery();
@@ -90,6 +83,7 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 	}
 
 	/**
+	 * ====== RECUPERE LE NOMBRE D'ELEMENT DANS LA TABLE COMPUTER ========
 	 * 
 	 * @return
 	 */
@@ -99,7 +93,7 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 		int nbComputer = 0;
 
 		try (Statement stat = con.getConn().createStatement()) {
-			ResultSet rs = stat.executeQuery(QUERY_NB_ELEMENT);
+			ResultSet rs = stat.executeQuery(QUERY_NB_ELEMENT_COMPUTER);
 
 			while (rs.next()) {
 				nbComputer = rs.getInt("nbcomputer");
@@ -112,7 +106,7 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 	}
 
 	/**
-	 * ======= REQUETES SQL AJOUTE UN ORDINATEUR PASSER PAR PARAMETRE =============
+	 * ======= REQUETES SQL AJOUTE UN ORDINATEUR PASSER PAR PARAMETRE ========
 	 * 
 	 * @param computer
 	 * @return
@@ -122,9 +116,9 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 		SingletonConn con = SingletonConn.INSTANCE;
 		con.initConn();
 
-		try (PreparedStatement ps = con.getConn().prepareStatement(QUERY_CREATE)) {
+		try (PreparedStatement ps = con.getConn().prepareStatement(QUERY_CREATE_COMPUTER)) {
 			ps.setString(1, computer.getName());
-		
+
 			if (computer.getIntroduced() != null) {
 
 				ps.setTimestamp(2, computer.getIntroduced());
@@ -143,18 +137,17 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 				ps.setNull(4, Types.INTEGER);
 			}
 			ps.executeUpdate();
-			System.out.println("Ajout reussi ... ");
 			con.closeConn();
+			LOGGER.info("Ajout Computer " + computer.getName() + " reussi !");
 			return true;
 		} catch (SQLException e) {
-			LOGGER.error(" error requete CREATE  : " + e.getMessage());
+			LOGGER.error(" error CREATE computer  : " + e.getMessage());
 		}
 		return false;
 	}
 
 	/**
-	 * ========== REQUETES SQL MIS A JOUR UN ORDINATEUR PASSER PAR PARAMETRE
-	 * ============
+	 * ======== REQUETES SQL MIS A JOUR UN ORDINATEUR PASSER PAR PARAMETRE =========
 	 * 
 	 * @param computer
 	 * @return
@@ -162,7 +155,7 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 	public void update(Computer computer) {
 		SingletonConn con = SingletonConn.INSTANCE;
 		con.initConn();
-		try (PreparedStatement ps = con.getConn().prepareStatement(QUERY_UPDATE)) {
+		try (PreparedStatement ps = con.getConn().prepareStatement(QUERY_UPDATE_COMPUTER)) {
 			ps.setString(1, computer.getName());
 
 			if (computer.getIntroduced() != null) {
@@ -185,7 +178,7 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 			ps.setLong(5, computer.getId());
 			ps.executeUpdate();
 			con.closeConn();
-			System.out.println("mise a jour reussi ... ");
+			LOGGER.info("Update Computer " + computer.getName() + "[" + computer.getId() + "] Reussi");
 		} catch (SQLException e) {
 			LOGGER.error(" error requete Update  : " + e.getMessage());
 		}
@@ -202,18 +195,18 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 		SingletonConn con = SingletonConn.INSTANCE;
 		con.initConn();
 
-		try (PreparedStatement ps = con.getConn().prepareStatement(QUERY_DELETE)) {
+		try (PreparedStatement ps = con.getConn().prepareStatement(QUERY_DELETE_COMPUTER)) {
 			ps.setLong(1, computer.getId());
 			ps.executeUpdate();
 			con.closeConn();
-			System.out.println("Suppression reussi ... ");
+			LOGGER.info("Suppression Computer " + computer.getName() + " Reussi");
 		} catch (SQLException e) {
-			LOGGER.error(" error requete DELETE  : " + e.getMessage());
+			LOGGER.error(" error  DELETE  Computer : " + e.getMessage());
 		}
 	}
 
 	/**
-	 * ===== REQUETES SQL RECUPERE UN ORDINATEUR PASSER PAR PARAMETRE ===========
+	 * ===== REQUETES SQL RECUPERE UN ORDINATEUR PASSER PAR PARAMETRE =========
 	 * 
 	 * @param id
 	 * @return
@@ -223,7 +216,7 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 		SingletonConn con = SingletonConn.INSTANCE;
 		con.initConn();
 
-		try (PreparedStatement stat = con.getConn().prepareStatement(QUERY_BY_ID)) {
+		try (PreparedStatement stat = con.getConn().prepareStatement(QUERY_BY_ID_COMPUTER)) {
 			stat.setInt(1, id);
 			ResultSet rs = stat.executeQuery();
 
@@ -241,7 +234,10 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 		Optional<Computer> op = Optional.ofNullable(iComputer);
 		return op;
 	}
-	
+
+	/**
+	 * ======== RECUPER LA PAGE SUIVANT LA RECHERCHE PAR UNE CHAINE DE CHARACTER ========
+	 */
 	@Override
 	public ArrayList<Computer> getSearch(int offset, int limitPage, String name) {
 		Computer iComputer = null;
@@ -250,8 +246,8 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 		con.initConn();
 
 		try (PreparedStatement stat = con.getConn().prepareStatement(QUERY_BY_NAME)) {
-			stat.setString(1, name+'%');
-			stat.setString(2, name+'%');
+			stat.setString(1, name + '%');
+			stat.setString(2, name + '%');
 			stat.setInt(3, offset);
 			stat.setInt(4, limitPage);
 			ResultSet rs = stat.executeQuery();
@@ -265,19 +261,21 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 			}
 			con.closeConn();
 		} catch (SQLException e) {
-			LOGGER.error(" error requetes GET Page : " + e.getMessage());
+			LOGGER.error(" error GET Page Computer : " + e.getMessage());
 		}
 		return listComputer;
 	}
 
+	/**
+	 * ======= NB D' ELEMENTS DE LA RECHERCHE ===========
+	 */
 	@Override
 	public int getNbElementSearch(String name) {
 		SingletonConn con = SingletonConn.INSTANCE;
 		con.initConn();
 		int nbComputer = 0;
-
 		try (PreparedStatement stat = con.getConn().prepareStatement(QUERY_NB_ELEMENT_BY_NAME)) {
-			stat.setString(1,name+'%');
+			stat.setString(1, name + '%');
 			ResultSet rs = stat.executeQuery();
 
 			while (rs.next()) {
@@ -285,7 +283,7 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 			}
 			con.closeConn();
 		} catch (SQLException e) {
-			LOGGER.error(" error requetes GET nbComputer : " + e.getMessage());
+			LOGGER.error(" error GET nbComputer : " + e.getMessage());
 		}
 		return nbComputer;
 	}
