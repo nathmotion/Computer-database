@@ -2,6 +2,8 @@ package main.java.excilys.cdb.dao;
 
 import java.util.ArrayList;
 import java.util.Optional;
+
+import main.java.excilys.cdb.model.Computer;
 import main.java.excilys.cdb.model.Page;
 
 public interface InterfaceDao<T>{
@@ -15,5 +17,6 @@ public interface InterfaceDao<T>{
 	public Optional<T> findById(int id);
 	public ArrayList<T> getSearch(Page<T> page,String name);
 	public int getNbElementSearch(String name);
+	public ArrayList<T> getPageSort(Page<Computer> page,String critere, String order);
 }
 

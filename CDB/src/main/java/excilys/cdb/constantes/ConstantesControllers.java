@@ -15,4 +15,5 @@ public class ConstantesControllers {
 	public final static String FLAG_SEARCH = "search";
 	public final static String ID = "id";
 	public final static String COMPUTER_ID = "computerId";
+	public final static String ORDER ="order";
 }

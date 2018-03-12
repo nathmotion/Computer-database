@@ -59,12 +59,12 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
+						<th><a href="dashboard.html?order=computer">Computer name</a></th>
 						<th>Introduced date</th>
 						<!-- Table header for Discontinued Date -->
 						<th>Discontinued date</th>
 						<!-- Table header for Company -->
-						<th>Company</th>
+						<th><a href="dashboard.html?order=company">Company</a></th>
 
 					</tr>
 				</thead>

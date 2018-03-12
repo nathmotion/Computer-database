@@ -31,6 +31,10 @@ public enum ServiceComputer {
 	public int daoGetNbComputerSearch(String name) {
 		return daocomputer.getNbElementSearch(name);
 	}
+	public Page<Computer> daoGetPageByOrder(Page<Computer> page,String critere, String order) {
+		page.elementsPage=daocomputer.getPageSort(page,critere,order);
+		return page;
+	}
 	
 	public int daoGetNbComputer() {
 		return daocomputer.getNbElement();

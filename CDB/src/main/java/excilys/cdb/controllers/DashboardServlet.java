@@ -28,10 +28,12 @@ public class DashboardServlet extends HttpServlet {
 	PageTag paginationTag = new PageTag();
 	Page<Computer> page = new Page<Computer>(0, 0, 10);
 	String searchName;
+	int computerOrderFlag;
+	int companyOrderFlag;
 
-		/**
-		 * ===== DO GET ===== 
-		 */
+	/**
+	 * ===== DO GET =====
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request = affichagePage(request);
@@ -39,12 +41,11 @@ public class DashboardServlet extends HttpServlet {
 	}
 
 	/**
-	 *  =====  DO POST =====
+	 * ===== DO POST =====
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		ArrayList<String> selection = new ArrayList<String>(
-				Arrays.asList(request.getParameter(SELECTION).split(",")));
+		ArrayList<String> selection = new ArrayList<String>(Arrays.asList(request.getParameter(SELECTION).split(",")));
 		gestionDelete(selection);
 		searchName = null;
 		request = affichagePage(request);
@@ -52,7 +53,8 @@ public class DashboardServlet extends HttpServlet {
 	}
 
 	/**
-	 * 	=====	GESTION DE LA REQUETE DE SUPPRESSION DES COMPUTER =======
+	 * ===== GESTION DE LA REQUETE DE SUPPRESSION DES COMPUTER =======
+	 * 
 	 * @param selection
 	 */
 	public void gestionDelete(ArrayList<String> selection) {
@@ -63,8 +65,10 @@ public class DashboardServlet extends HttpServlet {
 			serviceComputer.daoDelete(computer);
 		}
 	}
+
 	/**
-	 * 	========	GESTION D'AFFICHAGE DES PAGE DE COMPUTER ET LA RECHERCHE ======  
+	 * ======== GESTION D'AFFICHAGE DES PAGE DE COMPUTER ET LA RECHERCHE ======
+	 * 
 	 * @param request
 	 * @return
 	 */
@@ -73,6 +77,7 @@ public class DashboardServlet extends HttpServlet {
 		String stringLimite = request.getParameter(LIMIT);
 		String searchExpression = request.getParameter(SEARCH_NAME);
 		String searchFlag = request.getParameter(FLAG_SEARCH);
+		String order = request.getParameter(ORDER);
 		int count = serviceComputer.daoGetNbComputer();
 		if (searchFlag != null) {
 			if (Boolean.parseBoolean(searchFlag) == false) {
@@ -97,6 +102,38 @@ public class DashboardServlet extends HttpServlet {
 			count = serviceComputer.daoGetNbComputerSearch(searchName);
 			page = serviceComputer.daoGetPageByName(page, searchName);
 		}
+		if (order != null) {
+			if (order.equals("computer")) {
+				computerOrderFlag++;
+				if (computerOrderFlag % 2 == 0) {
+					page.offset = 0;
+					page=serviceComputer.daoGetPageByOrder(page,"computer","ASC");
+					page.current = (page.getOffset() / page.getLimit()) + 1;
+				}
+				if (computerOrderFlag % 2 == 1) {
+					page.offset = 0;
+					page=serviceComputer.daoGetPageByOrder(page,"computer","DESC");
+					page.current = (page.getOffset() / page.getLimit()) + 1;
+				}
+				
+			}
+			if (order.equals("company")) {
+				companyOrderFlag++;
+				if (companyOrderFlag % 2 == 0) {
+					page.limit = Integer.parseInt(stringLimite);
+					page.offset = 0;
+					page=serviceComputer.daoGetPageByOrder(page,"company","ASC");
+					page.current = (page.getOffset() / page.getLimit()) + 1;
+				}
+				if (companyOrderFlag % 2 == 1) {
+					page.limit = Integer.parseInt(stringLimite);
+					page.offset = 0;
+					page=serviceComputer.daoGetPageByOrder(page,"company","DESC");
+					page.current = (page.getOffset() / page.getLimit()) + 1;
+				}
+				
+			}
+		}
 		actionPage(action, count);
 		ArrayList<DtoComputer> listeDtoComputers = new ArrayList<>();
 		for (Computer computer : page.elementsPage) {
@@ -109,8 +146,10 @@ public class DashboardServlet extends HttpServlet {
 		request.setAttribute("nbComputer", count);
 		return request;
 	}
+
 	/**
-	 * 		=====	GESTION DES ACTIONS DEMANDE POUR AFFICHER LA PAGE DE COMPUTER ====
+	 * ===== GESTION DES ACTIONS DEMANDE POUR AFFICHER LA PAGE DE COMPUTER ====
+	 * 
 	 * @param action
 	 * @param count
 	 */
