@@ -21,11 +21,11 @@ public enum ServiceComputer {
 	}
 
 	public Page<Computer> daoGetPage(Page<Computer> page){
-		page.elementsPage=daocomputer.getPage(page.getOffset(),page.getLimit());
+		page.elementsPage=daocomputer.getPage(page);
 		return page;
 	}
 	public Page<Computer> daoGetPageByName(Page<Computer> page,String name){
-		page.elementsPage=daocomputer.getSearch(page.getOffset(),page.getLimit(),name);
+		page.elementsPage=daocomputer.getSearch(page,name);
 		return page;
 	}
 	public int daoGetNbComputerSearch(String name) {

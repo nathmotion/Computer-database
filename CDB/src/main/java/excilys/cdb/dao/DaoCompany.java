@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import main.java.excilys.cdb.connectionmanager.SingletonConn;
 import main.java.excilys.cdb.model.Company;
+import main.java.excilys.cdb.model.Page;
 
 public enum DaoCompany implements InterfaceDao<Company> {
 	INSTANCE;
@@ -49,14 +50,14 @@ public enum DaoCompany implements InterfaceDao<Company> {
 	 * ======== REQUETE SQL : RECUPERE COMPANY PAR PAGE ========
 	 */
 	@Override
-	public ArrayList<Company> getPage(int offset, int limitPage) {
+	public ArrayList<Company> getPage(Page<Company> page) {
 		Company company = null;
 		ArrayList<Company> listCompany = new ArrayList<Company>();
 		SingletonConn con = SingletonConn.INSTANCE;
 		con.initConn();
 
 		try (PreparedStatement s = con.getConn().prepareStatement(QUERY_GET_PAGE_COMPANY);) {
-			s.setInt(1, offset);
+			s.setInt(1, page.offset);
 			s.setInt(2, 10);
 			ResultSet rs = s.executeQuery();
 
@@ -97,11 +98,8 @@ public enum DaoCompany implements InterfaceDao<Company> {
 		con.initConn();
 		try {
 			con.getConn().setAutoCommit(false);
-			PreparedStatement ps = con.getConn().prepareStatement(QUERY_GET_BY_ID_COMPANY);
+			PreparedStatement ps = con.getConn().prepareStatement(QUERY_DELETE_BY_COMPANY);
 			ps.setLong(1, company.getId());
-			ps.executeUpdate();
-			ps = con.getConn().prepareStatement(QUERY_DELETE_BY_COMPANY);
-			ps.setString(1, company.getName());
 			ps.executeUpdate();
 			ps = con.getConn().prepareStatement(QUERY_DELETE_COMPANY);
 			ps.setLong(1, company.getId());
@@ -127,7 +125,7 @@ public enum DaoCompany implements InterfaceDao<Company> {
 	}
 
 	@Override
-	public ArrayList<Company> getSearch(int offset, int limitPage, String name) {
+	public ArrayList<Company> getSearch(Page<Company> company, String name) {
 		return null;
 	}
 

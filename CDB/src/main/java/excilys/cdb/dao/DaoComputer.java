@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import main.java.excilys.cdb.connectionmanager.SingletonConn;
 import main.java.excilys.cdb.model.Company;
 import main.java.excilys.cdb.model.Computer;
+import main.java.excilys.cdb.model.Page;
 
 public enum DaoComputer implements InterfaceDao<Computer> {
 	INSTANCE;
@@ -58,15 +59,15 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 	 * ======= RECUPERATION D'UNE PAGE DES COMPUTER =======
 	 */
 	@Override
-	public ArrayList<Computer> getPage(int offset, int limitPage) {
+	public ArrayList<Computer> getPage(Page<Computer> page) {
 		Computer iComputer = null;
 		ArrayList<Computer> listComputer = new ArrayList<Computer>();
 		SingletonConn con = SingletonConn.INSTANCE;
 		con.initConn();
 
 		try (PreparedStatement stat = con.getConn().prepareStatement(QUERY_GET_PAGE_COMPUTER)) {
-			stat.setInt(1, offset);
-			stat.setInt(2, limitPage);
+			stat.setInt(1, page.offset);
+			stat.setInt(2, page.limit);
 			ResultSet rs = stat.executeQuery();
 
 			while (rs.next()) {
@@ -251,7 +252,7 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 	 * ======== RECUPER LA PAGE SUIVANT LA RECHERCHE PAR UNE CHAINE DE CHARACTER ========
 	 */
 	@Override
-	public ArrayList<Computer> getSearch(int offset, int limitPage, String name) {
+	public ArrayList<Computer> getSearch(Page<Computer> page, String name) {
 		Computer iComputer = null;
 		ArrayList<Computer> listComputer = new ArrayList<Computer>();
 		SingletonConn con = SingletonConn.INSTANCE;
@@ -260,8 +261,8 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 		try (PreparedStatement stat = con.getConn().prepareStatement(QUERY_BY_NAME)) {
 			stat.setString(1, name + '%');
 			stat.setString(2, name + '%');
-			stat.setInt(3, offset);
-			stat.setInt(4, limitPage);
+			stat.setInt(3, page.offset);
+			stat.setInt(4, page.limit);
 			ResultSet rs = stat.executeQuery();
 			while (rs.next()) {
 				Company company = new Company();
@@ -304,5 +305,8 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 		}
 		return nbComputer;
 	}
+
+	public final static String QUERY_ORDER_COMPANY= "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id ORDER BY computer.name ASC  LIMIT ? , ? ";
+
 
 }

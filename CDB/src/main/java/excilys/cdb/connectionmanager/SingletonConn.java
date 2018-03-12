@@ -50,7 +50,6 @@ public enum SingletonConn {
 	public void initConn() {
 		try {
 			Class.forName(driver);
-			dsConnectionPool.setAutoCommit(false);
 			conn = (HikariProxyConnection) dsConnectionPool.getConnection();
 		} catch (SQLException | ClassNotFoundException e) {
 			LOGGER.error("conn :" + e.getMessage());
