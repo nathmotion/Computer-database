@@ -37,9 +37,10 @@ public enum DaoCompany implements InterfaceDao<Company> {
 				company = new Company(rs.getLong("id"), rs.getString("name"));
 				listCompany.add(company);
 			}
-			con.closeConn();
 		} catch (SQLException e) {
-			LOGGER.error(" error requetes GET ALL : " + e.getMessage());
+			LOGGER.error(" Erreur de la recuperation des données de Company : \n " + e.getMessage());
+		} finally {
+			con.closeConn();
 		}
 		return listCompany;
 	}
@@ -63,30 +64,27 @@ public enum DaoCompany implements InterfaceDao<Company> {
 				company = new Company(rs.getLong("id"), rs.getString("name"));
 				listCompany.add(company);
 			}
-			con.closeConn();
 		} catch (SQLException e) {
 
-			LOGGER.error(" error GET ALL : " + e.getMessage());
+			LOGGER.error(" Erreur de la recuperation des données de Company par page : \n " + e.getMessage());
+		} finally {
+			con.closeConn();
 		}
-
 		return listCompany;
 	}
 
 	@Override
 	public int getNbElement() {
-		// TODO Auto-generated method stub
-		return 0;
+ 		return 0;
 	}
 
 	@Override
 	public boolean create(Company t) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void update(Company t) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -97,32 +95,44 @@ public enum DaoCompany implements InterfaceDao<Company> {
 	public void delete(Company company) {
 		SingletonConn con = SingletonConn.INSTANCE;
 		con.initConn();
-
-		try (PreparedStatement ps = con.getConn().prepareStatement(QUERY_DELETE_COMPANY)) {
+		try {
+			con.getConn().setAutoCommit(false);
+			PreparedStatement ps = con.getConn().prepareStatement(QUERY_GET_BY_ID_COMPANY);
 			ps.setLong(1, company.getId());
 			ps.executeUpdate();
-			con.closeConn();
+			ps = con.getConn().prepareStatement(QUERY_DELETE_BY_COMPANY);
+			ps.setString(1, company.getName());
+			ps.executeUpdate();
+			ps = con.getConn().prepareStatement(QUERY_DELETE_COMPANY);
+			ps.setLong(1, company.getId());
+			ps.executeUpdate();
+			con.getConn().commit();
 			LOGGER.info("Suppression Company" + company.getName() + " reussi ");
+			ps.close();
 		} catch (SQLException e) {
-			LOGGER.error(" error DELETE Company : " + e.getMessage());
+			LOGGER.error(" Erreur suppression de Company : \n" + e.getMessage());
+			try {
+				con.getConn().rollback();
+			} catch (SQLException e1) {
+				LOGGER.error(" Erreur du Rollback : \n " + e1.getMessage());
+			}
+		} finally {
+			con.closeConn();
 		}
 	}
 
 	@Override
 	public Optional<Company> findById(int id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public ArrayList<Company> getSearch(int offset, int limitPage, String name) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public int getNbElementSearch(String name) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

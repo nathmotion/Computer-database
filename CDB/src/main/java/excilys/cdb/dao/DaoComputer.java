@@ -45,9 +45,11 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 				System.out.println("computer " + iComputer.toString());
 				listComputer.add(iComputer);
 			}
-			con.closeConn();
 		} catch (SQLException e) {
 			LOGGER.error(" error requetes GET ALL : " + e.getMessage());
+		}
+		finally {
+			con.closeConn();			
 		}
 		return listComputer;
 	}
@@ -71,7 +73,8 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 				Company company = new Company();
 				company.setName(rs.getString("company.name"));
 				company.setId(rs.getLong("company_id"));
-				iComputer = new Computer(rs.getLong("id"), rs.getString("name"), rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"), company);
+				iComputer = new Computer(rs.getLong("id"), rs.getString("name"), rs.getTimestamp("introduced"),
+						rs.getTimestamp("discontinued"), company);
 				listComputer.add(iComputer);
 			}
 			con.closeConn();
@@ -97,9 +100,11 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 			while (rs.next()) {
 				nbComputer = rs.getInt("nbcomputer");
 			}
-			con.closeConn();
 		} catch (SQLException e) {
 			LOGGER.error(" error requetes GET nbComputer : " + e.getMessage());
+		}
+		finally {
+			con.closeConn();			
 		}
 		return nbComputer;
 	}
@@ -136,11 +141,13 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 				ps.setNull(4, Types.INTEGER);
 			}
 			ps.executeUpdate();
-			con.closeConn();
 			LOGGER.info("Ajout Computer " + computer.getName() + " reussi !");
 			return true;
 		} catch (SQLException e) {
 			LOGGER.error(" error CREATE computer  : " + e.getMessage());
+		}
+		finally {
+			con.closeConn();			
 		}
 		return false;
 	}
@@ -176,10 +183,12 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 			}
 			ps.setLong(5, computer.getId());
 			ps.executeUpdate();
-			con.closeConn();
 			LOGGER.info("Update Computer " + computer.getName() + "[" + computer.getId() + "] Reussi");
 		} catch (SQLException e) {
 			LOGGER.error(" error requete Update  : " + e.getMessage());
+		}
+		finally {
+			con.closeConn();			
 		}
 	}
 
@@ -197,10 +206,12 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 		try (PreparedStatement ps = con.getConn().prepareStatement(QUERY_DELETE_COMPUTER)) {
 			ps.setLong(1, computer.getId());
 			ps.executeUpdate();
-			con.closeConn();
 			LOGGER.info("Suppression Computer " + computer.getName() + " Reussi");
 		} catch (SQLException e) {
 			LOGGER.error(" error  DELETE  Computer : " + e.getMessage());
+		}
+		finally {
+			con.closeConn();			
 		}
 	}
 
@@ -226,9 +237,11 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 				iComputer = new Computer(rs.getLong("computer.id"), rs.getString("computer.name"),
 						rs.getTimestamp("introduced"), rs.getTimestamp("discontinued"), company);
 			}
-			con.closeConn();
 		} catch (SQLException e) {
 			LOGGER.error(" error requetes GET by ID : " + e.getMessage());
+		}
+		finally {
+			con.closeConn();			
 		}
 		Optional<Computer> op = Optional.ofNullable(iComputer);
 		return op;
@@ -258,9 +271,11 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 						rs.getTimestamp("discontinued"), company);
 				listComputer.add(iComputer);
 			}
-			con.closeConn();
 		} catch (SQLException e) {
 			LOGGER.error(" error GET Page Computer : " + e.getMessage());
+		}
+		finally {
+			con.closeConn();			
 		}
 		return listComputer;
 	}
@@ -275,16 +290,19 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 		int nbComputer = 0;
 		try (PreparedStatement stat = con.getConn().prepareStatement(QUERY_NB_ELEMENT_BY_NAME)) {
 			stat.setString(1, name + '%');
+			stat.setString(2, name + '%');
 			ResultSet rs = stat.executeQuery();
 
 			while (rs.next()) {
 				nbComputer = rs.getInt("nbcomputer");
 			}
-			con.closeConn();
 		} catch (SQLException e) {
 			LOGGER.error(" error GET nbComputer : " + e.getMessage());
 		}
+		finally {
+			con.closeConn();			
+		}
 		return nbComputer;
 	}
-	
+
 }

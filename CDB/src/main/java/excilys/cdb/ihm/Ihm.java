@@ -75,8 +75,9 @@ public class Ihm {
 				pause(sc);
 				continue;
 			case "7":
-					
-
+				affichageSupprCompany(sc, servCompany);
+				pause(sc);
+				continue;
 			case "exit":
 				System.out.println(" Bye ...");
 				continue;
@@ -101,6 +102,7 @@ public class Ihm {
 		page.getElementsPage().forEach((computer -> {
 			System.out.println("id: " + computer.getId());
 			System.out.println("name: " + computer.getName());
+			System.out.println(" nom company :"+ computer.getCompany().getName());
 		}));
 	}
 
@@ -349,7 +351,7 @@ public class Ihm {
 		;
 		servComputer.daoCreate(computer);
 	}
-	
+
 	/**
 	 * ============= AFFICHAGE DU MENU SUPPR. D'UN COMPANY =============
 	 * 
@@ -365,6 +367,7 @@ public class Ihm {
 		company.setId(id);
 		servCompany.daoDelete(company);
 	}
+
 	/**
 	 * ============= AFFICHAGE DU MENU SUPPR. D'UN ORDINATEUR =============
 	 * 
