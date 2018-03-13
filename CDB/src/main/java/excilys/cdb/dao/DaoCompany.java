@@ -136,7 +136,7 @@ public enum DaoCompany implements InterfaceDao<Company> {
 	}
 
 	@Override
-	public ArrayList<Company> getPageSort(Page<Computer> page, String order) {
+	public ArrayList<Company> getPageSort(Page<Computer> page,String critere, Boolean order) {
 		// TODO Auto-generated method stub
 		return null;
 	}

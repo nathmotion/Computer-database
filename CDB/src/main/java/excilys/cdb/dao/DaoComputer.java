@@ -298,17 +298,20 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 		return nbComputer;
 	}
 
-	public ArrayList<Computer> getPageSort(Page<Computer> page,String critere, String order) {
+	public ArrayList<Computer> getPageSort(Page<Computer> page,String critere, Boolean orderAsc) {
 
 		Computer iComputer = null;
 		ArrayList<Computer> list = new ArrayList<Computer>();
 		SingletonConn con = SingletonConn.INSTANCE;
 		con.initConn();
-
-		try (PreparedStatement stat = con.getConn().prepareStatement(String.format(QUERY_ORDER, critere,order))) {
+		String stringOrder="DESC";
+		if(orderAsc) {
+			stringOrder="ASC";
+		}
+		
+		try (PreparedStatement stat = con.getConn().prepareStatement(String.format(QUERY_ORDER, critere,stringOrder))) {
 			stat.setInt(1, page.offset);
 			stat.setInt(2, page.limit);
-			System.out.println("request = "+ stat.toString());
 			ResultSet rs = stat.executeQuery();
 
 			while (rs.next()) {
@@ -319,9 +322,10 @@ public enum DaoComputer implements InterfaceDao<Computer> {
 						rs.getTimestamp("discontinued"), company);
 				list.add(iComputer);
 			}
-			con.closeConn();
 		} catch (SQLException e) {
 			LOGGER.error(" error requetes Page triee : " + e.getMessage());
+		}finally {
+			con.closeConn();
 		}
 		return list;
 	}

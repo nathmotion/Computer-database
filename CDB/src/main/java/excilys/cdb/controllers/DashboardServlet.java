@@ -30,6 +30,8 @@ public class DashboardServlet extends HttpServlet {
 	String searchName;
 	int computerOrderFlag;
 	int companyOrderFlag;
+	String order;
+	String modelOrder;
 
 	/**
 	 * ===== DO GET =====
@@ -48,6 +50,8 @@ public class DashboardServlet extends HttpServlet {
 		ArrayList<String> selection = new ArrayList<String>(Arrays.asList(request.getParameter(SELECTION).split(",")));
 		gestionDelete(selection);
 		searchName = null;
+		order = null;
+		modelOrder = null;
 		request = affichagePage(request);
 		this.getServletContext().getRequestDispatcher(VIEW_BOARD).forward(request, response);
 	}
@@ -73,16 +77,22 @@ public class DashboardServlet extends HttpServlet {
 	 * @return
 	 */
 	public HttpServletRequest affichagePage(HttpServletRequest request) {
+
 		String action = request.getParameter(ACTION_PAGE);
 		String stringLimite = request.getParameter(LIMIT);
 		String searchExpression = request.getParameter(SEARCH_NAME);
 		String searchFlag = request.getParameter(FLAG_SEARCH);
-		String order = request.getParameter(ORDER);
+		order = request.getParameter(ORDER);
+		String model = request.getParameter("model");
+
 		int count = serviceComputer.daoGetNbComputer();
 		if (searchFlag != null) {
 			if (Boolean.parseBoolean(searchFlag) == false) {
 				searchName = null;
 			}
+		}
+		if (model != null) {
+			modelOrder = model;
 		}
 		if (action == null) {
 			action = "";
@@ -95,46 +105,16 @@ public class DashboardServlet extends HttpServlet {
 		if (searchExpression != null) {
 			searchName = searchExpression;
 		}
-
+		
+		actionPage(action, count);
+		
 		if (searchName == null) {
-			page = serviceComputer.daoGetPage(page);
+			gestionPageOrder();
 		} else {
 			count = serviceComputer.daoGetNbComputerSearch(searchName);
 			page = serviceComputer.daoGetPageByName(page, searchName);
 		}
-		if (order != null) {
-			if (order.equals("computer")) {
-				computerOrderFlag++;
-				if (computerOrderFlag % 2 == 0) {
-					page.offset = 0;
-					page=serviceComputer.daoGetPageByOrder(page,"computer","ASC");
-					page.current = (page.getOffset() / page.getLimit()) + 1;
-				}
-				if (computerOrderFlag % 2 == 1) {
-					page.offset = 0;
-					page=serviceComputer.daoGetPageByOrder(page,"computer","DESC");
-					page.current = (page.getOffset() / page.getLimit()) + 1;
-				}
-				
-			}
-			if (order.equals("company")) {
-				companyOrderFlag++;
-				if (companyOrderFlag % 2 == 0) {
-					page.limit = Integer.parseInt(stringLimite);
-					page.offset = 0;
-					page=serviceComputer.daoGetPageByOrder(page,"company","ASC");
-					page.current = (page.getOffset() / page.getLimit()) + 1;
-				}
-				if (companyOrderFlag % 2 == 1) {
-					page.limit = Integer.parseInt(stringLimite);
-					page.offset = 0;
-					page=serviceComputer.daoGetPageByOrder(page,"company","DESC");
-					page.current = (page.getOffset() / page.getLimit()) + 1;
-				}
-				
-			}
-		}
-		actionPage(action, count);
+		
 		ArrayList<DtoComputer> listeDtoComputers = new ArrayList<>();
 		for (Computer computer : page.elementsPage) {
 			DtoComputer dtoComputer = new DtoComputer();
@@ -168,6 +148,36 @@ public class DashboardServlet extends HttpServlet {
 				page.current = (page.getOffset() / page.getLimit()) + 1;
 			}
 			break;
+		}
+	}
+
+	public void gestionPageOrder() {
+		if (order != null) {
+			computerOrderFlag++;
+			if (computerOrderFlag % 2 == 0) {
+				page.offset = 0;
+				page = serviceComputer.daoGetPageByOrder(page, modelOrder, true);
+				page.current = (page.getOffset() / page.getLimit()) + 1;
+			}
+			if (computerOrderFlag % 2 == 1) {
+				page.offset = 0;
+				page = serviceComputer.daoGetPageByOrder(page, modelOrder, false);
+				page.current = (page.getOffset() / page.getLimit()) + 1;
+			}
+			order = null;
+		} else {
+			if (modelOrder != null) {
+				if (computerOrderFlag % 2 == 0) {
+					page = serviceComputer.daoGetPageByOrder(page, modelOrder, true);
+					page.current = (page.getOffset() / page.getLimit()) + 1;
+				}
+				if (computerOrderFlag % 2 == 1) {
+					page = serviceComputer.daoGetPageByOrder(page, modelOrder, false);
+					page.current = (page.getOffset() / page.getLimit()) + 1;
+				}
+			} else {
+				page = serviceComputer.daoGetPage(page);
+			}
 		}
 	}
 }

@@ -17,6 +17,6 @@ public interface InterfaceDao<T>{
 	public Optional<T> findById(int id);
 	public ArrayList<T> getSearch(Page<T> page,String name);
 	public int getNbElementSearch(String name);
-	public ArrayList<T> getPageSort(Page<Computer> page,String critere, String order);
+	public ArrayList<T> getPageSort(Page<Computer> page,String critere, Boolean order);
 }
 
