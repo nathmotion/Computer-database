@@ -102,7 +102,7 @@ public class Ihm {
 		page.getElementsPage().forEach((computer -> {
 			System.out.println("id: " + computer.getId());
 			System.out.println("name: " + computer.getName());
-			System.out.println(" nom company :"+ computer.getCompany().getName());
+			System.out.println(" nom company :" + computer.getCompany().getName());
 		}));
 	}
 
