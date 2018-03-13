@@ -38,7 +38,7 @@ public class Ihm {
 			choix = sc.nextLine();
 			switch (choix) {
 			case "1":
-				ArrayList<Company> tableCompany = servCompany.daoGetAllEntities();
+				ArrayList<Company> tableCompany = servCompany.getAllEntities();
 				LOGGER.debug(" salut");
 				afficheListCompany(tableCompany);
 				pause(sc);
@@ -46,10 +46,10 @@ public class Ihm {
 
 			case "2":
 				int offset = 0;
-				int nbComputer = servComputer.daoGetNbComputer();
+				int nbComputer = servComputer.getNbComputer();
 				do {
 					Page<Computer> pageComputer = new Page<Computer>(offset, 10);
-					pageComputer = servComputer.daoGetPage(pageComputer);
+					pageComputer = servComputer.getPage(pageComputer);
 					afficheListComputer(pageComputer);
 					offset = optionPage(sc, offset, nbComputer);
 				} while (!choix.equals("quit"));
@@ -130,7 +130,7 @@ public class Ihm {
 		System.out.println("Veullez saisir l' id de l'ordinateur ");
 		int id = sc.nextInt();
 		sc.nextLine();
-		Optional<Computer> opcomputer = servComputer.daoFindById(id);
+		Optional<Computer> opcomputer = servComputer.findById(id);
 
 		if (opcomputer.isPresent()) {
 			Computer computer = opcomputer.get();
@@ -155,7 +155,7 @@ public class Ihm {
 		System.out.println("Entrez l'id de l'ordinateur a mettre a jour : ");
 		int id = sc.nextInt();
 		sc.nextLine();
-		Optional<Computer> optcomputer = servcomputer.daoFindById(id);
+		Optional<Computer> optcomputer = servcomputer.findById(id);
 		if (optcomputer.isPresent()) {
 			Computer computer = optcomputer.get();
 			System.out.println("id: " + computer.getId());
@@ -190,7 +190,7 @@ public class Ihm {
 				System.out.println("Entrez le nouveau name de l'ordinateur :");
 				choice = sc.nextLine();
 				computer.setName(choice);
-				servComputer.daoUpdate(computer);
+				servComputer.update(computer);
 
 			case "2":
 				System.out.println("Entrez l'année la date d'introduction du nouveau ordinateur: ");
@@ -209,7 +209,7 @@ public class Ihm {
 						break;
 					}
 					computer.setIntroduced(convertLocalDatetoTimestamp(date_introduced));
-					servComputer.daoUpdate(computer);
+					servComputer.update(computer);
 				} catch (DateTimeParseException e) {
 					LOGGER.error(" le format de la date introduced saisie est mauvais ou ce sont pas des nombres  ");
 				}
@@ -227,7 +227,7 @@ public class Ihm {
 				try {
 					LocalDate date_discontinued = LocalDate.parse(string_date_discontinued);
 					computer.setIntroduced(convertLocalDatetoTimestamp(date_discontinued));
-					servComputer.daoUpdate(computer);
+					servComputer.update(computer);
 					if (date_discontinued.getYear() < (int) 1970) {
 						System.out.println(" Une des Dates saissies est inferieur a 1970  ");
 						choix = "0";
@@ -244,7 +244,7 @@ public class Ihm {
 				sc.nextLine();
 				computer.getCompany().setId(id);
 				;
-				servComputer.daoUpdate(computer);
+				servComputer.update(computer);
 				continue;
 
 			default:
@@ -349,7 +349,7 @@ public class Ihm {
 		}
 		computer.getCompany().setId(company_id);
 		;
-		servComputer.daoCreate(computer);
+		servComputer.create(computer);
 	}
 
 	/**
@@ -365,7 +365,7 @@ public class Ihm {
 		sc.nextLine();
 		Company company = new Company();
 		company.setId(id);
-		servCompany.daoDelete(company);
+		servCompany.delete(company);
 	}
 
 	/**
@@ -381,7 +381,7 @@ public class Ihm {
 		sc.nextLine();
 		Computer computer = new Computer();
 		computer.setId(id);
-		servComputer.daoDelete(computer);
+		servComputer.delete(computer);
 	}
 
 	/**

@@ -16,43 +16,43 @@ public enum ServiceComputer {
 	ServiceComputer(){
 	}
 
-	public ArrayList<Computer> daoGetAllEntities() {
+	public ArrayList<Computer> getAllEntities() {
 		return daocomputer.getAll();
 	}
 
-	public Page<Computer> daoGetPage(Page<Computer> page){
+	public Page<Computer> getPage(Page<Computer> page){
 		page.elementsPage=daocomputer.getPage(page);
 		return page;
 	}
-	public Page<Computer> daoGetPageByName(Page<Computer> page,String name){
+	public Page<Computer> getPageByName(Page<Computer> page,String name){
 		page.elementsPage=daocomputer.getSearch(page,name);
 		return page;
 	}
-	public int daoGetNbComputerSearch(String name) {
+	public int getNbComputerSearch(String name) {
 		return daocomputer.getNbElementSearch(name);
 	}
-	public Page<Computer> daoGetPageByOrder(Page<Computer> page,String critere, Boolean order) {
+	public Page<Computer> getPageByOrder(Page<Computer> page,String critere, Boolean order) {
 		page.elementsPage=daocomputer.getPageSort(page,critere,order);
 		return page;
 	}
 	
-	public int daoGetNbComputer() {
+	public int getNbComputer() {
 		return daocomputer.getNbElement();
 	}
 
-	public boolean daoCreate(Computer computer) {
+	public boolean create(Computer computer) {
 		return daocomputer.create(computer);
 	}
 
-	public void daoUpdate(Computer computer) {
+	public void update(Computer computer) {
 		daocomputer.update(computer);
 	}
 
-	public void daoDelete(Computer computer) {
+	public void delete(Computer computer) {
 		daocomputer.delete(computer);
 	}
 	
-	public Optional<Computer> daoFindById(int id){
+	public Optional<Computer> findById(int id){
 		return daocomputer.findById(id);
 	}
 }

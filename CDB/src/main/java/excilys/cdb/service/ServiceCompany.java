@@ -14,10 +14,10 @@ public enum ServiceCompany {
 	ServiceCompany(){
 	}
 
-	public ArrayList<Company> daoGetAllEntities() {
+	public ArrayList<Company> getAllEntities() {
 		return daoCompany.getAll();
 	}
-	public void daoDelete(Company company) {
+	public void delete(Company company) {
 		daoCompany.delete(company);
 	}
 }
