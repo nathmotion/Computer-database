@@ -69,7 +69,7 @@ public class AddComputerServlet extends HttpServlet {
 	 * @return
 	 */
 	public HttpServletRequest affichageCompany(HttpServletRequest request) {
-		ArrayList<Company> companys = serviceCompany.daoGetAllEntities();
+		ArrayList<Company> companys = serviceCompany.getAllEntities();
 		ArrayList<DtoCompany> listeDtoCompany = new ArrayList<>();
 
 		for (Company company : companys) {
@@ -99,7 +99,7 @@ public class AddComputerServlet extends HttpServlet {
 			dtoComputer.companyId = stringCompanyId;
 			listError.clear();
 			Computer computer = mapperComputer.mapToEntity(dtoComputer);
-			serviceComputer.daoCreate(computer);
+			serviceComputer.create(computer);
 		}
 
 	}

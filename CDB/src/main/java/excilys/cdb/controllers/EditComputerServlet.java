@@ -46,7 +46,7 @@ public class EditComputerServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String selection = request.getParameter(ID);
 		idComputer = Integer.parseInt(selection);
-		Optional<Computer> optComputer = serviceComputer.daoFindById(Integer.parseInt(selection));
+		Optional<Computer> optComputer = serviceComputer.findById(Integer.parseInt(selection));
 		if (optComputer.isPresent()) {
 			DtoComputer dtoComputer = mapComputer.mapToDto(optComputer.get());
 			System.out.println("date " + dtoComputer.date_introduced);
@@ -66,7 +66,7 @@ public class EditComputerServlet extends HttpServlet {
 			throws ServletException, IOException {
 		editRequest(request);
 		request.setAttribute("errors", listError);
-		Optional<Computer> optComputer = serviceComputer.daoFindById(idComputer);
+		Optional<Computer> optComputer = serviceComputer.findById(idComputer);
 		if (optComputer.isPresent()) {
 			DtoComputer dtoComputer = mapComputer.mapToDto(optComputer.get());
 			request.setAttribute("computer", dtoComputer);
@@ -95,7 +95,7 @@ public class EditComputerServlet extends HttpServlet {
 			Company company = new Company(Long.valueOf(stringCompanyId), "");
 			DtoComputer dtoComputer = new DtoComputer(stringId, stringName, stringDateIntro, stringDateDisc, company);
 			Computer computer = mapComputer.mapToEntity(dtoComputer);
-			serviceComputer.daoUpdate(computer);
+			serviceComputer.update(computer);
 		}
 		listError.clear();
 	}
