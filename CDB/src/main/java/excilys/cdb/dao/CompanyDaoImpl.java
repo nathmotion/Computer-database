@@ -26,9 +26,9 @@ import main.java.excilys.cdb.model.Page;
 public class CompanyDaoImpl implements InterfaceDao<Company> {
 
 	@Autowired
-	JdbcTemplate jdbcTemplate;
+	private JdbcTemplate jdbcTemplate;
 
-	final static Logger LOGGER = LogManager.getLogger(DaoCompany.class);
+	final static Logger LOGGER = LogManager.getLogger(CompanyDaoImpl.class);
 
 	/**
 	 * ======== REQUETE SQL : RECUPERE LA LISTE DES COMPAGNIES ========
@@ -38,6 +38,7 @@ public class CompanyDaoImpl implements InterfaceDao<Company> {
 
 		RowMapper<Company> beanPropertyRowMapper = (rs, rowNum) -> new Company(rs.getLong("id"), rs.getString("name"));
 		List<Company> listeCompany = jdbcTemplate.query(QUERY_GET_ALL_COMPANY, beanPropertyRowMapper);
+		System.out.println(" size " + listeCompany.size());
 		return (ArrayList<Company>) listeCompany;
 	}
 
@@ -58,10 +59,8 @@ public class CompanyDaoImpl implements InterfaceDao<Company> {
 	}
 
 	@Override
-	public boolean create(Company t) {
-		return false;
+	public void create(Company t) {
 	}
-
 	@Override
 	public void update(Company t) {
 

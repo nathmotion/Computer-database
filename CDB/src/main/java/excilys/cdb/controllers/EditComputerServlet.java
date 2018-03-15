@@ -13,31 +13,34 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import main.java.excilys.cdb.dao.DaoComputer;
-import main.java.excilys.cdb.dto.DtoCompany;
 import main.java.excilys.cdb.dto.DtoComputer;
 import main.java.excilys.cdb.exceptions.InvalidDateException;
 import main.java.excilys.cdb.mapper.MapperCompany;
 import main.java.excilys.cdb.mapper.MapperComputer;
 import main.java.excilys.cdb.model.Company;
 import main.java.excilys.cdb.model.Computer;
-import main.java.excilys.cdb.service.ServiceCompany;
-import main.java.excilys.cdb.service.ServiceComputer;
+import main.java.excilys.cdb.service.CompanyServiceImpl;
+import main.java.excilys.cdb.service.ComputerServiceImpl;
 import main.java.excilys.cdb.validator.ValidatorComputer;
 
 @WebServlet("/editComputer.html")
 public class EditComputerServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	final static Logger LOGGER = LogManager.getLogger(DaoComputer.class);
+
+	final static Logger LOGGER = LogManager.getLogger(EditComputerServlet.class);
+
+	@Autowired
+	private ValidatorComputer validatorComputer;
+	@Autowired
+	private ComputerServiceImpl serviceComputer;
+	@Autowired
+	private MapperComputer mapComputer;
+
 	ArrayList<String> listError = new ArrayList<String>();
-	final ServiceComputer serviceComputer = ServiceComputer.INSTANCE;
-	final ServiceCompany serviceCompany = ServiceCompany.INSTANCE;
 	private int idComputer;
-	final MapperCompany mapCompany = MapperCompany.INSTANCE;
-	final MapperComputer mapComputer = MapperComputer.INSTANCE;
-	ValidatorComputer validatorComputer = ValidatorComputer.INSTANCE;
 
 	/**
 	 * === DO GET ====
@@ -101,7 +104,8 @@ public class EditComputerServlet extends HttpServlet {
 	}
 
 	/**
-	 * ======= TESTE ET VALIDE SI LES DONNEES PASSE PAR LE FORMULAIRE SONT CORRECT =====
+	 * ======= TESTE ET VALIDE SI LES DONNEES PASSE PAR LE FORMULAIRE SONT CORRECT
+	 * =====
 	 * 
 	 * @param name
 	 * @param dateIntro

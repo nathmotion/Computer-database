@@ -1,13 +1,13 @@
 package main.java.excilys.cdb.service;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import main.java.excilys.cdb.model.Page;
 
 public interface ServiceCDB<T> {
 
-	public ArrayList<T> getAllEntities();
+	public List<T> getAllEntities();
 
 	public Page<T> getPage(Page<T> page);
 
@@ -19,7 +19,7 @@ public interface ServiceCDB<T> {
 
 	public int getNbTotal();
 
-	public boolean create(T obj);
+	public void create(T obj);
 
 	public void update(T obj);
 

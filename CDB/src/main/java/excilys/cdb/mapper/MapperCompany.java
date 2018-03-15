@@ -1,10 +1,13 @@
 package main.java.excilys.cdb.mapper;
 
+import org.springframework.stereotype.Component;
+
 import main.java.excilys.cdb.dto.DtoCompany;
 import main.java.excilys.cdb.model.Company;
 
-public enum MapperCompany {
-	INSTANCE;
+@Component
+public class MapperCompany {
+	
 
 	public DtoCompany mapToDto(Company company) {
 		DtoCompany dtoCompany = new DtoCompany();

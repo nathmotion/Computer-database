@@ -1,4 +1,4 @@
-package main.java.excilys.cdb.jdbc;
+package main.java.excilys.cdb.configuration;
 
 import javax.sql.DataSource;
 

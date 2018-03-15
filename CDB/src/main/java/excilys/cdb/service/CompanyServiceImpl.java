@@ -1,6 +1,7 @@
 package main.java.excilys.cdb.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,9 @@ import main.java.excilys.cdb.model.Page;
 public class CompanyServiceImpl implements ServiceCDB<Company> {
 
 	@Autowired
-	InterfaceDao<Company> daoCompany;
+	private InterfaceDao<Company> daoCompany;
 
-	public ArrayList<Company> getAllEntities() {
+	public List<Company> getAllEntities() {
 		return daoCompany.getAll();
 	}
 
@@ -50,8 +51,7 @@ public class CompanyServiceImpl implements ServiceCDB<Company> {
 	}
 
 	@Override
-	public boolean create(Company obj) {
-		return false;
+	public void create(Company obj) {
 	}
 
 	@Override

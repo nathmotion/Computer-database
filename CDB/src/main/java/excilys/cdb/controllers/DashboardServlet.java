@@ -5,17 +5,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import main.java.excilys.cdb.dto.DtoComputer;
 import main.java.excilys.cdb.mapper.MapperComputer;
 import main.java.excilys.cdb.model.Computer;
 import main.java.excilys.cdb.model.Page;
-import main.java.excilys.cdb.service.ServiceComputer;
+import main.java.excilys.cdb.service.ComputerServiceImpl;
 import main.java.excilys.cdb.taglib.PageTag;
 
 /**
@@ -23,8 +30,12 @@ import main.java.excilys.cdb.taglib.PageTag;
  */
 @WebServlet("/dashboard.html")
 public class DashboardServlet extends HttpServlet {
-	MapperComputer mapComputer = MapperComputer.INSTANCE;
-	ServiceComputer serviceComputer = ServiceComputer.INSTANCE;
+
+	@Autowired
+	ComputerServiceImpl serviceComputer;
+	@Autowired
+	MapperComputer mapComputer;
+
 	PageTag paginationTag = new PageTag();
 	Page<Computer> page = new Page<Computer>(0, 0, 10);
 	String searchName;
@@ -85,7 +96,7 @@ public class DashboardServlet extends HttpServlet {
 		order = request.getParameter(ORDER);
 		String model = request.getParameter("model");
 
-		int count = serviceComputer.getNbComputer();
+		int count = serviceComputer.getNbTotal();
 		if (searchFlag != null) {
 			if (Boolean.parseBoolean(searchFlag) == false) {
 				searchName = null;
@@ -105,16 +116,16 @@ public class DashboardServlet extends HttpServlet {
 		if (searchExpression != null) {
 			searchName = searchExpression;
 		}
-		
+
 		actionPage(action, count);
-		
+
 		if (searchName == null) {
 			gestionPageOrder();
 		} else {
-			count = serviceComputer.getNbComputerSearch(searchName);
+			count = serviceComputer.getNbSearch(searchName);
 			page = serviceComputer.getPageByName(page, searchName);
 		}
-		
+
 		ArrayList<DtoComputer> listeDtoComputers = new ArrayList<>();
 		for (Computer computer : page.elementsPage) {
 			DtoComputer dtoComputer = new DtoComputer();
@@ -179,5 +190,15 @@ public class DashboardServlet extends HttpServlet {
 				page = serviceComputer.getPage(page);
 			}
 		}
+	}
+
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+		ServletContext servletContext = config.getServletContext();
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils
+				.getWebApplicationContext(servletContext);
+		AutowireCapableBeanFactory autowireCapableBeanFactory = webApplicationContext.getAutowireCapableBeanFactory();
+		autowireCapableBeanFactory.autowireBean(this);
 	}
 }

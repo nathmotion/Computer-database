@@ -1,5 +1,6 @@
 package main.java.excilys.cdb.ihm;
 
+import java.util.List;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -9,17 +10,21 @@ import java.util.Optional;
 import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import main.java.excilys.cdb.model.Company;
 import main.java.excilys.cdb.model.Computer;
 import main.java.excilys.cdb.model.Page;
-import main.java.excilys.cdb.service.ServiceCompany;
-import main.java.excilys.cdb.service.ServiceComputer;
+import main.java.excilys.cdb.service.CompanyServiceImpl;
+import main.java.excilys.cdb.service.ComputerServiceImpl;
 
 public class Ihm {
 	final static Logger LOGGER = LogManager.getLogger(Ihm.class);
-	ServiceCompany servCompany = ServiceCompany.INSTANCE;
-	ServiceComputer servComputer = ServiceComputer.INSTANCE;
+	@Autowired
+	CompanyServiceImpl servCompany;
+	@Autowired
+	ComputerServiceImpl servComputer; 
+	
 	Scanner sc = new Scanner(System.in);
 	static String choix;
 
@@ -38,7 +43,7 @@ public class Ihm {
 			choix = sc.nextLine();
 			switch (choix) {
 			case "1":
-				ArrayList<Company> tableCompany = servCompany.getAllEntities();
+				List<Company> tableCompany = servCompany.getAllEntities();
 				LOGGER.debug(" salut");
 				afficheListCompany(tableCompany);
 				pause(sc);
@@ -46,7 +51,7 @@ public class Ihm {
 
 			case "2":
 				int offset = 0;
-				int nbComputer = servComputer.getNbComputer();
+				int nbComputer = servComputer.getNbTotal();
 				do {
 					Page<Computer> pageComputer = new Page<Computer>(offset, 10);
 					pageComputer = servComputer.getPage(pageComputer);
@@ -111,7 +116,7 @@ public class Ihm {
 	 * 
 	 * @param tableCompany
 	 */
-	public static void afficheListCompany(ArrayList<Company> tableCompany) {
+	public static void afficheListCompany(List<Company> tableCompany) {
 		clearConsole(20);
 		afficheMenu(" LISTE DES COMPANY ");
 		tableCompany.forEach((company -> {
@@ -126,7 +131,7 @@ public class Ihm {
 	 * @param sc
 	 * @param servComputer
 	 */
-	public static void afficheFindbyId(Scanner sc, ServiceComputer servComputer) {
+	public static void afficheFindbyId(Scanner sc, ComputerServiceImpl servComputer) {
 		System.out.println("Veullez saisir l' id de l'ordinateur ");
 		int id = sc.nextInt();
 		sc.nextLine();
@@ -150,7 +155,7 @@ public class Ihm {
 	 * @param sc
 	 * @param servcomputer
 	 */
-	public static void affichageMiseAjourOrdinateur(Scanner sc, ServiceComputer servcomputer) {
+	public static void affichageMiseAjourOrdinateur(Scanner sc, ComputerServiceImpl servcomputer) {
 		afficheMenu(" MISE A JOUR D'UN ORDINATEUR");
 		System.out.println("Entrez l'id de l'ordinateur a mettre a jour : ");
 		int id = sc.nextInt();
@@ -178,7 +183,7 @@ public class Ihm {
 	 * @param date_discontinued
 	 * @param company_id
 	 */
-	public static void miseajourOrdinateur(ServiceComputer servComputer, Scanner sc, Computer computer) {
+	public static void miseajourOrdinateur(ComputerServiceImpl servComputer, Scanner sc, Computer computer) {
 		System.out.println("Que voulez vous modifier  : ");
 		System.out.println("	1)Name		2)Date Introduced		3)Date Discontinued		4)Company id");
 		String choice = sc.nextLine();
@@ -259,7 +264,7 @@ public class Ihm {
 	 * @param sc
 	 * @param servcomputer
 	 */
-	public static void affichageAjoutOrdinateur(Scanner sc, ServiceComputer servcomputer) {
+	public static void affichageAjoutOrdinateur(Scanner sc, ComputerServiceImpl servcomputer) {
 
 		afficheMenu(" AJOUT D'UN ORDINATEUR");
 		System.out.println("Veuillez saisir le nom de nouveau ordinateur: ");
@@ -321,7 +326,7 @@ public class Ihm {
 	 * @param date_discontinued
 	 * @param company_id
 	 */
-	public static void ajoutOrdinateur(ServiceComputer servComputer, String name, String string_date_introduced,
+	public static void ajoutOrdinateur(ComputerServiceImpl servComputer, String name, String string_date_introduced,
 			String string_date_discontinued, Long company_id) {
 		Computer computer = new Computer();
 		computer.setName(name);
@@ -358,7 +363,7 @@ public class Ihm {
 	 * @param sc
 	 * @param servComputer
 	 */
-	public static void affichageSupprCompany(Scanner sc, ServiceCompany servCompany) {
+	public static void affichageSupprCompany(Scanner sc, CompanyServiceImpl servCompany) {
 		afficheMenu("SUPPR . D'UNE COMPANIE ");
 		System.out.println("Veuillez saisir l'id de la companie que vous souhaiter suppr.: ");
 		Long id = sc.nextLong();
@@ -374,7 +379,7 @@ public class Ihm {
 	 * @param sc
 	 * @param servComputer
 	 */
-	public static void affichageSupprOrdinateur(Scanner sc, ServiceComputer servComputer) {
+	public static void affichageSupprOrdinateur(Scanner sc, ComputerServiceImpl servComputer) {
 		afficheMenu("SUPPR . D'UN ORDINATEUR");
 		System.out.println("Veuillez saisir l'id de ordinateur que vous souhaiter suppr.: ");
 		Long id = sc.nextLong();

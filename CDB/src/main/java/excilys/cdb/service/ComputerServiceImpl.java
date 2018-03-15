@@ -1,12 +1,12 @@
 package main.java.excilys.cdb.service;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import main.java.excilys.cdb.dao.InterfaceDao;
+import main.java.excilys.cdb.dao.ComputerDaoImpl;
 import main.java.excilys.cdb.model.Computer;
 import main.java.excilys.cdb.model.Page;
 
@@ -14,9 +14,9 @@ import main.java.excilys.cdb.model.Page;
 public class ComputerServiceImpl implements ServiceCDB<Computer>{
 	
 	@Autowired
-	InterfaceDao<Computer> daoComputer;
+	private ComputerDaoImpl daoComputer;
 
-	public ArrayList<Computer> getAllEntities() {
+	public List<Computer> getAllEntities() {
 		return daoComputer.getAll();
 	}
 
@@ -40,8 +40,8 @@ public class ComputerServiceImpl implements ServiceCDB<Computer>{
 		return daoComputer.getNbElement();
 	}
 
-	public boolean create(Computer computer) {
-		return daoComputer.create(computer);
+	public void create(Computer computer) {
+		daoComputer.create(computer);
 	}
 
 	public void update(Computer computer) {

@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import main.java.excilys.cdb.dao.DaoComputer;
 
 
 public class testService {

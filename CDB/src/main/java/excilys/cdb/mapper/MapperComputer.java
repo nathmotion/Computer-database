@@ -4,12 +4,14 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import org.springframework.stereotype.Component;
+
 import main.java.excilys.cdb.dto.DtoComputer;
 import main.java.excilys.cdb.model.Company;
 import main.java.excilys.cdb.model.Computer;
 
-public enum MapperComputer {
-	INSTANCE;
+@Component
+public class MapperComputer {
 
 	public Computer mapToEntity(DtoComputer dtoComputer) {
 		Company company = new Company();
