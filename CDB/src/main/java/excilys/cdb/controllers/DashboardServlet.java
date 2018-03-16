@@ -1,6 +1,13 @@
 package main.java.excilys.cdb.controllers;
 
-import static main.java.excilys.cdb.constantes.ConstantesControllers.*;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.ACTION_PAGE;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.FLAG_SEARCH;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.LIMIT;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.ORDER;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.SEARCH_NAME;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.SELECTION;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.VIEW_BOARD;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -29,6 +37,7 @@ import main.java.excilys.cdb.taglib.PageTag;
  * Servlet implementation class MyServletInterface
  */
 @WebServlet("/dashboard.html")
+@Controller
 public class DashboardServlet extends HttpServlet {
 
 	@Autowired
@@ -193,12 +202,11 @@ public class DashboardServlet extends HttpServlet {
 	}
 
 	@Override
-	public void init(ServletConfig config) throws ServletException {
+	public void init(ServletConfig config) throws ServletException{
 		super.init(config);
 		ServletContext servletContext = config.getServletContext();
-		WebApplicationContext webApplicationContext = WebApplicationContextUtils
-				.getWebApplicationContext(servletContext);
-		AutowireCapableBeanFactory autowireCapableBeanFactory = webApplicationContext.getAutowireCapableBeanFactory();
-		autowireCapableBeanFactory.autowireBean(this);
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+	    AutowireCapableBeanFactory autowireCapableBeanFactory = webApplicationContext.getAutowireCapableBeanFactory();
+	    autowireCapableBeanFactory.autowireBean(this);	
 	}
 }

@@ -10,7 +10,7 @@ import main.java.excilys.cdb.dao.ComputerDaoImpl;
 import main.java.excilys.cdb.model.Computer;
 import main.java.excilys.cdb.model.Page;
 
-@Service("ServiceCDB")
+@Service
 public class ComputerServiceImpl implements ServiceCDB<Computer>{
 	
 	@Autowired

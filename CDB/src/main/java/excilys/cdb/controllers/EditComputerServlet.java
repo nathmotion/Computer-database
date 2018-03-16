@@ -1,36 +1,49 @@
 package main.java.excilys.cdb.controllers;
 
-import static main.java.excilys.cdb.constantes.ConstantesControllers.*;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.COMPANY_ID;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.COMPUTER_NAME;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.DATE_DISC;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.DATE_INTRO;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.ID;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.VIEW_BOARD;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.VIEW_EDIT_COMPUTER;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import main.java.excilys.cdb.configuration.JdbcConfig;
 import main.java.excilys.cdb.dto.DtoComputer;
 import main.java.excilys.cdb.exceptions.InvalidDateException;
-import main.java.excilys.cdb.mapper.MapperCompany;
 import main.java.excilys.cdb.mapper.MapperComputer;
 import main.java.excilys.cdb.model.Company;
 import main.java.excilys.cdb.model.Computer;
-import main.java.excilys.cdb.service.CompanyServiceImpl;
 import main.java.excilys.cdb.service.ComputerServiceImpl;
 import main.java.excilys.cdb.validator.ValidatorComputer;
 
 @WebServlet("/editComputer.html")
+@Controller
 public class EditComputerServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	final static Logger LOGGER = LogManager.getLogger(EditComputerServlet.class);
+	//final static Logger LOGGER = LogManager.getLogger(EditComputerServlet.class);
 
 	@Autowired
 	private ValidatorComputer validatorComputer;
@@ -52,10 +65,9 @@ public class EditComputerServlet extends HttpServlet {
 		Optional<Computer> optComputer = serviceComputer.findById(Integer.parseInt(selection));
 		if (optComputer.isPresent()) {
 			DtoComputer dtoComputer = mapComputer.mapToDto(optComputer.get());
-			System.out.println("date " + dtoComputer.date_introduced);
 			request.setAttribute("computer", dtoComputer);
 		} else {
-			LOGGER.error("  L'item computer" + selection + " n'est pas trouve");
+			//LOGGER.error("  L'item computer" + selection + " n'est pas trouve");
 			request.setAttribute("error", "Computer not found");
 			request.getRequestDispatcher(VIEW_BOARD).forward(request, response);
 		}
@@ -74,7 +86,7 @@ public class EditComputerServlet extends HttpServlet {
 			DtoComputer dtoComputer = mapComputer.mapToDto(optComputer.get());
 			request.setAttribute("computer", dtoComputer);
 		} else {
-			LOGGER.error("  L'item computer" + idComputer + " n'est pas trouve");
+			//LOGGER.error("  L'item computer" + idComputer + " n'est pas trouve");
 			request.setAttribute("error", "Computer not found");
 			request.getRequestDispatcher(VIEW_BOARD).forward(request, response);
 		}
@@ -116,23 +128,32 @@ public class EditComputerServlet extends HttpServlet {
 		try {
 			validatorComputer.validationName(name);
 		} catch (NullPointerException e) {
-			LOGGER.error("nom saisie non valide !");
+			//LOGGER.error("nom saisie non valide !");
 			listError.add("nom saisie non valide !");
 		}
 
 		try {
 			validatorComputer.validationDateIntro(dateIntro);
 		} catch (IllegalArgumentException e) {
-			LOGGER.error("La date d'introducion n'est pas valide");
+			//LOGGER.error("La date d'introducion n'est pas valide");
 			listError.add("La date d'introducion n'est pas valide");
 		}
 
 		try {
 			validatorComputer.validationDateDisc(dateIntro, dateDisc);
 		} catch (InvalidDateException e) {
-			LOGGER.error(e.getMessage());
+			//LOGGER.error(e.getMessage());
 			listError.add("la date de retrait n'ont valide ! ");
 		}
 
+	}
+
+	@Override
+	public void init(ServletConfig config) throws ServletException{
+		super.init(config);
+		ServletContext servletContext = config.getServletContext();
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+	    AutowireCapableBeanFactory autowireCapableBeanFactory = webApplicationContext.getAutowireCapableBeanFactory();
+	    autowireCapableBeanFactory.autowireBean(this);	
 	}
 }

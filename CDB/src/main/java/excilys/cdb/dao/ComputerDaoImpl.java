@@ -16,8 +16,6 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -32,7 +30,8 @@ import main.java.excilys.cdb.model.Page;
 @Qualifier("InterfaceDao")
 public class ComputerDaoImpl implements InterfaceDao<Computer> {
 
-	public final static Logger LOGGER = LogManager.getLogger(ComputerDaoImpl.class);
+	// public final static Logger LOGGER =
+	// LogManager.getLogger(ComputerDaoImpl.class);
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
@@ -101,7 +100,7 @@ public class ComputerDaoImpl implements InterfaceDao<Computer> {
 			companyId = 0;
 		}
 		jdbcTemplate.update(QUERY_CREATE_COMPUTER, computer.getName(), introduced, discontinued, companyId);
-		LOGGER.debug(" Creation de l'ordinateur");
+		// LOGGER.debug(" Creation de l'ordinateur");
 	}
 
 	/**
@@ -132,7 +131,7 @@ public class ComputerDaoImpl implements InterfaceDao<Computer> {
 			companyId = 0;
 		}
 		jdbcTemplate.update(QUERY_UPDATE_COMPUTER, computer.getName(), introduced, discontinued, companyId);
-		LOGGER.debug(" Update de l'ordinateur");
+		// LOGGER.debug(" Update de l'ordinateur");
 	}
 
 	/**
@@ -153,7 +152,7 @@ public class ComputerDaoImpl implements InterfaceDao<Computer> {
 	 * @return
 	 */
 	public Optional<Computer> findById(int id) {
-		return Optional.ofNullable(jdbcTemplate.queryForObject(QUERY_BY_ID_COMPUTER, myRowMapper));
+		return Optional.ofNullable(jdbcTemplate.queryForObject(QUERY_BY_ID_COMPUTER, myRowMapper, id));
 	}
 
 	/**

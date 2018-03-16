@@ -1,18 +1,29 @@
 package main.java.excilys.cdb.controllers;
 
-import static main.java.excilys.cdb.constantes.ConstantesControllers.*;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.COMPANY_ID;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.COMPUTER_NAME;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.DATE_DISC;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.DATE_INTRO;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.VIEW_ADD_COMPUTER;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import main.java.excilys.cdb.dto.DtoCompany;
 import main.java.excilys.cdb.dto.DtoComputer;
@@ -29,9 +40,10 @@ import main.java.excilys.cdb.validator.ValidatorComputer;
  * Servlet implementation class AddComputerServlet
  */
 @WebServlet("/addComputer.html")
+@Controller
 public class AddComputerServlet extends HttpServlet {
-	
-	final static Logger LOGGER = LogManager.getLogger(AddComputerServlet.class);
+
+	//final static Logger LOGGER = LogManager.getLogger(AddComputerServlet.class);
 
 	ArrayList<String> listError = new ArrayList<>();
 	@Autowired
@@ -91,7 +103,8 @@ public class AddComputerServlet extends HttpServlet {
 	}
 
 	/**
-	 * ======= GERE LA CREATION D'UN COMPUTER : APPEL DE LA REQUETE CREATION FOURNI PAR LE SERVICE ========
+	 * ======= GERE LA CREATION D'UN COMPUTER : APPEL DE LA REQUETE CREATION FOURNI
+	 * PAR LE SERVICE ========
 	 * 
 	 * @param stringName
 	 * @param stringDateIntro
@@ -114,7 +127,8 @@ public class AddComputerServlet extends HttpServlet {
 	}
 
 	/**
-	 * ======= TESTE ET VALIDE SI LES DONNEES PASSE PAR LE FORMULAIRE SONT CORRECT =====
+	 * ======= TESTE ET VALIDE SI LES DONNEES PASSE PAR LE FORMULAIRE SONT CORRECT
+	 * =====
 	 * 
 	 * @param name
 	 * @param dateIntro
@@ -125,23 +139,32 @@ public class AddComputerServlet extends HttpServlet {
 		try {
 			validatorComputer.validationName(name);
 		} catch (NullPointerException e) {
-			LOGGER.error(e.getMessage());
+			//LOGGER.error(e.getMessage());
 			listError.add("nom saisie non valide !");
 		}
 
 		try {
 			validatorComputer.validationDateIntro(dateIntro);
 		} catch (IllegalArgumentException e) {
-			LOGGER.error(e.getMessage());
+			//LOGGER.error(e.getMessage());
 			listError.add("La date d'introducion n'est pas valide");
 		}
 
 		try {
 			validatorComputer.validationDateDisc(dateIntro, dateDisc);
 		} catch (InvalidDateException e) {
-			LOGGER.error(e.getMessage());
+		//	LOGGER.error(e.getMessage());
 			listError.add(e.getMessage());
 		}
 
+	}
+
+	@Override
+	public void init(ServletConfig config) throws ServletException{
+		super.init(config);
+		ServletContext servletContext = config.getServletContext();
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+	    AutowireCapableBeanFactory autowireCapableBeanFactory = webApplicationContext.getAutowireCapableBeanFactory();
+	    autowireCapableBeanFactory.autowireBean(this);	
 	}
 }

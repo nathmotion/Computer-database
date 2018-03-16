@@ -5,11 +5,8 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import main.java.excilys.cdb.model.Company;
@@ -19,7 +16,7 @@ import main.java.excilys.cdb.service.CompanyServiceImpl;
 import main.java.excilys.cdb.service.ComputerServiceImpl;
 
 public class Ihm {
-	final static Logger LOGGER = LogManager.getLogger(Ihm.class);
+//	final static Logger LOGGER = LogManager.getLogger(Ihm.class);
 	@Autowired
 	CompanyServiceImpl servCompany;
 	@Autowired
@@ -44,7 +41,6 @@ public class Ihm {
 			switch (choix) {
 			case "1":
 				List<Company> tableCompany = servCompany.getAllEntities();
-				LOGGER.debug(" salut");
 				afficheListCompany(tableCompany);
 				pause(sc);
 				continue;
@@ -216,7 +212,7 @@ public class Ihm {
 					computer.setIntroduced(convertLocalDatetoTimestamp(date_introduced));
 					servComputer.update(computer);
 				} catch (DateTimeParseException e) {
-					LOGGER.error(" le format de la date introduced saisie est mauvais ou ce sont pas des nombres  ");
+				//	LOGGER.error(" le format de la date introduced saisie est mauvais ou ce sont pas des nombres  ");
 				}
 				continue;
 
@@ -239,7 +235,7 @@ public class Ihm {
 						break;
 					}
 				} catch (DateTimeParseException e) {
-					LOGGER.error(" le format de la date discontinued saisie est mauvais ou ce sont pas des nombres  ");
+			//		LOGGER.error(" le format de la date discontinued saisie est mauvais ou ce sont pas des nombres  ");
 				}
 				continue;
 
@@ -309,7 +305,7 @@ public class Ihm {
 				return;
 			}
 		} catch (NumberFormatException e) {
-			LOGGER.error("Année saisie n'est pas du bon format ou pas un nombre");
+			//LOGGER.error("Année saisie n'est pas du bon format ou pas un nombre");
 			return;
 		}
 		String date_introduced = year + "-" + month + "-" + day;
@@ -338,7 +334,7 @@ public class Ihm {
 				LocalDate date_introduced = LocalDate.parse(string_date_introduced);
 				computer.setIntroduced(convertLocalDatetoTimestamp(date_introduced));
 			} catch (DateTimeParseException e) {
-				LOGGER.error(" le format de la date continued saisie est mauvais ou ce sont pas des nombres  ");
+			//	LOGGER.error(" le format de la date continued saisie est mauvais ou ce sont pas des nombres  ");
 			}
 		}
 
@@ -349,7 +345,7 @@ public class Ihm {
 				LocalDate date_discontinued = LocalDate.parse(string_date_discontinued);
 				computer.setDiscontinued(convertLocalDatetoTimestamp(date_discontinued));
 			} catch (DateTimeParseException e) {
-				LOGGER.error(" le format de la date discontinued saisie est mauvais ou ce sont pas des nombres  ");
+			//	LOGGER.error(" le format de la date discontinued saisie est mauvais ou ce sont pas des nombres  ");
 			}
 		}
 		computer.getCompany().setId(company_id);

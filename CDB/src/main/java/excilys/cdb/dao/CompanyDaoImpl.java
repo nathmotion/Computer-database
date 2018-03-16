@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -28,7 +27,7 @@ public class CompanyDaoImpl implements InterfaceDao<Company> {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	final static Logger LOGGER = LogManager.getLogger(CompanyDaoImpl.class);
+	//final static Logger LOGGER = LogManager.getLogger(CompanyDaoImpl.class);
 
 	/**
 	 * ======== REQUETE SQL : RECUPERE LA LISTE DES COMPAGNIES ========
@@ -74,7 +73,7 @@ public class CompanyDaoImpl implements InterfaceDao<Company> {
 
 		jdbcTemplate.update(QUERY_DELETE_BY_COMPANY, company.getName());
 		jdbcTemplate.update(QUERY_DELETE_COMPANY, company.getId());
-		LOGGER.info("Suppression Company" + company.getName() + " reussi ");
+	//	LOGGER.info("Suppression Company" + company.getName() + " reussi ");
 	}
 
 	@Override

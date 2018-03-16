@@ -11,7 +11,7 @@ import main.java.excilys.cdb.dao.InterfaceDao;
 import main.java.excilys.cdb.model.Company;
 import main.java.excilys.cdb.model.Page;
 
-@Service("ServiceCDB")
+@Service
 public class CompanyServiceImpl implements ServiceCDB<Company> {
 
 	@Autowired

@@ -4,9 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import com.zaxxer.hikari.pool.HikariProxyConnection;
@@ -14,7 +11,7 @@ import com.zaxxer.hikari.pool.HikariProxyConnection;
 public enum SingletonConn {
 	INSTANCE;
 
-	final static Logger LOGGER = LogManager.getLogger(SingletonConn.class);
+	//final static Logger LOGGER = LogManager.getLogger(SingletonConn.class);
 	// url
 	private String url;
 	// username
@@ -52,7 +49,7 @@ public enum SingletonConn {
 			Class.forName(driver);
 			conn = (HikariProxyConnection) dsConnectionPool.getConnection();
 		} catch (SQLException | ClassNotFoundException e) {
-			LOGGER.error("conn :" + e.getMessage());
+			//LOGGER.error("conn :" + e.getMessage());
 		}
 	}
 
@@ -60,7 +57,7 @@ public enum SingletonConn {
 		try {
 			conn.close();
 		} catch (SQLException e) {
-			LOGGER.error("close : " + e.getMessage());
+			//LOGGER.error("close : " + e.getMessage());
 		}
 	}
 
@@ -72,7 +69,7 @@ public enum SingletonConn {
 		try {
 			return conn.createStatement();
 		} catch (SQLException e) {
-			LOGGER.error(" statement creation :" + e.getMessage());
+			//LOGGER.error(" statement creation :" + e.getMessage());
 		}
 		return null;
 	}

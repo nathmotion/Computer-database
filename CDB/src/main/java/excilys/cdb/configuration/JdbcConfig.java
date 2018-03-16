@@ -12,8 +12,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Configuration
-@ComponentScan("main.java.excilys.cdb.jdbc")
-@PropertySource(value= {"classpath:userInforDB.properties"})
+@ComponentScan("main.java.excilys.cdb")
+@PropertySource(value= {"classpath:userInfoDB.properties"})
 public class JdbcConfig {
 
 	@Autowired
@@ -31,7 +31,7 @@ public class JdbcConfig {
 	
 	@Bean
 	public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate();
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.setResultsMapCaseInsensitive(true);
 		return jdbcTemplate;
 	}
