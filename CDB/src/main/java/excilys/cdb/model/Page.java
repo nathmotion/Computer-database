@@ -8,6 +8,9 @@ public class Page<T> {
 	public List<T> elementsPage;
 	public int limit = 10;
 	public int current;
+	private String search;
+	private String typeOrder;
+	private int orderCmp;
 
 	public Page(int offset, List<T> page) {
 		this.offset = offset;
@@ -17,19 +20,18 @@ public class Page<T> {
 	public Page() {
 
 	}
-	
-	public Page(int current, int offset,  int limit ) {
-		this.offset=offset;
-		this.current=current;
-		this.limit=limit;
+
+	public Page(int current, int offset, int limit) {
+		this.offset = offset;
+		this.current = current;
+		this.limit = limit;
 	}
-	
+
 	public int atPage(int numPage) {
 		current = (numPage - 1) * limit;
 		return current;
 
 	}
-	
 
 	// getters and setters
 	public Page(int offset, int limit) {
@@ -75,6 +77,31 @@ public class Page<T> {
 
 	public void setCurrent(int current) {
 		this.current = current;
+	}
+
+	public String getSearch() {
+		return search;
+	}
+
+	public void setSearch(String search) {
+		this.search = search;
+	}
+
+	
+	public String getTypeOrder() {
+		return typeOrder;
+	}
+
+	public void setTypeOrder(String typeOrder) {
+		this.typeOrder = typeOrder;
+	}
+
+	public int getOrderCmp() {
+		return orderCmp;
+	}
+
+	public void setOrderCmp(int orderCmp) {
+		this.orderCmp = orderCmp;
 	}
 
 }

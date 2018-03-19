@@ -11,9 +11,10 @@ public class ConstantesControllers {
 	public final static String SELECTION = "selection";
 	public final static String ACTION_PAGE = "actionpage";
 	public final static String LIMIT = "limit";
-	public final static String SEARCH_NAME = "searchName";
-	public final static String FLAG_SEARCH = "search";
+	public final static String SEARCH = "search";
 	public final static String ID = "id";
 	public final static String COMPUTER_ID = "computerId";
-	public final static String ORDER ="order";
+	public final static String TYPE_ORDER="typeOrder";
+	public final static String ORDER_CMP="orderCmp";
+	
 }

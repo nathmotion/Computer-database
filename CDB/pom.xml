@@ -19,31 +19,7 @@
 		<jstl>1.2</jstl>
 		<spring-version>5.0.4.RELEASE</spring-version>
 	</properties>
-	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.0.0</version>
-				<configuration>
-					<!-- <warSourceDirectory>WebContent</warSourceDirectory> -->
-					<archive>
-						<manifest>
-							<mainClass>main.java.excilys.cdb.ihm.Ihm</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+
 
 	<dependencies>
 		<dependency>
@@ -52,17 +28,16 @@
 			<version>${mysql-connector-version}</version>
 		</dependency>
 
+		<!-- TEST DEPENDENCE -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit-version}</version>
-			<!-- <scope>test</scope> -->
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>${mockito-all-version}</version>
-			<!-- <scope>test</scope> -->
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -79,26 +54,27 @@
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<version>${hsql-version}</version>
-			<!-- <scope>test</scope> -->
 		</dependency>
+
+		<!-- SERVLET -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.0.1</version>
 		</dependency>
-
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/taglibs/standard -->
+
+		<!-- TAGLIBS -->
 		<dependency>
 			<groupId>taglibs</groupId>
 			<artifactId>standard</artifactId>
 			<version>${taglibs}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/javax.servlet.jsp.jstl/jstl -->
+
 		<dependency>
 			<groupId>javax.servlet.jsp.jstl</groupId>
 			<artifactId>jstl-api</artifactId>
@@ -109,17 +85,16 @@
 			<artifactId>jstl-impl</artifactId>
 			<version>${jstl}</version>
 		</dependency>
-		<dependency>
-			<groupId>taglibs</groupId>
-			<artifactId>standard</artifactId>
-			<version>1.1.2</version>
-		</dependency>
+
+		<!-- Connection Pool -->
 		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP-java7</artifactId>
 			<version>2.4.13</version>
 			<scope>compile</scope>
 		</dependency>
+
+		<!-- SPRING FRAMEWORK -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
@@ -157,4 +132,32 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+
+		<!-- BUILD --> 
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<!-- <warSourceDirectory>WebContent</warSourceDirectory> -->
+					<archive>
+						<manifest>
+							<mainClass>main.java.excilys.cdb.ihm.Ihm</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>

@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -27,7 +27,7 @@ public class CompanyDaoImpl implements InterfaceDao<Company> {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	//final static Logger LOGGER = LogManager.getLogger(CompanyDaoImpl.class);
+	// final static Logger LOGGER = LogManager.getLogger(CompanyDaoImpl.class);
 
 	/**
 	 * ======== REQUETE SQL : RECUPERE LA LISTE DES COMPAGNIES ========
@@ -36,9 +36,14 @@ public class CompanyDaoImpl implements InterfaceDao<Company> {
 	public ArrayList<Company> getAll() {
 
 		RowMapper<Company> beanPropertyRowMapper = (rs, rowNum) -> new Company(rs.getLong("id"), rs.getString("name"));
+		try {
 		List<Company> listeCompany = jdbcTemplate.query(QUERY_GET_ALL_COMPANY, beanPropertyRowMapper);
-		System.out.println(" size " + listeCompany.size());
 		return (ArrayList<Company>) listeCompany;
+		} catch(DataAccessException e) {
+			System.out.println(" Requet erreur sur recuperation de tout la liste des company !");
+		}
+		return null;
+		
 	}
 
 	/**
@@ -60,6 +65,7 @@ public class CompanyDaoImpl implements InterfaceDao<Company> {
 	@Override
 	public void create(Company t) {
 	}
+
 	@Override
 	public void update(Company t) {
 
@@ -73,7 +79,7 @@ public class CompanyDaoImpl implements InterfaceDao<Company> {
 
 		jdbcTemplate.update(QUERY_DELETE_BY_COMPANY, company.getName());
 		jdbcTemplate.update(QUERY_DELETE_COMPANY, company.getId());
-	//	LOGGER.info("Suppression Company" + company.getName() + " reussi ");
+		// LOGGER.info("Suppression Company" + company.getName() + " reussi ");
 	}
 
 	@Override
