@@ -32,7 +32,6 @@ public class DashboardControllers {
 
 	Page<Computer> page = new Page<Computer>(0, 0, 10);
 
-	
 	@GetMapping("/dashboard.html")
 	public String doGet(@RequestParam(value = ACTION_PAGE, required = false) String action,
 			@RequestParam(value = LIMIT, required = false) String limit,
