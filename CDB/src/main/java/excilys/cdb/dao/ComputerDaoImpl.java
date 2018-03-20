@@ -96,10 +96,11 @@ public class ComputerDaoImpl implements InterfaceDao<Computer> {
 
 		if (computer.getCompany().getId() != 0 && computer.getCompany().getId() != null) {
 			companyId = computer.getCompany().getId();
+			jdbcTemplate.update(QUERY_CREATE_COMPUTER, computer.getName(), introduced, discontinued, companyId);
 		} else {
-			companyId = 0;
+			jdbcTemplate.update(QUERY_CREATE_COMPUTER, computer.getName(), introduced, discontinued, null);
+
 		}
-		jdbcTemplate.update(QUERY_CREATE_COMPUTER, computer.getName(), introduced, discontinued, companyId);
 		// LOGGER.debug(" Creation de l'ordinateur");
 	}
 
@@ -141,7 +142,7 @@ public class ComputerDaoImpl implements InterfaceDao<Computer> {
 	 * @return
 	 */
 	public void delete(Computer computer) {
-
+		
 		jdbcTemplate.update(QUERY_DELETE_COMPUTER, computer.getId());
 	}
 

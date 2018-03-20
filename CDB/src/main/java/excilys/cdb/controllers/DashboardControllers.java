@@ -32,9 +32,7 @@ public class DashboardControllers {
 
 	Page<Computer> page = new Page<Computer>(0, 0, 10);
 
-	/***
-	 * ====== POST : SUBMIT ======
-	 */
+	
 	@GetMapping("/dashboard.html")
 	public String doGet(@RequestParam(value = ACTION_PAGE, required = false) String action,
 			@RequestParam(value = LIMIT, required = false) String limit,
@@ -46,6 +44,9 @@ public class DashboardControllers {
 		return "dashboard";
 	}
 
+	/***
+	 * ====== POST : SUBMIT ======
+	 */
 	@PostMapping("/dashboard.html")
 	public String submit(@RequestParam(value = ACTION_PAGE, required = false) String action,
 			@RequestParam(value = LIMIT, required = false) String limit,
@@ -102,10 +103,10 @@ public class DashboardControllers {
 			page.offset = 0;
 			page.current = (page.getOffset() / page.getLimit()) + 1;
 		}
-		
+
 		actionPage(actionPage, count);
-		
-		if (page.getSearch()!=null && !page.getSearch().equals("null")) {
+
+		if (page.getSearch() != null && !page.getSearch().equals("null")) {
 			count = computerService.getNbSearch(page.getSearch());
 			page = computerService.getPageByName(page, page.getSearch());
 		} else {

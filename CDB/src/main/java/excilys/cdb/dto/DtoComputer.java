@@ -22,6 +22,13 @@ public class DtoComputer {
 		this.companyId = String.valueOf(company.getId());
 		this.companyName = company.getName();
 	}
+	public DtoComputer(String name, String date_introduced, String date_discontinued, String companyId,String companyName) {
+		this.name = name;
+		this.date_introduced = date_introduced;
+		this.date_discontinued = date_discontinued;
+		this.companyId = companyId;
+		this.companyName = companyName;
+	}
 
 	public String getId() {
 		return id;

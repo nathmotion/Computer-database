@@ -1,9 +1,9 @@
 package main.java.excilys.cdb.constantes;
 
 public class ConstantesControllers {
-	public final static String VIEW_ADD_COMPUTER = "/WEB-INF/views/addComputer.jsp";
-	public final static String VIEW_EDIT_COMPUTER = "/WEB-INF/views/editComputer.jsp";
-	public final static String VIEW_BOARD = "/WEB-INF/views/dashboard.jsp";
+	public final static String VIEW_ADD_COMPUTER = "addComputer";
+	public final static String VIEW_EDIT_COMPUTER = "editComputer";
+	public final static String VIEW_BOARD = "dashboard";
 	public final static String COMPUTER_NAME = "computerName";
 	public final static String DATE_INTRO = "introduced";
 	public final static String DATE_DISC = "discontinued";
