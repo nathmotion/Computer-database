@@ -10,7 +10,7 @@ public class ConstanteRequeteSql {
 	public final static String QUERY_GET_PAGE_COMPUTER = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  LIMIT ? , ?";
 	public final static String QUERY_NB_ELEMENT_COMPUTER = "SELECT count(*) as nbcomputer FROM computer";
 	public final static String QUERY_BY_NAME = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ? LIMIT ? , ?";
-	public final static String QUERY_NB_ELEMENT_BY_NAME = "SELECT count(*) as nbcomputer FROM computer WHERE computer.name LIKE ? ORqwert company.name LIKE ?";
+	public final static String QUERY_NB_ELEMENT_BY_NAME = "SELECT count(*) as nbcomputer FROM computer LEFT JOIN company ON company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
 	public final static String QUERY_ORDER= "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id ORDER BY %s.name %s LIMIT ? , ? ";
 	public final static String QUERY_DELETE_BY_COMPANY ="DELETE FROM computer WHERE company_id= ? ";
 

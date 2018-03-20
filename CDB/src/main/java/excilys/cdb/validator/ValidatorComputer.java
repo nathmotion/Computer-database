@@ -3,10 +3,13 @@ package main.java.excilys.cdb.validator;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+import org.springframework.stereotype.Component;
+
 import main.java.excilys.cdb.exceptions.InvalidDateException;
 
-public enum ValidatorComputer {
-	INSTANCE;
+@Component
+public class ValidatorComputer {
+	
 
 	public void validationName(String name) throws NullPointerException {
 		if (name.equals(null) || name.equals("")) {
