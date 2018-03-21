@@ -14,8 +14,11 @@ import main.java.excilys.cdb.model.Page;
 @Service
 public class CompanyServiceImpl implements ServiceCDB<Company> {
 
-	@Autowired
 	private InterfaceDao<Company> daoCompany;
+
+	public CompanyServiceImpl(InterfaceDao<Company> daoCompany) {
+		this.daoCompany=daoCompany;
+	}
 
 	public List<Company> getAllEntities() {
 		return daoCompany.getAll();

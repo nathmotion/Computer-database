@@ -1,9 +1,13 @@
 package main.java.excilys.cdb.dto;
 
+import org.springframework.lang.NonNull;
+
+
 import main.java.excilys.cdb.model.Company;
 
 public class DtoComputer {
 	public String id;
+	@NonNull
 	public String name;
 	public String date_introduced;
 	public String date_discontinued;

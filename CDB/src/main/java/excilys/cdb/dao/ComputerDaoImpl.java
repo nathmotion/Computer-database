@@ -32,15 +32,16 @@ public class ComputerDaoImpl implements InterfaceDao<Computer> {
 
 	// public final static Logger LOGGER =
 	// LogManager.getLogger(ComputerDaoImpl.class);
-
-	@Autowired
-	JdbcTemplate jdbcTemplate;
-
+	private final JdbcTemplate jdbcTemplate;
 	RowMapper<Computer> myRowMapper = (rs, rowNum) -> {
 		Company company = new Company(rs.getLong("company_id"), rs.getString("company.name"));
 		return new Computer(rs.getLong("id"), rs.getString("name"), rs.getTimestamp("introduced"),
 				rs.getTimestamp("discontinued"), company);
 	};
+
+	public ComputerDaoImpl(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
 	/**
 	 * ====== REQUETES SQL : RECUPERE LA LISTE DES COMPUTER =======
@@ -142,7 +143,7 @@ public class ComputerDaoImpl implements InterfaceDao<Computer> {
 	 * @return
 	 */
 	public void delete(Computer computer) {
-		
+
 		jdbcTemplate.update(QUERY_DELETE_COMPUTER, computer.getId());
 	}
 
@@ -157,8 +158,7 @@ public class ComputerDaoImpl implements InterfaceDao<Computer> {
 	}
 
 	/**
-	 * ======== RECUPER LA PAGE SUIVANT LA RECHERCHE PAR UNE CHAINE DE CHARACTER
-	 * ========
+	 * ======== RECUPER LA PAGE SUIVANT LA RECHERCHE PAR UNE CHAINE DE CHARACTER ========
 	 */
 	@Override
 	public List<Computer> getSearch(Page<Computer> page, String name) {
