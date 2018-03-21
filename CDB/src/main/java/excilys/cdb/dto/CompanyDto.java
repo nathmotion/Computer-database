@@ -4,7 +4,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DtoCompany {
+public class CompanyDto {
 	
 	
 	public String id;
@@ -12,11 +12,11 @@ public class DtoCompany {
 	@NonNull
 	public String name;
 
-	public DtoCompany() {
+	public CompanyDto() {
 
 	}
 
-	public DtoCompany(String id, String name) {
+	public CompanyDto(String id, String name) {
 		this.id = id;
 		this.name = name;
 	}

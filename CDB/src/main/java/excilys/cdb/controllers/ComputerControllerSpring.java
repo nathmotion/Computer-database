@@ -1,10 +1,6 @@
 package main.java.excilys.cdb.controllers;
 
 import static main.java.excilys.cdb.constantes.ConstantesControllers.ACTION_PAGE;
-import static main.java.excilys.cdb.constantes.ConstantesControllers.COMPANY_ID;
-import static main.java.excilys.cdb.constantes.ConstantesControllers.COMPUTER_NAME;
-import static main.java.excilys.cdb.constantes.ConstantesControllers.DATE_DISC;
-import static main.java.excilys.cdb.constantes.ConstantesControllers.DATE_INTRO;
 import static main.java.excilys.cdb.constantes.ConstantesControllers.ID;
 import static main.java.excilys.cdb.constantes.ConstantesControllers.LIMIT;
 import static main.java.excilys.cdb.constantes.ConstantesControllers.ORDER_CMP;
@@ -14,9 +10,14 @@ import static main.java.excilys.cdb.constantes.ConstantesControllers.TYPE_ORDER;
 import static main.java.excilys.cdb.constantes.ConstantesControllers.VIEW_ADD_COMPUTER;
 import static main.java.excilys.cdb.constantes.ConstantesControllers.VIEW_BOARD;
 import static main.java.excilys.cdb.constantes.ConstantesControllers.VIEW_EDIT_COMPUTER;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.COMPUTER_NAME;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.DATE_DISC;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.DATE_INTRO;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.COMPANY_ID;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -25,11 +26,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import main.java.excilys.cdb.dto.DtoCompany;
-import main.java.excilys.cdb.dto.DtoComputer;
+import main.java.excilys.cdb.dto.CompanyDto;
+import main.java.excilys.cdb.dto.ComputerDto;
 import main.java.excilys.cdb.exceptions.InvalidDateException;
 import main.java.excilys.cdb.mapper.MapperCompany;
 import main.java.excilys.cdb.mapper.MapperComputer;
@@ -104,27 +106,24 @@ public class ComputerControllerSpring {
 	 * ===== POST : VIEW ADD COMPUTER =====
 	 */
 	@PostMapping("/addComputer.html")
-	private String submitAddComputer(@RequestParam(value = COMPUTER_NAME, required = false) @Valid String computerName,
-			BindingResult binding, @RequestParam(value = DATE_INTRO, required = false) String introduced,
-			@RequestParam(value = DATE_DISC, required = false) String discontinued,
-			@RequestParam(value = COMPANY_ID, required = false) String companyId, Model model) {
+	private String submitAddComputer(@RequestParam Map<String,String> param,BindingResult binding ,Model model) {
 
-		gestionCreation(computerName, introduced, discontinued, companyId, model);
+		gestionCreation(param.get(COMPUTER_NAME), param.get(DATE_INTRO), param.get(DATE_DISC), param.get(COMPANY_ID), model);
 		if (binding.hasErrors()) {
 			System.out.println(" Bean validator a trouve une erreur ");
-		}
+		} 
 		model = affichageCompany(model);
 		return VIEW_ADD_COMPUTER;
 	}
 
 	/***
-	 * ====== GET : ======
+	 * ====== GET : Edit Computer ======
 	 */
 	@GetMapping("/editComputer.html")
 	public String getEditComputer(@RequestParam(value = ID, required = false) String id, Model model) {
 		Optional<Computer> optComputer = computerService.findById(idComputer);
 		if (optComputer.isPresent()) {
-			DtoComputer dtoComputer = computerMap.mapToDto(optComputer.get());
+			ComputerDto dtoComputer = computerMap.mapToDto(optComputer.get());
 			model.addAttribute("computer", dtoComputer);
 		} else {
 			// LOGGER.error(" L'item computer" + idComputer + " n'est pas trouve");
@@ -134,15 +133,11 @@ public class ComputerControllerSpring {
 	}
 
 	/***
-	 * ====== POST : SUBMIT ======
+	 * ====== POST : SUBMIT EDIT COMPUTER ======
 	 */
 	@PostMapping("/editComputer.html")
-	public String submit(@RequestParam(value = ID, required = false) String id,
-			@RequestParam(value = COMPUTER_NAME, required = false) String computerName,
-			@RequestParam(value = DATE_INTRO, required = false) String introduced,
-			@RequestParam(value = DATE_DISC, required = false) String discontinued,
-			@RequestParam(value = COMPANY_ID, required = false) String companyId, Model model) {
-		model = editRequest(id, computerName, introduced, discontinued, companyId, model);
+	public String submitEditComputer(@RequestParam Map<String,String> param,BindingResult binding, Model model) {
+		model = editRequest(param.get(ID), param.get(COMPUTER_NAME), param.get(DATE_INTRO), param.get(DATE_DISC), param.get(COMPANY_ID), model);
 		return VIEW_EDIT_COMPUTER;
 	}
 
@@ -159,7 +154,7 @@ public class ComputerControllerSpring {
 		validate = validations(stringName, stringDateIntro, stringDateDisc, stringCompanyId, request);
 		if (validate) {
 			Company company = new Company(Long.valueOf(stringCompanyId), "");
-			DtoComputer dtoComputer = new DtoComputer(stringId, stringName, stringDateIntro, stringDateDisc, company);
+			ComputerDto dtoComputer = new ComputerDto(stringId, stringName, stringDateIntro, stringDateDisc, company);
 			Computer computer = computerMap.mapToEntity(dtoComputer);
 			computerService.update(computer);
 		}
@@ -219,9 +214,9 @@ public class ComputerControllerSpring {
 			handlePageOrder(computerService);
 		}
 
-		ArrayList<DtoComputer> listeDtoComputers = new ArrayList<>();
+		ArrayList<ComputerDto> listeDtoComputers = new ArrayList<>();
 		for (Computer computer : page.elementsPage) {
-			DtoComputer dtoComputer = new DtoComputer();
+			ComputerDto dtoComputer = new ComputerDto();
 			dtoComputer = computerMap.mapToDto(computer);
 			listeDtoComputers.add(dtoComputer);
 		}
@@ -282,10 +277,10 @@ public class ComputerControllerSpring {
 	 */
 	public Model affichageCompany(Model request) {
 		List<Company> companys = companyService.getAllEntities();
-		List<DtoCompany> listeDtoCompany = new ArrayList<>();
+		List<CompanyDto> listeDtoCompany = new ArrayList<>();
 
 		for (Company company : companys) {
-			DtoCompany dtoCompany = new DtoCompany();
+			CompanyDto dtoCompany = new CompanyDto();
 			dtoCompany = companyMap.mapToDto(company);
 			listeDtoCompany.add(dtoCompany);
 		}
@@ -307,7 +302,7 @@ public class ComputerControllerSpring {
 		Boolean validate = true;
 		validate = validations(computerName, introduced, discontinued, companyId, model);
 		if (validate) {
-			DtoComputer dtoComputer = new DtoComputer(computerName, introduced, discontinued, companyId, "");
+			ComputerDto dtoComputer = new ComputerDto(computerName, introduced, discontinued, companyId, "");
 			Computer computer = computerMap.mapToEntity(dtoComputer);
 			computerService.create(computer);
 		}
@@ -335,6 +330,7 @@ public class ComputerControllerSpring {
 		}
 
 		try {
+			System.out.println(" [Validation method] - dateIntro "+ dateIntro);
 			computerValidator.validationDateIntro(dateIntro);
 		} catch (IllegalArgumentException e) {
 			// LOGGER.error("La date d'introducion n'est pas valide");

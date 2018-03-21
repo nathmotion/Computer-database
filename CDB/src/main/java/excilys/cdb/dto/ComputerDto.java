@@ -5,7 +5,8 @@ import org.springframework.lang.NonNull;
 
 import main.java.excilys.cdb.model.Company;
 
-public class DtoComputer {
+public class ComputerDto {
+	@NonNull
 	public String id;
 	@NonNull
 	public String name;
@@ -14,11 +15,11 @@ public class DtoComputer {
 	public String companyId;
 	public String companyName;
 
-	public DtoComputer() {
+	public ComputerDto() {
 
 	}
 
-	public DtoComputer(String id, String name, String date_introduced, String date_discontinued, Company company) {
+	public ComputerDto(String id, String name, String date_introduced, String date_discontinued, Company company) {
 		this.id = id;
 		this.name = name;
 		this.date_introduced = date_introduced;
@@ -26,7 +27,7 @@ public class DtoComputer {
 		this.companyId = String.valueOf(company.getId());
 		this.companyName = company.getName();
 	}
-	public DtoComputer(String name, String date_introduced, String date_discontinued, String companyId,String companyName) {
+	public ComputerDto(String name, String date_introduced, String date_discontinued, String companyId,String companyName) {
 		this.name = name;
 		this.date_introduced = date_introduced;
 		this.date_discontinued = date_discontinued;

@@ -6,14 +6,14 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
-import main.java.excilys.cdb.dto.DtoComputer;
+import main.java.excilys.cdb.dto.ComputerDto;
 import main.java.excilys.cdb.model.Company;
 import main.java.excilys.cdb.model.Computer;
 
 @Component
 public class MapperComputer {
 
-	public Computer mapToEntity(DtoComputer dtoComputer) {
+	public Computer mapToEntity(ComputerDto dtoComputer) {
 		Company company = new Company();
 		company.setId(Long.parseLong(dtoComputer.companyId));
 		company.setName(dtoComputer.companyName);
@@ -43,8 +43,8 @@ public class MapperComputer {
 		return computer;
 	}
 
-	public DtoComputer mapToDto(Computer computer) {
-		DtoComputer dtoComputer = new DtoComputer();
+	public ComputerDto mapToDto(Computer computer) {
+		ComputerDto dtoComputer = new ComputerDto();
 		dtoComputer.name = computer.getName();
 		dtoComputer.id = computer.getId().toString();
 		Optional<Timestamp> timeIntroOptional = Optional.ofNullable(computer.getIntroduced());
