@@ -10,14 +10,9 @@ import static main.java.excilys.cdb.constantes.ConstantesControllers.TYPE_ORDER;
 import static main.java.excilys.cdb.constantes.ConstantesControllers.VIEW_ADD_COMPUTER;
 import static main.java.excilys.cdb.constantes.ConstantesControllers.VIEW_BOARD;
 import static main.java.excilys.cdb.constantes.ConstantesControllers.VIEW_EDIT_COMPUTER;
-import static main.java.excilys.cdb.constantes.ConstantesControllers.COMPUTER_NAME;
-import static main.java.excilys.cdb.constantes.ConstantesControllers.DATE_DISC;
-import static main.java.excilys.cdb.constantes.ConstantesControllers.DATE_INTRO;
-import static main.java.excilys.cdb.constantes.ConstantesControllers.COMPANY_ID;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -98,6 +93,7 @@ public class ComputerControllerSpring {
 	 */
 	@GetMapping("/addComputer.html")
 	public String getAddComputer(Model model) {
+		model.addAttribute("ComputerDto", new ComputerDto());
 		model = affichageCompany(model);
 		return VIEW_ADD_COMPUTER;
 	}
@@ -106,9 +102,9 @@ public class ComputerControllerSpring {
 	 * ===== POST : VIEW ADD COMPUTER =====
 	 */
 	@PostMapping("/addComputer.html")
-	private String submitAddComputer(@RequestParam Map<String,String> param,BindingResult binding ,Model model) {
+	private String submitAddComputer(@ModelAttribute("computerDto")  ComputerDto computerDto,BindingResult binding ,Model model) {
 
-		gestionCreation(param.get(COMPUTER_NAME), param.get(DATE_INTRO), param.get(DATE_DISC), param.get(COMPANY_ID), model);
+		gestionCreation(computerDto.name, computerDto.date_introduced, computerDto.date_discontinued, computerDto.companyId, model);
 		if (binding.hasErrors()) {
 			System.out.println(" Bean validator a trouve une erreur ");
 		} 
@@ -136,8 +132,8 @@ public class ComputerControllerSpring {
 	 * ====== POST : SUBMIT EDIT COMPUTER ======
 	 */
 	@PostMapping("/editComputer.html")
-	public String submitEditComputer(@RequestParam Map<String,String> param,BindingResult binding, Model model) {
-		model = editRequest(param.get(ID), param.get(COMPUTER_NAME), param.get(DATE_INTRO), param.get(DATE_DISC), param.get(COMPANY_ID), model);
+	public String submitEditComputer(@RequestParam("computerDto")  ComputerDto computerDto,BindingResult binding, Model model) {
+		model = editRequest(computerDto.id, computerDto.name, computerDto.date_introduced, computerDto.date_discontinued, computerDto.companyId, model);
 		return VIEW_EDIT_COMPUTER;
 	}
 
@@ -330,7 +326,6 @@ public class ComputerControllerSpring {
 		}
 
 		try {
-			System.out.println(" [Validation method] - dateIntro "+ dateIntro);
 			computerValidator.validationDateIntro(dateIntro);
 		} catch (IllegalArgumentException e) {
 			// LOGGER.error("La date d'introducion n'est pas valide");
