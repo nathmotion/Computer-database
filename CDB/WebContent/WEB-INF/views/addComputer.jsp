@@ -24,29 +24,34 @@
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
 					<c:forEach items="${errors}" var="error">
-					<h3 class="errors" style='color:red' >${error}</h3>
-					<br>
+						<h3 class="errors" style='color: red'>${error}</h3>
+						<br>
 					</c:forEach>
-					<form:form action="addComputer.html" method="POST" modelAttribute="computerDto" id="formAddComputer">
+					<form:form action="addComputer.html" method="POST"
+						modelAttribute="computerDto" id="formAddComputer">
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> <form:input
-									type="text" class="form-control" id="computerName"
-									name="computerName" path="name" placeholder="Computer name"/>
+								<label for="computerName">Computer name</label>
+								<form:input path="name" type="text" class="form-control"
+									id="computerName" name="computerName"
+									placeholder="Computer name" />
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date</label> <form:input
-									type="date" class="form-control" id="introduced"
-									name="introduced" placeholder="Introduced date" path="date_introduced" min="1970-01-01"/>
+								<label for="introduced">Introduced date</label>
+								<form:input path="date_introduced" type="date"
+									class="form-control" id="introduced" name="introduced"
+									placeholder="Introduced date" min="1970-01-01" />
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> <form:input
-									type="date" class="form-control" id="discontinued"
-									name="discontinued" placeholder="Discontinued date" path="date_discontinued" min="1970-01-01"/>
+								<label for="discontinued">Discontinued date</label>
+								<form:input type="date" class="form-control" id="discontinued"
+									path="date_discontinued" name="discontinued"
+									placeholder="Discontinued date" min="1970-01-01" />
 							</div>
 							<div class="form-group">
-								<label for="companyId">Company</label> <form:select
-									class="form-control" id="companyId" name="companyId" path="companyId">
+								<label for="companyId">Company</label>
+								<form:select path="companyId" class="form-control"
+									id="companyId" name="companyId">
 									<option value="0">None</option>
 									<c:forEach items="${ListeCompany}" var="company">
 										<option value="${company.id}">${company.id}-
@@ -56,20 +61,23 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Add" id="addButton" class="btn btn-primary">
-							or <a href="dashboard.html" class="btn btn-default">Cancel</a>
+							<input type="submit" value="Add" id="addButton"
+								class="btn btn-primary"> or <a href="dashboard.html"
+								class="btn btn-default">Cancel</a>
 						</div>
 					</form:form>
 				</div>
 			</div>
 		</div>
 	</section>
-	
+
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/addComputer.js"></script>
 
-	 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 </body>
 </html>

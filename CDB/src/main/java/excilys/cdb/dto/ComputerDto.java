@@ -1,14 +1,17 @@
 package main.java.excilys.cdb.dto;
 
-import org.springframework.lang.NonNull;
+import javax.validation.constraints.NotNull;
 
+import org.springframework.stereotype.Component;
 
 import main.java.excilys.cdb.model.Company;
 
+@Component
 public class ComputerDto {
-	@NonNull
+	
+	@NotNull
 	public String id;
-	@NonNull
+	@NotNull
 	public String name;
 	public String date_introduced;
 	public String date_discontinued;
@@ -27,7 +30,9 @@ public class ComputerDto {
 		this.companyId = String.valueOf(company.getId());
 		this.companyName = company.getName();
 	}
-	public ComputerDto(String name, String date_introduced, String date_discontinued, String companyId,String companyName) {
+
+	public ComputerDto(String name, String date_introduced, String date_discontinued, String companyId,
+			String companyName) {
 		this.name = name;
 		this.date_introduced = date_introduced;
 		this.date_discontinued = date_discontinued;
@@ -57,5 +62,12 @@ public class ComputerDto {
 
 	public String getCompanyName() {
 		return companyName;
+	}
+
+	@Override
+	public String toString() {
+		return "ComputerDto [id=" + id + ", name=" + name + ", date_introduced=" + date_introduced
+				+ ", date_discontinued=" + date_discontinued + ", companyId=" + companyId + ", companyName="
+				+ companyName + "]";
 	}
 }

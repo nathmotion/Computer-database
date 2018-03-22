@@ -1,6 +1,10 @@
 package main.java.excilys.cdb.controllers;
 
 import static main.java.excilys.cdb.constantes.ConstantesControllers.ACTION_PAGE;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.COMPANY_ID;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.COMPUTER_NAME;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.DATE_DISC;
+import static main.java.excilys.cdb.constantes.ConstantesControllers.DATE_INTRO;
 import static main.java.excilys.cdb.constantes.ConstantesControllers.ID;
 import static main.java.excilys.cdb.constantes.ConstantesControllers.LIMIT;
 import static main.java.excilys.cdb.constantes.ConstantesControllers.ORDER_CMP;
@@ -13,13 +17,13 @@ import static main.java.excilys.cdb.constantes.ConstantesControllers.VIEW_EDIT_C
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-
-import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,11 +53,12 @@ public class ComputerControllerSpring {
 	private int idComputer;
 
 	public ComputerControllerSpring(ComputerServiceImpl computerService, CompanyServiceImpl companyService,
-			MapperComputer computerMap, MapperCompany companyMap) {
+			MapperComputer computerMap, MapperCompany companyMap, ValidatorComputer computerValidator) {
 		this.companyService = companyService;
 		this.computerService = computerService;
 		this.companyMap = companyMap;
 		this.computerMap = computerMap;
+		this.computerValidator = computerValidator;
 	}
 
 	/***
@@ -93,7 +98,7 @@ public class ComputerControllerSpring {
 	 */
 	@GetMapping("/addComputer.html")
 	public String getAddComputer(Model model) {
-		model.addAttribute("ComputerDto", new ComputerDto());
+		model.addAttribute("computerDto", new ComputerDto());
 		model = affichageCompany(model);
 		return VIEW_ADD_COMPUTER;
 	}
@@ -102,12 +107,11 @@ public class ComputerControllerSpring {
 	 * ===== POST : VIEW ADD COMPUTER =====
 	 */
 	@PostMapping("/addComputer.html")
-	private String submitAddComputer(@ModelAttribute("computerDto")  ComputerDto computerDto,BindingResult binding ,Model model) {
-
-		gestionCreation(computerDto.name, computerDto.date_introduced, computerDto.date_discontinued, computerDto.companyId, model);
-		if (binding.hasErrors()) {
-			System.out.println(" Bean validator a trouve une erreur ");
-		} 
+	private String submitAddComputer(@RequestParam Map<String, String> params, @ModelAttribute("computerDto") @Validated(ComputerDto.class) ComputerDto computerDto,
+			BindingResult binding, Model model) {
+		System.out.println(computerDto.toString());
+		gestionCreation(params.get(COMPUTER_NAME), params.get(DATE_INTRO), params.get(DATE_DISC),
+				params.get(COMPANY_ID), model);
 		model = affichageCompany(model);
 		return VIEW_ADD_COMPUTER;
 	}
@@ -132,8 +136,9 @@ public class ComputerControllerSpring {
 	 * ====== POST : SUBMIT EDIT COMPUTER ======
 	 */
 	@PostMapping("/editComputer.html")
-	public String submitEditComputer(@RequestParam("computerDto")  ComputerDto computerDto,BindingResult binding, Model model) {
-		model = editRequest(computerDto.id, computerDto.name, computerDto.date_introduced, computerDto.date_discontinued, computerDto.companyId, model);
+	public String submitEditComputer(@RequestParam Map<String, String> params, Model model) {
+		model = editRequest(params.get(ID), params.get(COMPUTER_NAME), params.get(DATE_INTRO), params.get(DATE_DISC),
+				params.get(COMPANY_ID), model);
 		return VIEW_EDIT_COMPUTER;
 	}
 
@@ -149,7 +154,7 @@ public class ComputerControllerSpring {
 
 		validate = validations(stringName, stringDateIntro, stringDateDisc, stringCompanyId, request);
 		if (validate) {
-			Company company = new Company(Long.valueOf(stringCompanyId), "");
+			Company company = new Company(Long.parseLong(stringCompanyId), "");
 			ComputerDto dtoComputer = new ComputerDto(stringId, stringName, stringDateIntro, stringDateDisc, company);
 			Computer computer = computerMap.mapToEntity(dtoComputer);
 			computerService.update(computer);
@@ -306,8 +311,7 @@ public class ComputerControllerSpring {
 	}
 
 	/**
-	 * ======= TESTE ET VALIDE SI LES DONNEES PASSE PAR LE FORMULAIRE SONT
-	 * CORRECT=====
+	 * ======= TESTE ET VALIDE SI LES DONNEES PASSE PAR LE FORMULAIRE SONT CORRECT=====
 	 * 
 	 * @param name
 	 * @param dateIntro
@@ -317,6 +321,7 @@ public class ComputerControllerSpring {
 	 */
 	public Boolean validations(String name, String dateIntro, String dateDisc, String companyId, Model model) {
 		Boolean validate = true;
+
 		try {
 			computerValidator.validationName(name);
 		} catch (NullPointerException e) {

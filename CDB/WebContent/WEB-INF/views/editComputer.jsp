@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-
 <html>
 <head>
 <title>Computer Database</title>
@@ -26,40 +24,40 @@
 						${computer.id}</div>
 					<h1>Edit Computer</h1>
 
-					<form:form action="editComputer.html" method="POST" modelAttribute="computerDto">
-						<form:input type="hidden" value="${computer.id}" id="computerId"
-							name="computerId" path="id"/>
+					<form action="editComputer.html" method="POST">
+						<input type="hidden" value="${computer.id}" id="computerId"
+							name="computerId" />
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> <form:input
+								<label for="computerName">Computer name</label> <input
 									type="text" class="form-control" id="computerName"
-									name="computerName" value="${computer.name}" path="name" required/>
+									name="computerName" value="${computer.name}" required>
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date</label> <form:input
+								<label for="introduced">Introduced date</label> <input
 									type="date" class="form-control" id="introduced"
-									name="introduced" value="${computer.date_introduced}" path="date_introduced" min="1970-01-01"/>
+									name="introduced" value="${computer.date_introduced}" min="1970-01-01">
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> <form:input
+								<label for="discontinued">Discontinued date</label> <input
 									type="date" class="form-control" id="discontinued"
-									name="discontinued" value="${computer.date_discontinued }" path="date_discontinued" min="1970-01-01"/>
+									name="discontinued" value="${computer.date_discontinued }" min="1970-01-01">
 							</div>
 							<div class="form-group">
-								<label for="companyId">Company</label> <form:select
-									class="form-control" id="companyId" name="companyId" path="companyId">
+								<label for="companyId">Company</label> <select
+									class="form-control" id="companyId" name="companyId">
 									<option value="${computer.companyId}">${computer.companyId}-${computer.companyName}</option>
 									<c:forEach items="${ListeCompany}" var="company">
 										<option value="${company.id}">${company.id}-${company.name}</option>
 									</c:forEach>
-								</form:select>
+								</select>
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
 							<input type="submit" value="Edit" class="btn btn-primary">
 							or <a href="dashboard.html" class="btn btn-default">Cancel</a>
 						</div>
-					</form:form>
+					</form>
 				</div>
 			</div>
 		</div>
