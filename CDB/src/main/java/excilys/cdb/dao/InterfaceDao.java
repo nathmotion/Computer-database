@@ -1,5 +1,6 @@
 package main.java.excilys.cdb.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +15,7 @@ public interface InterfaceDao<T>{
 	public abstract void create(T t);
 	public abstract void update(T t);
 	public abstract void delete(T t);
-	public abstract Optional<T> findById(int id);
+	public abstract Optional<T> findById(int id) throws SQLException;
 	public abstract List<T> getSearch(Page<T> page,String name);
 	public abstract int getNbElementSearch(String name);
 	public abstract List<T> getPageSort(Page<Computer> page,String critere, Boolean order);

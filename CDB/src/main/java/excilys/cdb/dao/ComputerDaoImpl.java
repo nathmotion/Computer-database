@@ -11,6 +11,7 @@ import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_NB_ELEM
 import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_ORDER;
 import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_UPDATE_COMPUTER;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 import java.util.List;
@@ -153,7 +154,7 @@ public class ComputerDaoImpl implements InterfaceDao<Computer> {
 	 * @param id
 	 * @return
 	 */
-	public Optional<Computer> findById(int id) {
+	public Optional<Computer> findById(int id)throws SQLException {
 		return Optional.ofNullable(jdbcTemplate.queryForObject(QUERY_BY_ID_COMPUTER, myRowMapper, id));
 	}
 

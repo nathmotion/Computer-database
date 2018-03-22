@@ -1,5 +1,6 @@
 package main.java.excilys.cdb.service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,5 +26,5 @@ public interface ServiceCDB<T> {
 
 	public void delete(T obj);
 
-	public Optional<T> findById(int id);
+	public Optional<T> findById(int id) throws SQLException;
 }

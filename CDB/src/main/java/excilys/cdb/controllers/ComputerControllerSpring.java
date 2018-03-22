@@ -15,15 +15,17 @@ import static main.java.excilys.cdb.constantes.ConstantesControllers.VIEW_ADD_CO
 import static main.java.excilys.cdb.constantes.ConstantesControllers.VIEW_BOARD;
 import static main.java.excilys.cdb.constantes.ConstantesControllers.VIEW_EDIT_COMPUTER;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import main.java.excilys.cdb.dto.CompanyDto;
 import main.java.excilys.cdb.dto.ComputerDto;
+import main.java.excilys.cdb.exceptions.DatabaseException;
 import main.java.excilys.cdb.exceptions.InvalidDateException;
 import main.java.excilys.cdb.mapper.MapperCompany;
 import main.java.excilys.cdb.mapper.MapperComputer;
@@ -71,8 +74,13 @@ public class ComputerControllerSpring {
 			@RequestParam(value = ORDER_CMP, required = false) String orderCmp,
 			@RequestParam(value = TYPE_ORDER, required = false) String typeOrder, Model model) {
 
-		model = affichagePage(action, limit, search, typeOrder, orderCmp, model);
-		return VIEW_BOARD;
+		try {
+			model = affichagePage(action, limit, search, typeOrder, orderCmp, model);
+			return VIEW_BOARD;
+		} catch (DatabaseException e) {
+			return "500";
+		}
+
 	}
 
 	/***
@@ -85,12 +93,16 @@ public class ComputerControllerSpring {
 			@RequestParam(value = ORDER_CMP, required = false) String orderCmp,
 			@RequestParam(value = SELECTION, required = false) List<String> selection,
 			@RequestParam(value = TYPE_ORDER, required = false) String typeOrder, Model model) {
-		search = null;
-		orderCmp = null;
-		typeOrder = null;
-		gestionDelete(selection);
-		model = affichagePage(action, limit, search, typeOrder, orderCmp, model);
-		return VIEW_BOARD;
+		try {
+			search = null;
+			orderCmp = null;
+			typeOrder = null;
+			gestionDelete(selection);
+			model = affichagePage(action, limit, search, typeOrder, orderCmp, model);
+			return VIEW_BOARD;
+		} catch (DatabaseException e) {
+			return "500";
+		}
 	}
 
 	/**
@@ -107,13 +119,16 @@ public class ComputerControllerSpring {
 	 * ===== POST : VIEW ADD COMPUTER =====
 	 */
 	@PostMapping("/addComputer.html")
-	private String submitAddComputer(@RequestParam Map<String, String> params, @ModelAttribute("computerDto") @Validated(ComputerDto.class) ComputerDto computerDto,
+	private String submitAddComputer(@ModelAttribute("computerDto") @Valid ComputerDto computerDto,
 			BindingResult binding, Model model) {
-		System.out.println(computerDto.toString());
-		gestionCreation(params.get(COMPUTER_NAME), params.get(DATE_INTRO), params.get(DATE_DISC),
-				params.get(COMPANY_ID), model);
+		if (binding.hasErrors()) {
+			System.out.println(" le binding a trouve une erreur !");
+			return VIEW_ADD_COMPUTER;
+		}
+		gestionCreation(computerDto.getName(), computerDto.getDate_introduced(), computerDto.getDate_discontinued(),
+				computerDto.getCompanyId(), model);
 		model = affichageCompany(model);
-		return VIEW_ADD_COMPUTER;
+		return "redirect:" + VIEW_BOARD + ".html";
 	}
 
 	/***
@@ -121,25 +136,30 @@ public class ComputerControllerSpring {
 	 */
 	@GetMapping("/editComputer.html")
 	public String getEditComputer(@RequestParam(value = ID, required = false) String id, Model model) {
-		Optional<Computer> optComputer = computerService.findById(idComputer);
-		if (optComputer.isPresent()) {
-			ComputerDto dtoComputer = computerMap.mapToDto(optComputer.get());
-			model.addAttribute("computer", dtoComputer);
-		} else {
-			// LOGGER.error(" L'item computer" + idComputer + " n'est pas trouve");
-			model.addAttribute("error", "Computer not found");
+		try {
+			Optional<Computer> optComputer = computerService.findById(Integer.parseInt(id));
+			if (optComputer.isPresent()) {
+				ComputerDto dtoComputer = computerMap.mapToDto(optComputer.get());
+				model.addAttribute("computerDto", dtoComputer);
+			} else {
+				// LOGGER.error(" L'item computer" + idComputer + " n'est pas trouve");
+				model.addAttribute("error", "Computer not found");
+			}
+			return VIEW_EDIT_COMPUTER;
+		} catch (SQLException e) {
+			return "500";
 		}
-		return VIEW_EDIT_COMPUTER;
 	}
 
 	/***
 	 * ====== POST : SUBMIT EDIT COMPUTER ======
 	 */
 	@PostMapping("/editComputer.html")
-	public String submitEditComputer(@RequestParam Map<String, String> params, Model model) {
-		model = editRequest(params.get(ID), params.get(COMPUTER_NAME), params.get(DATE_INTRO), params.get(DATE_DISC),
-				params.get(COMPANY_ID), model);
-		return VIEW_EDIT_COMPUTER;
+	public String submitEditComputer(@ModelAttribute("ComputerDto") @Valid ComputerDto computerDto,
+			BindingResult binding, Model model) {
+		model = editRequest(computerDto.getId(), computerDto.getName(), computerDto.getDate_introduced(),
+				computerDto.getDate_discontinued(), computerDto.getCompanyId(), model);
+		return "redirect:" + VIEW_BOARD + ".html";
 	}
 
 	/**
@@ -167,7 +187,7 @@ public class ComputerControllerSpring {
 	 * 
 	 * @param selection
 	 */
-	public void gestionDelete(List<String> selection) {
+	public void gestionDelete(List<String> selection) throws DatabaseException {
 		for (String idString : selection) {
 			Long idComputer = Long.parseLong(idString);
 			Computer computer = new Computer();
@@ -183,7 +203,7 @@ public class ComputerControllerSpring {
 	 * @return
 	 */
 	public Model affichagePage(String actionPage, String limit, String search, String typeOrder, String orderCmp,
-			Model model) {
+			Model model) throws DatabaseException {
 
 		if (search != null) {
 			page.setSearch(search);
@@ -311,7 +331,8 @@ public class ComputerControllerSpring {
 	}
 
 	/**
-	 * ======= TESTE ET VALIDE SI LES DONNEES PASSE PAR LE FORMULAIRE SONT CORRECT=====
+	 * ======= TESTE ET VALIDE SI LES DONNEES PASSE PAR LE FORMULAIRE SONT
+	 * CORRECT=====
 	 * 
 	 * @param name
 	 * @param dateIntro

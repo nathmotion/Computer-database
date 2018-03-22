@@ -1,5 +1,6 @@
 package main.java.excilys.cdb.dto;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Component;
@@ -9,14 +10,14 @@ import main.java.excilys.cdb.model.Company;
 @Component
 public class ComputerDto {
 	
-	@NotNull
-	public String id;
-	@NotNull
-	public String name;
-	public String date_introduced;
-	public String date_discontinued;
-	public String companyId;
-	public String companyName;
+
+	private String id;
+	@NotBlank(message = "Name can't be empty")
+	private String name;
+	private String date_introduced;
+	private String date_discontinued;
+	private String companyId;
+	private String companyName;
 
 	public ComputerDto() {
 
@@ -62,6 +63,30 @@ public class ComputerDto {
 
 	public String getCompanyName() {
 		return companyName;
+	}
+	
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setDate_introduced(String date_introduced) {
+		this.date_introduced = date_introduced;
+	}
+
+	public void setDate_discontinued(String date_discontinued) {
+		this.date_discontinued = date_discontinued;
+	}
+
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 
 	@Override

@@ -23,8 +23,8 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
-					<c:forEach items="${errors}" var="error">
-						<h3 class="errors" style='color: red'>${error}</h3>
+					<c:forEach items="${error}" var="err">
+						<h3 class="error" style='color: red'>${err}</h3>
 						<br>
 					</c:forEach>
 					<form:form action="addComputer.html" method="POST"

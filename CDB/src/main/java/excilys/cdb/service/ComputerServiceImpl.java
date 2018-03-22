@@ -1,5 +1,6 @@
 package main.java.excilys.cdb.service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,7 +59,7 @@ public class ComputerServiceImpl implements ServiceCDB<Computer> {
 		daoComputer.delete(computer);
 	}
 
-	public Optional<Computer> findById(int id) {
+	public Optional<Computer> findById(int id) throws SQLException {
 		return daoComputer.findById(id);
 	}
 
