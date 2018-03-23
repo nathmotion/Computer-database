@@ -1,7 +1,9 @@
 package main.java.excilys.cdb.dto;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.stereotype.Component;
 
@@ -9,10 +11,12 @@ import main.java.excilys.cdb.model.Company;
 
 @Component
 public class ComputerDto {
-	
 
 	private String id;
+	
 	@NotBlank(message = "Name can't be empty")
+	@Pattern(regexp = "[!@#$%^&*()<>]", message="name not valid expression")
+	@Valid
 	private String name;
 	private String date_introduced;
 	private String date_discontinued;
@@ -64,7 +68,7 @@ public class ComputerDto {
 	public String getCompanyName() {
 		return companyName;
 	}
-	
+
 	public void setId(String id) {
 		this.id = id;
 	}

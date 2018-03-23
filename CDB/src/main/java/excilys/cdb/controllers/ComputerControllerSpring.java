@@ -1,10 +1,6 @@
 package main.java.excilys.cdb.controllers;
 
 import static main.java.excilys.cdb.constantes.ConstantesControllers.ACTION_PAGE;
-import static main.java.excilys.cdb.constantes.ConstantesControllers.COMPANY_ID;
-import static main.java.excilys.cdb.constantes.ConstantesControllers.COMPUTER_NAME;
-import static main.java.excilys.cdb.constantes.ConstantesControllers.DATE_DISC;
-import static main.java.excilys.cdb.constantes.ConstantesControllers.DATE_INTRO;
 import static main.java.excilys.cdb.constantes.ConstantesControllers.ID;
 import static main.java.excilys.cdb.constantes.ConstantesControllers.LIMIT;
 import static main.java.excilys.cdb.constantes.ConstantesControllers.ORDER_CMP;
@@ -18,6 +14,7 @@ import static main.java.excilys.cdb.constantes.ConstantesControllers.VIEW_EDIT_C
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
@@ -68,37 +65,28 @@ public class ComputerControllerSpring {
 	 * ====== GET : VIEW DASHBOARD ======
 	 */
 	@GetMapping("/dashboard.html")
-	public String getDashboard(@RequestParam(value = ACTION_PAGE, required = false) String action,
-			@RequestParam(value = LIMIT, required = false) String limit,
-			@RequestParam(value = SEARCH, required = false) String search,
-			@RequestParam(value = ORDER_CMP, required = false) String orderCmp,
-			@RequestParam(value = TYPE_ORDER, required = false) String typeOrder, Model model) {
-
+	public String getDashboard(@RequestParam Map<String, String> params, Locale Locale, Model model) {
 		try {
-			model = affichagePage(action, limit, search, typeOrder, orderCmp, model);
+			model = affichagePage(params.get(ACTION_PAGE), params.get(LIMIT), params.get(SEARCH),
+					params.get(TYPE_ORDER), params.get(ORDER_CMP), model);
 			return VIEW_BOARD;
 		} catch (DatabaseException e) {
 			return "500";
 		}
-
 	}
 
 	/***
 	 * ====== POST : VIEW DASHBOARD ======
 	 */
 	@PostMapping("/dashboard.html")
-	public String submitDashboard(@RequestParam(value = ACTION_PAGE, required = false) String action,
-			@RequestParam(value = LIMIT, required = false) String limit,
-			@RequestParam(value = SEARCH, required = false) String search,
-			@RequestParam(value = ORDER_CMP, required = false) String orderCmp,
-			@RequestParam(value = SELECTION, required = false) List<String> selection,
-			@RequestParam(value = TYPE_ORDER, required = false) String typeOrder, Model model) {
+	public String submitDashboard(@RequestParam Map<String, String> params, Locale Locale,
+			@RequestParam(value = SELECTION, required = false) List<String> selection, Model model) {
 		try {
-			search = null;
-			orderCmp = null;
-			typeOrder = null;
+			String search = null;
+			String orderCmp = null;
+			String typeOrder = null;
 			gestionDelete(selection);
-			model = affichagePage(action, limit, search, typeOrder, orderCmp, model);
+			model = affichagePage(params.get(ACTION_PAGE), params.get(LIMIT), search, typeOrder, orderCmp, model);
 			return VIEW_BOARD;
 		} catch (DatabaseException e) {
 			return "500";
@@ -125,10 +113,17 @@ public class ComputerControllerSpring {
 			System.out.println(" le binding a trouve une erreur !");
 			return VIEW_ADD_COMPUTER;
 		}
-		gestionCreation(computerDto.getName(), computerDto.getDate_introduced(), computerDto.getDate_discontinued(),
-				computerDto.getCompanyId(), model);
-		model = affichageCompany(model);
-		return "redirect:" + VIEW_BOARD + ".html";
+		List<String> errors = validations(computerDto.getName(), computerDto.getDate_introduced(),
+				computerDto.getDate_discontinued(), computerDto.getCompanyId());
+		if (errors.size() == 0) {
+			gestionCreation(computerDto.getName(), computerDto.getDate_introduced(), computerDto.getDate_discontinued(),
+					computerDto.getCompanyId());
+			model = affichageCompany(model);
+			return "redirect:" + VIEW_BOARD + ".html";
+		} else {
+			model.addAttribute("errors", errors);
+			return VIEW_ADD_COMPUTER;
+		}
 	}
 
 	/***
@@ -157,9 +152,16 @@ public class ComputerControllerSpring {
 	@PostMapping("/editComputer.html")
 	public String submitEditComputer(@ModelAttribute("ComputerDto") @Valid ComputerDto computerDto,
 			BindingResult binding, Model model) {
-		model = editRequest(computerDto.getId(), computerDto.getName(), computerDto.getDate_introduced(),
-				computerDto.getDate_discontinued(), computerDto.getCompanyId(), model);
-		return "redirect:" + VIEW_BOARD + ".html";
+		List<String> errors = validations(computerDto.getName(), computerDto.getDate_introduced(),
+				computerDto.getDate_discontinued(), computerDto.getCompanyId());
+		if (errors.size() == 0) {
+			model = editRequest(computerDto.getId(), computerDto.getName(), computerDto.getDate_introduced(),
+					computerDto.getDate_discontinued(), computerDto.getCompanyId(), model);
+			return "redirect:" + VIEW_BOARD + ".html";
+		} else {
+			model.addAttribute("errors", errors);
+			return VIEW_EDIT_COMPUTER;
+		}
 	}
 
 	/**
@@ -171,8 +173,6 @@ public class ComputerControllerSpring {
 	public Model editRequest(String stringId, String stringName, String stringDateIntro, String stringDateDisc,
 			String stringCompanyId, Model request) {
 		Boolean validate = true;
-
-		validate = validations(stringName, stringDateIntro, stringDateDisc, stringCompanyId, request);
 		if (validate) {
 			Company company = new Company(Long.parseLong(stringCompanyId), "");
 			ComputerDto dtoComputer = new ComputerDto(stringId, stringName, stringDateIntro, stringDateDisc, company);
@@ -318,16 +318,10 @@ public class ComputerControllerSpring {
 	 * @param stringDateDisc
 	 * @param stringCompanyId
 	 */
-	public void gestionCreation(String computerName, String introduced, String discontinued, String companyId,
-			Model model) {
-		Boolean validate = true;
-		validate = validations(computerName, introduced, discontinued, companyId, model);
-		if (validate) {
-			ComputerDto dtoComputer = new ComputerDto(computerName, introduced, discontinued, companyId, "");
-			Computer computer = computerMap.mapToEntity(dtoComputer);
-			computerService.create(computer);
-		}
-
+	public void gestionCreation(String computerName, String introduced, String discontinued, String companyId) {
+		ComputerDto dtoComputer = new ComputerDto(computerName, introduced, discontinued, companyId, "");
+		Computer computer = computerMap.mapToEntity(dtoComputer);
+		computerService.create(computer);
 	}
 
 	/**
@@ -340,33 +334,29 @@ public class ComputerControllerSpring {
 	 * @param companyId
 	 * @return
 	 */
-	public Boolean validations(String name, String dateIntro, String dateDisc, String companyId, Model model) {
-		Boolean validate = true;
-
+	public List<String> validations(String name, String dateIntro, String dateDisc, String companyId) {
+		List<String> errors = new ArrayList<String>();
 		try {
 			computerValidator.validationName(name);
 		} catch (NullPointerException e) {
 			// LOGGER.error("nom saisie non valide !");
-			validate = false;
-			model.addAttribute("error", "nom saisie non valide !");
+			errors.add("nom saisie non valide");
 		}
 
 		try {
 			computerValidator.validationDateIntro(dateIntro);
 		} catch (IllegalArgumentException e) {
 			// LOGGER.error("La date d'introducion n'est pas valide");
-			validate = false;
-			model.addAttribute("error", "La date d'introducion n'est pas valide");
+			errors.add("La date d'introducion n'est pas valide");
+
 		}
 
 		try {
 			computerValidator.validationDateDisc(dateIntro, dateDisc);
 		} catch (InvalidDateException e) {
 			// LOGGER.error(e.getMessage());
-			validate = false;
-			model.addAttribute("error", "la date de retrait n'ont valide ! ");
+			errors.add("la date de retrait n'ont valide ! ");
 		}
-		return validate;
-
+		return errors;
 	}
 }
