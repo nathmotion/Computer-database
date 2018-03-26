@@ -24,8 +24,8 @@
 				<spring:message code="App.Title" />
 			</a>
 			<div class="pull-right">
-			 <a href="dashboard?myLocale=fr">FR</a>
-			 <a href="dashboard?myLocale=en">EN</a>
+			 <a href="dashboard.html?myLocale=fr">FR</a>
+			 <a href="dashboard.html?myLocale=en">EN</a>
 			</div>
 		</div>
 		<div>

@@ -13,11 +13,10 @@ import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_UPDATE_
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
-
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -82,7 +81,7 @@ public class ComputerDaoImpl implements InterfaceDao<Computer> {
 	 * @return
 	 */
 	public void create(Computer computer) {
-		Timestamp introduced, discontinued;
+		LocalDate introduced, discontinued;
 		long companyId;
 		if (computer.getIntroduced() != null) {
 			introduced = computer.getIntroduced();
@@ -114,7 +113,7 @@ public class ComputerDaoImpl implements InterfaceDao<Computer> {
 	 */
 	public void update(Computer computer) {
 
-		Timestamp introduced, discontinued;
+		LocalDate introduced, discontinued;
 		long companyId;
 		if (computer.getIntroduced() != null) {
 			introduced = computer.getIntroduced();

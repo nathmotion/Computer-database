@@ -21,14 +21,14 @@ public class MapperComputer {
 		if (dtoComputer.getDate_introduced() == null || dtoComputer.getDate_introduced().equals("")) {
 			computer.setIntroduced(null);
 		} else {
-			computer.setIntroduced(Timestamp.valueOf(LocalDate.parse(dtoComputer.getDate_introduced()).atStartOfDay()));
+			computer.setIntroduced(LocalDate.parse(dtoComputer.getDate_introduced()));
 		}
 
 		if (dtoComputer.getDate_discontinued() == null || dtoComputer.getDate_discontinued().equals("")) {
 			computer.setDiscontinued(null);
 		} else {
 			LocalDate parseTmpDate = LocalDate.parse(dtoComputer.getDate_discontinued());
-			computer.setDiscontinued(Timestamp.valueOf((parseTmpDate.atStartOfDay())));
+			computer.setDiscontinued(parseTmpDate);
 
 		}
 
@@ -47,17 +47,17 @@ public class MapperComputer {
 		ComputerDto dtoComputer = new ComputerDto();
 		dtoComputer.setName(computer.getName());
 		dtoComputer.setId(computer.getId().toString());
-		Optional<Timestamp> timeIntroOptional = Optional.ofNullable(computer.getIntroduced());
-		Optional<Timestamp> timeDiscOptional = Optional.ofNullable(computer.getDiscontinued());
+		Optional<LocalDate> timeIntroOptional = Optional.ofNullable(computer.getIntroduced());
+		Optional<LocalDate> timeDiscOptional = Optional.ofNullable(computer.getDiscontinued());
 
 		if (timeIntroOptional.isPresent()) {
-			dtoComputer.setDate_introduced(String.valueOf(computer.getIntroduced().toLocalDateTime().toLocalDate()));
+			dtoComputer.setDate_introduced(String.valueOf(computer.getIntroduced()));
 		} else {
 			dtoComputer.setDate_introduced("");
 		}
 
 		if (timeDiscOptional.isPresent()) {
-			dtoComputer.setDate_discontinued(String.valueOf(computer.getDiscontinued().toLocalDateTime().toLocalDate()));
+			dtoComputer.setDate_discontinued(String.valueOf(computer.getDiscontinued()));
 		} else {
 			dtoComputer.setDate_discontinued("");
 		}

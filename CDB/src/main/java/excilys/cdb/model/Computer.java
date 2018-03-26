@@ -1,13 +1,14 @@
 package main.java.excilys.cdb.model;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 public class Computer {
 
 	private Long id;
 	private String name;
-	private Timestamp introduced;
-	private Timestamp discontinued;
+	private LocalDate introduced;
+	private LocalDate discontinued;
 	private Company company;
 
 	public Computer() {
@@ -17,8 +18,16 @@ public class Computer {
 	public Computer(Long id, String name, Timestamp introduction, Timestamp discontinuation, Company company_id) {
 		this.id = id;
 		this.name = name;
-		this.introduced = introduction;
-		this.discontinued = discontinuation;
+		if (introduction == null) {
+			this.introduced = null;
+		} else {
+			this.introduced = introduction.toLocalDateTime().toLocalDate();
+		}
+		if (discontinued == null) {
+			this.discontinued = null;
+		} else {
+			this.discontinued = discontinuation.toLocalDateTime().toLocalDate();
+		}
 		this.company = company_id;
 
 	}
@@ -47,19 +56,19 @@ public class Computer {
 		this.name = name;
 	}
 
-	public Timestamp getIntroduced() {
+	public LocalDate getIntroduced() {
 		return introduced;
 	}
 
-	public void setIntroduced(Timestamp introduction) {
+	public void setIntroduced(LocalDate introduction) {
 		this.introduced = introduction;
 	}
 
-	public Timestamp getDiscontinued() {
+	public LocalDate getDiscontinued() {
 		return discontinued;
 	}
 
-	public void setDiscontinued(Timestamp discontinuation) {
+	public void setDiscontinued(LocalDate discontinuation) {
 		discontinued = discontinuation;
 	}
 
