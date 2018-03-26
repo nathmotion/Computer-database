@@ -13,6 +13,7 @@ public class Company {
 		this.id = id;
 		this.name = name;
 	}
+
 	public Long getId() {
 		return id;
 	}
@@ -20,7 +21,6 @@ public class Company {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 
 	public String getName() {
 		return name;
@@ -65,7 +65,5 @@ public class Company {
 			return false;
 		return true;
 	}
-
-
 
 }

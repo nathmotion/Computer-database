@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import main.java.excilys.cdb.ihm.Ihm;
-import main.java.excilys.cdb.service.ServiceComputer;
+import main.java.excilys.cdb.service.ComputerServiceImpl;
 
 
 public class testIhm {
@@ -19,7 +19,7 @@ public class testIhm {
 	@Mock
 	Ihm cli;
 	@Mock
-	ServiceComputer serviceComputer;
+	ComputerServiceImpl serviceComputer;
 	@Mock
 	LocalDate mockDate;
 

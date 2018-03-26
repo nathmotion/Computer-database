@@ -1,91 +1,75 @@
 package main.java.excilys.cdb.connectionmanager;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-import org.apache.log4j.Logger;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import com.zaxxer.hikari.pool.HikariProxyConnection;
 
 public enum SingletonConn {
 	INSTANCE;
 
-	final Logger logger=Logger.getLogger(SingletonConn.class);
-	// url 
-	private final String url;
+	//final static Logger LOGGER = LogManager.getLogger(SingletonConn.class);
+	// url
+	private String url;
 	// username
 	private String username;
 	// password
 	private String password;
 	// objet connection
-	private Connection conn ;
+	private HikariProxyConnection conn;
+	private String driver;
+	// Bundle Ressources
+	private ResourceBundle bundle = ResourceBundle.getBundle("userInfoDB");
+	// Hikari Connection Pool
+	private HikariConfig config = new HikariConfig();
+	private HikariDataSource dsConnectionPool;
 
-	SingletonConn(){
-		
-		 ResourceBundle bundle = ResourceBundle.getBundle("userInfoDB");
-	        username = bundle.getString("login");
-	        password = bundle.getString("password");
-	        url = bundle.getString("url");
-	        
+	SingletonConn() {
+		username = bundle.getString("login");
+		password = bundle.getString("password");
+		url = bundle.getString("url");
+		driver = bundle.getString("driver");
+		config.setJdbcUrl(url);
+		config.setPassword(password);
+		config.setUsername(username);
+		config.setMaximumPoolSize(100);
 		try {
-			conn= DriverManager.getConnection(url, username, password);
-		} catch (SQLException e) {
-			logger.error(" Connection fail ....  "+e.getMessage());
+			Class.forName(driver);
+			dsConnectionPool = new HikariDataSource(config);
+		} catch (ClassNotFoundException e) {
+			System.out.println("conn instance :" + e.getMessage());
 		}
 	}
 
 	public void initConn() {
-		
-		ResourceBundle bundle = ResourceBundle.getBundle("connection");
-        username = bundle.getString("login");
-        password = bundle.getString("password");
-        
 		try {
-			conn= DriverManager.getConnection(url, username, password);
-		} catch (SQLException e) {
-			logger.error("conn :"+e.getMessage());
+			Class.forName(driver);
+			conn = (HikariProxyConnection) dsConnectionPool.getConnection();
+		} catch (SQLException | ClassNotFoundException e) {
+			//LOGGER.error("conn :" + e.getMessage());
 		}
 	}
-	public void initConn(String url, String user, String pass) {
-		try {
-			conn=DriverManager.getConnection(url,user,pass);
-		} catch (SQLException e) {
-			logger.error("conn : "+e.getMessage());
-		}
-	}
+
 	public void closeConn() {
 		try {
 			conn.close();
 		} catch (SQLException e) {
-			logger.error("close : "+e.getMessage());
+			//LOGGER.error("close : " + e.getMessage());
 		}
 	}
 
-	
-	public String getUrl() {
-		return url;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
 	public Connection getConn() {
 		return conn;
-	}
-
-	public void setConn(Connection conn) {
-		this.conn = conn;
 	}
 
 	public java.sql.Statement createStatement() {
 		try {
 			return conn.createStatement();
 		} catch (SQLException e) {
-			logger.error(" statement creation :" + e.getMessage());
+			//LOGGER.error(" statement creation :" + e.getMessage());
 		}
 		return null;
 	}
