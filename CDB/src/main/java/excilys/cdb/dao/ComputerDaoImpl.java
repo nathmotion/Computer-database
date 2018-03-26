@@ -11,6 +11,7 @@ import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_NB_ELEM
 import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_ORDER;
 import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_UPDATE_COMPUTER;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 import java.util.List;
@@ -32,15 +33,16 @@ public class ComputerDaoImpl implements InterfaceDao<Computer> {
 
 	// public final static Logger LOGGER =
 	// LogManager.getLogger(ComputerDaoImpl.class);
-
-	@Autowired
-	JdbcTemplate jdbcTemplate;
-
+	private final JdbcTemplate jdbcTemplate;
 	RowMapper<Computer> myRowMapper = (rs, rowNum) -> {
 		Company company = new Company(rs.getLong("company_id"), rs.getString("company.name"));
 		return new Computer(rs.getLong("id"), rs.getString("name"), rs.getTimestamp("introduced"),
 				rs.getTimestamp("discontinued"), company);
 	};
+
+	public ComputerDaoImpl(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
 	/**
 	 * ====== REQUETES SQL : RECUPERE LA LISTE DES COMPUTER =======
@@ -142,7 +144,7 @@ public class ComputerDaoImpl implements InterfaceDao<Computer> {
 	 * @return
 	 */
 	public void delete(Computer computer) {
-		
+
 		jdbcTemplate.update(QUERY_DELETE_COMPUTER, computer.getId());
 	}
 
@@ -152,13 +154,12 @@ public class ComputerDaoImpl implements InterfaceDao<Computer> {
 	 * @param id
 	 * @return
 	 */
-	public Optional<Computer> findById(int id) {
+	public Optional<Computer> findById(int id)throws SQLException {
 		return Optional.ofNullable(jdbcTemplate.queryForObject(QUERY_BY_ID_COMPUTER, myRowMapper, id));
 	}
 
 	/**
-	 * ======== RECUPER LA PAGE SUIVANT LA RECHERCHE PAR UNE CHAINE DE CHARACTER
-	 * ========
+	 * ======== RECUPER LA PAGE SUIVANT LA RECHERCHE PAR UNE CHAINE DE CHARACTER ========
 	 */
 	@Override
 	public List<Computer> getSearch(Page<Computer> page, String name) {

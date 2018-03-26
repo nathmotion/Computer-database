@@ -1,6 +1,7 @@
 package main.java.excilys.cdb.ihm;
 
 import java.util.List;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -131,7 +132,13 @@ public class Ihm {
 		System.out.println("Veullez saisir l' id de l'ordinateur ");
 		int id = sc.nextInt();
 		sc.nextLine();
-		Optional<Computer> opcomputer = servComputer.findById(id);
+		Optional<Computer> opcomputer = null;
+		try {
+			opcomputer = servComputer.findById(id);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		if (opcomputer.isPresent()) {
 			Computer computer = opcomputer.get();
@@ -156,7 +163,13 @@ public class Ihm {
 		System.out.println("Entrez l'id de l'ordinateur a mettre a jour : ");
 		int id = sc.nextInt();
 		sc.nextLine();
-		Optional<Computer> optcomputer = servcomputer.findById(id);
+		Optional<Computer> optcomputer = null;
+		try {
+			optcomputer = servcomputer.findById(id);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (optcomputer.isPresent()) {
 			Computer computer = optcomputer.get();
 			System.out.println("id: " + computer.getId());

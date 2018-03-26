@@ -24,11 +24,14 @@ import main.java.excilys.cdb.model.Page;
 @Qualifier("InterfaceDao")
 public class CompanyDaoImpl implements InterfaceDao<Company> {
 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
-
+	
+	private final JdbcTemplate jdbcTemplate;
 	// final static Logger LOGGER = LogManager.getLogger(CompanyDaoImpl.class);
-
+	
+	public CompanyDaoImpl(JdbcTemplate jdbcTemplate) {
+			this.jdbcTemplate=jdbcTemplate;
+	}
+	
 	/**
 	 * ======== REQUETE SQL : RECUPERE LA LISTE DES COMPAGNIES ========
 	 */

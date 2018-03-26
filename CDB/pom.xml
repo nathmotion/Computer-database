@@ -5,6 +5,7 @@
 	<artifactId>CDB</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
+	<!-- PROPERTIES VERSION -->
 	<properties>
 		<junit-version>4.12</junit-version>
 		<log4j-api-version>2.10.0</log4j-api-version>
@@ -19,9 +20,8 @@
 		<jstl>1.2</jstl>
 		<spring-version>5.0.4.RELEASE</spring-version>
 	</properties>
-
-
 	<dependencies>
+	<!-- JDBC CONNNECTOR  -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -86,7 +86,7 @@
 			<version>${jstl}</version>
 		</dependency>
 
-		<!-- Connection Pool -->
+		<!-- CONECTION POOL -->
 		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP-java7</artifactId>
@@ -131,9 +131,16 @@
 			<version>4.0.0</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>2.0.1.Final</version>
+		</dependency>
+		<!-- HIBERNATE -->
+	
 	</dependencies>
 
-		<!-- BUILD --> 
+	<!-- BUILD -->
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
