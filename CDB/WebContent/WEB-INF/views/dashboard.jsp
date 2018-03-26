@@ -23,12 +23,16 @@
 				href="dashboard.html?limit=${page.limit}&search=null&typeOrder=null">
 				<spring:message code="App.Title" />
 			</a>
+			<div class="pull-right">
+			 <a href="dashboard?myLocale=fr">FR</a>
+			 <a href="dashboard?myLocale=en">EN</a>
+			</div>
 		</div>
 		<div>
 			<%-- <select class="selectpicker" data-width="fit">
-				<option value="user?mylocale=en"
+				<option value="lang=en"
 					data-content='<span class="flag-icon flag-icon-us" ></span> English'>English</option>
-				<option
+				<option value="lang=fr"
 					data-content='<span class="flag-icon flag-icon-fr"></span> Français'>Français</option>
 			</select> --%>
 		</div>
@@ -44,9 +48,8 @@
 					<form id="searchForm" action="dashboard.html" method="GET"
 						class="form-inline">
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="${label.placeholderSearch}" />
-						<input type="submit" id="searchsubmit" value="label.buttonSearch"
-							class="btn btn-primary" />
+							class="form-control" placeholder="<spring:message code="label.placeholderSearch"/>" />
+						<input type="submit" id="searchsubmit" value="<spring:message code="label.buttonSearch" />" class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">

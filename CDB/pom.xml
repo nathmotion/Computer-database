@@ -21,6 +21,7 @@
 		<spring-version>5.0.4.RELEASE</spring-version>
 	</properties>
 	<dependencies>
+	<!-- JDBC CONNNECTOR  -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
