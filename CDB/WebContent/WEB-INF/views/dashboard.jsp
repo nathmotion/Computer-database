@@ -1,7 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="mylib" uri="/WEB-INF/taglib.tld"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <!DOCTYPE html>
 <html>
@@ -17,27 +19,44 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.html?limit=${page.limit}&search=null&typeOrder=null"> Application -
-				Computer Database </a>
+			<a class="navbar-brand"
+				href="dashboard.html?limit=${page.limit}&search=null&typeOrder=null">
+				<spring:message code="App.Title" />
+			</a>
+			<div class="pull-right">
+			 <a href="dashboard?myLocale=fr">FR</a>
+			 <a href="dashboard?myLocale=en">EN</a>
+			</div>
+		</div>
+		<div>
+			<%-- <select class="selectpicker" data-width="fit">
+				<option value="lang=en"
+					data-content='<span class="flag-icon flag-icon-us" ></span> English'>English</option>
+				<option value="lang=fr"
+					data-content='<span class="flag-icon flag-icon-fr"></span> Français'>Français</option>
+			</select> --%>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${nbComputer} Computers found</h1>
+			<h1 id="homeTitle">${nbComputer}
+				<spring:message code="label.titleComputerFound" />
+			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="dashboard.html" method="GET" class="form-inline">
+					<form id="searchForm" action="dashboard.html" method="GET"
+						class="form-inline">
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
-							class="btn btn-primary" />
+							class="form-control" placeholder="<spring:message code="label.placeholderSearch"/>" />
+						<input type="submit" id="searchsubmit" value="<spring:message code="label.buttonSearch" />" class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer.html">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="addComputer.html"><spring:message
+							code="label.buttonAddComputer" /></a> <a class="btn btn-default"
+						id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message
+							code="label.buttonEdit" /></a>
 				</div>
 			</div>
 		</div>
@@ -59,12 +78,14 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><a href="dashboard.html?typeOrder=computer&orderCmp=0">Computer name</a></th>
-						<th>Introduced date</th>
+						<th><a href="dashboard.html?typeOrder=computer&orderCmp=0"><spring:message
+									code="label.listTitleComputerName" /></a></th>
+						<th><spring:message code="label.listTitleDateIntroduced" /></th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
+						<th><spring:message code="label.listTitleDateDiscontinued" /></th>
 						<!-- Table header for Company -->
-						<th><a href="dashboard.html?typeOrder=company&orderCmp=0">Company</a></th>
+						<th><a href="dashboard.html?typeOrder=company&orderCmp=0"><spring:message
+									code="label.listTitleCompany" /></a></th>
 
 					</tr>
 				</thead>
@@ -89,22 +110,29 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><mylib:link target="dashboard.html" page="${page}" action="previous" /></li>
-				<li><mylib:link target="dashboard.html" page="${page}" action="numpage" nbElement="${nbComputer}"/></li>
-				<li><mylib:link target="dashboard.html" page="${page}" action="next" /></li>
+				<li><mylib:link target="dashboard.html" page="${page}"
+						action="previous" /></li>
+				<li><mylib:link target="dashboard.html" page="${page}"
+						action="numpage" nbElement="${nbComputer}" /></li>
+				<li><mylib:link target="dashboard.html" page="${page}"
+						action="next" /></li>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<input type="button" class="btn btn-default" onClick="location.href='dashboard.html?limit=10'" value="10"/>
-				<input type="button" class="btn btn-default" onClick="location.href='dashboard.html?limit=50'" value="50"/>
-				<input type="button" class="btn btn-default" onClick="location.href='dashboard.html?limit=100'" value="100"/>
+				<input type="button" class="btn btn-default"
+					onClick="location.href='dashboard.html?limit=10'" value="10" /> <input
+					type="button" class="btn btn-default"
+					onClick="location.href='dashboard.html?limit=50'" value="50" /> <input
+					type="button" class="btn btn-default"
+					onClick="location.href='dashboard.html?limit=100'" value="100" />
 			</div>
 		</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/dashboard.js"></script>
-	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
-	
+	<script
+		src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 </html>
