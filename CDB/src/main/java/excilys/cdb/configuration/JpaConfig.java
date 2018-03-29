@@ -1,5 +1,6 @@
 package main.java.excilys.cdb.configuration;
 
+import java.io.IOException;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
@@ -13,6 +14,7 @@ import org.springframework.dao.annotation.PersistenceExceptionTranslationPostPro
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -30,25 +32,32 @@ public class JpaConfig {
 
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-		LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
+		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+		em.setDataSource(dataSource());
+		em.setPackagesToScan(new String[] { "model" });
+		em.setJpaProperties(hibProperties());
 
-		entityManagerFactory.setDataSource(dataSource());
+		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+		em.setJpaVendorAdapter(vendorAdapter);
+		return em;
+	}
 
-		// Classpath scanning of @Component, @Service, etc annotated class
-		entityManagerFactory.setPackagesToScan(env.getProperty("entitymanager.packagesToScan"));
+	private Properties hibProperties() {
+		Properties prop = new Properties();
+		try {
+			prop.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("/hibernate.properties"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return prop;
+	}
 
-		// Vendor adapter
-		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-		entityManagerFactory.setJpaVendorAdapter(vendorAdapter);
+	@Bean
+	public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
+		JpaTransactionManager transactionManager = new JpaTransactionManager();
+		transactionManager.setEntityManagerFactory(emf);
 
-		// Hibernate properties
-		Properties additionalProperties = new Properties();
-		additionalProperties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
-		additionalProperties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
-		additionalProperties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
-		entityManagerFactory.setJpaProperties(additionalProperties);
-
-		return entityManagerFactory;
+		return transactionManager;
 	}
 
 	@Bean
@@ -59,14 +68,6 @@ public class JpaConfig {
 		dataSource.setUsername(env.getRequiredProperty("login"));
 		dataSource.setPassword(env.getRequiredProperty("password"));
 		return dataSource;
-	}
-
-	@Bean
-	public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-		JpaTransactionManager transactionManager = new JpaTransactionManager();
-		transactionManager.setEntityManagerFactory(emf);
-
-		return transactionManager;
 	}
 
 	@Bean

@@ -1,32 +1,24 @@
 package main.java.excilys.cdb.repositories;
 
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Optional;
+import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_BY_NAME;
+import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_NB_ELEMENT_BY_NAME;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 import main.java.excilys.cdb.model.Computer;
 import main.java.excilys.cdb.model.Page;
 
-public interface ComputerRepositoryImpl {
+@Repository
+public interface ComputerRepositoryImpl extends PagingAndSortingRepository<Computer, Integer> {
 
-	void save(Computer computer);
+	@Query(QUERY_NB_ELEMENT_BY_NAME)
+	int countByName(String name);
 
-	void delete(Computer computer);
-
-	int getNbElement();
-
-	Optional<Computer> findById(int id) throws SQLException;
-
-	List<Computer> getPage(Page<Computer> page);
-
-	List<Computer> getAll();
-
-	public List<Computer> getPageSort(Page<Computer> page, String critere, Boolean order);
-
-	int getNbElementSearch(String name);
-
-	List<Computer> getSearch(Page<Computer> page, String name);
+	@Query(QUERY_BY_NAME)
+	List<Computer> findPageByName(Page<Computer> page, String name);
 
 }

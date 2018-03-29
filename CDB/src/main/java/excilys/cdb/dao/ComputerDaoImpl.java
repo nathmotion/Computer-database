@@ -1,18 +1,8 @@
 package main.java.excilys.cdb.dao;
 
-import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_BY_ID_COMPUTER;
-import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_BY_NAME;
-import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_CREATE_COMPUTER;
-import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_DELETE_COMPUTER;
-import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_GET_ALL_COMPUTER;
-import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_GET_PAGE_COMPUTER;
-import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_NB_ELEMENT_BY_NAME;
-import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_NB_ELEMENT_COMPUTER;
-import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_ORDER;
-import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.QUERY_UPDATE_COMPUTER;
+import static main.java.excilys.cdb.constantes.ConstanteRequeteSql.*;
 
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +17,6 @@ import main.java.excilys.cdb.model.Computer;
 import main.java.excilys.cdb.model.Page;
 
 @Repository
-@Qualifier("InterfaceDao")
 public class ComputerDaoImpl implements InterfaceDao<Computer> {
 
 	// public final static Logger LOGGER =

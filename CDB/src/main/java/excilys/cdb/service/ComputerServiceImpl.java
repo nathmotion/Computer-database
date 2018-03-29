@@ -4,63 +4,62 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import main.java.excilys.cdb.dao.ComputerDaoImpl;
 import main.java.excilys.cdb.model.Computer;
 import main.java.excilys.cdb.model.Page;
+import main.java.excilys.cdb.repositories.ComputerRepositoryImpl;
 
 @Service
 public class ComputerServiceImpl implements ServiceCDB<Computer> {
 
-	private final ComputerDaoImpl daoComputer;
+	private final ComputerRepositoryImpl computerRepository;
 
-	public ComputerServiceImpl(ComputerDaoImpl daoComputer) {
-		this.daoComputer = daoComputer;
+	public ComputerServiceImpl(ComputerRepositoryImpl computerRepositoryImpl) {
+		this.computerRepository = computerRepositoryImpl;
 	}
 
 	public List<Computer> getAllEntities() {
-		return daoComputer.getAll();
+		return computerRepository.findAll();
 	}
 
 	public Page<Computer> getPage(Page<Computer> page) {
-		page.elementsPage = daoComputer.getPage(page);
+		page.elementsPage = computerRepository.findAll();
 		return page;
 	}
 
 	public Page<Computer> getPageByName(Page<Computer> page, String name) {
-		page.elementsPage = daoComputer.getSearch(page, name);
+		page.elementsPage = computerRepository.findPageByName(page, name);
 		return page;
 	}
 
 	public int getNbSearch(String name) {
-		return daoComputer.getNbElementSearch(name);
+		return computerRepository.countByName(name);
 	}
 
 	public Page<Computer> getPageByOrder(Page<Computer> page, String critere, Boolean order) {
-		page.elementsPage = daoComputer.getPageSort(page, critere, order);
+		page.elementsPage = computerRepository.
 		return page;
 	}
 
 	public int getNbTotal() {
-		return daoComputer.getNbElement();
+		return (int)computerRepository.count();
 	}
 
 	public void create(Computer computer) {
-		daoComputer.create(computer);
+		computerRepository.save(computer);
 	}
 
 	public void update(Computer computer) {
-		daoComputer.update(computer);
+		computerRepository.save(computer);
 	}
 
 	public void delete(Computer computer) {
-		daoComputer.delete(computer);
+		computerRepository.delete(computer);
 	}
 
 	public Optional<Computer> findById(int id) throws SQLException {
-		return daoComputer.findById(id);
+		return computerRepository.findById(id);
 	}
 
 }
