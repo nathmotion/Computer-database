@@ -3,12 +3,31 @@ package main.java.excilys.cdb.model;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "computer")
 public class Computer {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
 	private Long id;
+	@Column(name = "name")
 	private String name;
+	@Column(name = "introduced")
 	private LocalDate introduced;
+	@Column(name = "discontinued")
 	private LocalDate discontinued;
+	@OneToOne
+	@PrimaryKeyJoinColumn
 	private Company company;
 
 	public Computer() {

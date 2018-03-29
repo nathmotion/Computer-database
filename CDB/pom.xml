@@ -21,7 +21,7 @@
 		<spring-version>5.0.4.RELEASE</spring-version>
 	</properties>
 	<dependencies>
-	<!-- JDBC CONNNECTOR  -->
+		<!-- JDBC CONNNECTOR -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -136,10 +136,37 @@
 			<artifactId>validation-api</artifactId>
 			<version>2.0.1.Final</version>
 		</dependency>
-		<!-- HIBERNATE -->
-	
-	</dependencies>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>2.0.5.RELEASE</version>
+		</dependency>
 
+
+		<!-- HIBERNATE -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>5.2.15.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-annotations</artifactId>
+			<version>3.5.6-Final</version>
+		</dependency>
+
+	</dependencies>
+	<!-- REPERTORIEs -->
+	<repositories>
+		<repository>
+			<id>spring-libs-release</id>
+			<name>Spring Releases</name>
+			<url>https://repo.spring.io/libs-release</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 	<!-- BUILD -->
 	<build>
 		<sourceDirectory>src</sourceDirectory>

@@ -118,8 +118,7 @@ public class ComputerControllerSpring {
 			System.out.println(" le binding a trouve une erreur !");
 			return VIEW_ADD_COMPUTER;
 		}
-		List<String> errors = validations(computerDto.getName(), computerDto.getDate_introduced(),
-				computerDto.getDate_discontinued(), computerDto.getCompanyId());
+		List<String> errors = computerValidator.validate(computerDto);
 		if (errors.size() == 0) {
 			gestionCreation(computerDto.getName(), computerDto.getDate_introduced(), computerDto.getDate_discontinued(),
 					computerDto.getCompanyId());
@@ -157,8 +156,7 @@ public class ComputerControllerSpring {
 	@PostMapping("/editComputer.html")
 	public String submitEditComputer(@ModelAttribute("ComputerDto") @Valid ComputerDto computerDto,
 			BindingResult binding, Model model) {
-		List<String> errors = validations(computerDto.getName(), computerDto.getDate_introduced(),
-				computerDto.getDate_discontinued(), computerDto.getCompanyId());
+		List<String> errors = computerValidator.validate(computerDto);
 		if (errors.size() == 0) {
 			model = editRequest(computerDto.getId(), computerDto.getName(), computerDto.getDate_introduced(),
 					computerDto.getDate_discontinued(), computerDto.getCompanyId(), model);
@@ -329,39 +327,4 @@ public class ComputerControllerSpring {
 		computerService.create(computer);
 	}
 
-	/**
-	 * ======= TESTE ET VALIDE SI LES DONNEES PASSE PAR LE FORMULAIRE SONT
-	 * CORRECT=====
-	 * 
-	 * @param name
-	 * @param dateIntro
-	 * @param dateDisc
-	 * @param companyId
-	 * @return
-	 */
-	public List<String> validations(String name, String dateIntro, String dateDisc, String companyId) {
-		List<String> errors = new ArrayList<String>();
-		try {
-			computerValidator.validationName(name);
-		} catch (NullPointerException e) {
-			// LOGGER.error("nom saisie non valide !");
-			errors.add("nom saisie non valide");
-		}
-
-		try {
-			computerValidator.validationDateIntro(dateIntro);
-		} catch (IllegalArgumentException e) {
-			// LOGGER.error("La date d'introducion n'est pas valide");
-			errors.add("La date d'introducion n'est pas valide");
-
-		}
-
-		try {
-			computerValidator.validationDateDisc(dateIntro, dateDisc);
-		} catch (InvalidDateException e) {
-			// LOGGER.error(e.getMessage());
-			errors.add("la date de retrait n'ont valide ! ");
-		}
-		return errors;
-	}
 }
