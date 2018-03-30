@@ -1,14 +1,13 @@
 package main.java.excilys.cdb.configuration;
 
-import java.io.IOException;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -25,32 +24,34 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "main.java.excilys.cdb.repositories")
+@PropertySource({ "classpath:hibernate.properties" })
 public class JpaConfig {
 
-	@Autowired
 	private Environment env;
+
+	JpaConfig(Environment env) {
+		this.env = env;
+	}
 
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 		em.setDataSource(dataSource());
-		em.setPackagesToScan(new String[] { "model" });
-		em.setJpaProperties(hibProperties());
-
+		em.setPackagesToScan(new String[] { "main.java.excilys.cdb.model" });
+		em.setJpaProperties(hibernateProperties());
 		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		em.setJpaVendorAdapter(vendorAdapter);
 		return em;
 	}
-
-	private Properties hibProperties() {
-		Properties prop = new Properties();
-		try {
-			prop.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("/hibernate.properties"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return prop;
-	}
+	
+	Properties hibernateProperties() {
+		return new Properties() {
+			{
+				setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
+				setProperty("hibernate.show_sql",env.getProperty("hibernate.show_sql"));
+			}
+		};
+	}	
 
 	@Bean
 	public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {

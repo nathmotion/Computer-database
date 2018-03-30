@@ -20,12 +20,16 @@ public class Computer {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private Long id;
+
 	@Column(name = "name")
 	private String name;
+
 	@Column(name = "introduced")
-	private LocalDate introduced;
+	private Timestamp introduced;
+
 	@Column(name = "discontinued")
-	private LocalDate discontinued;
+	private Timestamp discontinued;
+
 	@OneToOne
 	@PrimaryKeyJoinColumn
 	private Company company;
@@ -40,12 +44,12 @@ public class Computer {
 		if (introduction == null) {
 			this.introduced = null;
 		} else {
-			this.introduced = introduction.toLocalDateTime().toLocalDate();
+			this.introduced = introduction;
 		}
 		if (discontinued == null) {
 			this.discontinued = null;
 		} else {
-			this.discontinued = discontinuation.toLocalDateTime().toLocalDate();
+			this.discontinued = discontinuation;
 		}
 		this.company = company_id;
 
@@ -76,19 +80,19 @@ public class Computer {
 	}
 
 	public LocalDate getIntroduced() {
-		return introduced;
+		return introduced.toLocalDateTime().toLocalDate();
 	}
 
 	public void setIntroduced(LocalDate introduction) {
-		this.introduced = introduction;
+		this.introduced = Timestamp.valueOf(introduction.atStartOfDay());
 	}
 
 	public LocalDate getDiscontinued() {
-		return discontinued;
+		return discontinued.toLocalDateTime().toLocalDate();
 	}
 
 	public void setDiscontinued(LocalDate discontinuation) {
-		discontinued = discontinuation;
+		discontinued = Timestamp.valueOf(discontinuation.atStartOfDay());
 	}
 
 	@Override

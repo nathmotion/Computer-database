@@ -4,10 +4,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import main.java.excilys.cdb.model.Computer;
-import main.java.excilys.cdb.model.Page;
 import main.java.excilys.cdb.repositories.ComputerRepositoryImpl;
 
 @Service
@@ -20,16 +21,16 @@ public class ComputerServiceImpl implements ServiceCDB<Computer> {
 	}
 
 	public List<Computer> getAllEntities() {
-		return computerRepository.findAll();
+		return   (List<Computer>) computerRepository.findAll();
 	}
 
-	public Page<Computer> getPage(Page<Computer> page) {
-		page.elementsPage = computerRepository.findAll();
+	public Page<Computer> getPage(Pageable p) {
+		Page<Computer> page = computerRepository.findAll(p);
 		return page;
 	}
 
-	public Page<Computer> getPageByName(Page<Computer> page, String name) {
-		page.elementsPage = computerRepository.findPageByName(page, name);
+	public Page<Computer> getPageByName( String name, Pageable pageable) {
+		Page<Computer> page= computerRepository.findAllByName(name,pageable);
 		return page;
 	}
 
@@ -37,9 +38,9 @@ public class ComputerServiceImpl implements ServiceCDB<Computer> {
 		return computerRepository.countByName(name);
 	}
 
-	public Page<Computer> getPageByOrder(Page<Computer> page, String critere, Boolean order) {
-		page.elementsPage = computerRepository.
-		return page;
+	public Page<Computer> getPageByOrder(Pageable page, String critere, Boolean order) {
+		Page<Computer> computerRepository.findByOrderNameAsc(page);
+		return null;
 	}
 
 	public int getNbTotal() {
@@ -61,5 +62,4 @@ public class ComputerServiceImpl implements ServiceCDB<Computer> {
 	public Optional<Computer> findById(int id) throws SQLException {
 		return computerRepository.findById(id);
 	}
-
 }

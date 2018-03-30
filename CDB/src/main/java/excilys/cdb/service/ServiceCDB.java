@@ -3,20 +3,20 @@ package main.java.excilys.cdb.service;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-
-import main.java.excilys.cdb.model.Page;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ServiceCDB<T> {
 
 	public List<T> getAllEntities();
 
-	public Page<T> getPage(Page<T> page);
+	public Page<T> getPage(Pageable page);
 
-	public Page<T> getPageByName(Page<T> page, String name);
+	public Page<T> getPageByName(String name,Pageable page);
 
 	public int getNbSearch(String name);
 
-	public Page<T> getPageByOrder(Page<T> page, String critere, Boolean order);
+	public Page<T> getPageByOrder(Pageable page, String critere, Boolean order);
 
 	public int getNbTotal();
 
