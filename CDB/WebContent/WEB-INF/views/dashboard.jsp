@@ -24,8 +24,8 @@
 				<spring:message code="App.Title" />
 			</a>
 			<div class="pull-right">
-			 <a href="dashboard.html?myLocale=fr">FR</a>
-			 <a href="dashboard.html?myLocale=en">EN</a>
+				<a href="dashboard.html?myLocale=fr">FR</a> <a
+					href="dashboard.html?myLocale=en">EN</a>
 			</div>
 		</div>
 		<div>
@@ -48,8 +48,11 @@
 					<form id="searchForm" action="dashboard.html" method="GET"
 						class="form-inline">
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="<spring:message code="label.placeholderSearch"/>" />
-						<input type="submit" id="searchsubmit" value="<spring:message code="label.buttonSearch" />" class="btn btn-primary" />
+							class="form-control"
+							placeholder="<spring:message code="label.placeholderSearch"/>" />
+						<input type="submit" id="searchsubmit"
+							value="<spring:message code="label.buttonSearch" />"
+							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
@@ -110,12 +113,9 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><mylib:link target="dashboard.html" page="${page}"
-						action="previous" /></li>
-				<li><mylib:link target="dashboard.html" page="${page}"
-						action="numpage" nbElement="${nbComputer}" /></li>
-				<li><mylib:link target="dashboard.html" page="${page}"
-						action="next" /></li>
+				<li><mylib:link page="${page}" action="previous" /></li>
+				<li><mylib:link page="${page}" action="numpage" /></li>
+				<li><mylib:link page="${page}" action="next" /></li>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">

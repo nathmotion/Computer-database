@@ -7,47 +7,55 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+
 import main.java.excilys.cdb.model.Computer;
-import main.java.excilys.cdb.model.Page;
 
 public class PageTag extends SimpleTagSupport {
-	private Page<Computer> page;
-	private String target;
 	private String action;
-	private String nbElement;
-
+	Page<Computer> page;
+	int search;
+	Sort.Direction order;
+	int numpage;
 	StringWriter sw = new StringWriter();
 
 	public void doTag() throws JspException, IOException {
 		JspWriter out = getJspContext().getOut();
 		if (action.equals("next")) {
-			out.println("<a href=\"dashboard.html?actionpage=next&search="+ page.getSearch()+"&typeOrder="+page.getTypeOrder()+"&orderCmp="+page.getOrderCmp()+"\" aria-label=\"Next\"> <span aria-hidden=true>&raquo;</span>\n" + "</a>");
+			out.println("<a href=\"dashboard.html?numpage=" + actionPage() + "&search=" + search + "&order=" + order
+					+ "\" aria-label=\"Next\"> <span aria-hidden=true>&raquo;</span>\n" + "</a>");
 		}
 		if (action.equals("previous")) {
-			out.println(" <a href=\"dashboard.html?actionpage=previous&search="+page.getSearch()+"&searchName="+ page.getSearch()+"&typeOrder="+page.getTypeOrder()+"&orderCmp="+page.getOrderCmp()+"\" \n	aria-label=\"Previous\"> <span aria-hidden=\"true\">&laquo;</span>\n</a>");
+			out.println(" <a href=\"dashboard.html?numpage=" + actionPage() + "p&search=" + search + "&order=" + order
+					+ "\" \n	aria-label=\"Previous\"> <span aria-hidden=\"true\">&laquo;</span>\n</a>");
 		}
-		if(action.equals("numpage")) {
-			int nbPage=(Integer.parseInt(nbElement)/page.limit);
-			if(page.current>2) {
-				out.println("<a href=\"dashboard.html?gopage="+(page.current-2)+"&search="+page.getSearch()+"&searchName="+ page.getSearch()+"&typeOrder="+page.getTypeOrder()+"&orderCmp="+page.getOrderCmp()+"\" >"+(page.current-2) + "</a>");
+		out.println("<a href=\"dashboard.html?numpage=" + (page.getTotalPages() - 1) + "/>");
+	}
+
+	/**
+	 * ===== [ GESTION ] : ACTIONS DEMANDE POUR AFFICHER LA PAGE DE COMPUTER ====
+	 * 
+	 * @param action
+	 * @param count
+	 */
+	public int actionPage() {
+		switch (action) {
+		case "next":
+			if (page.hasNext()) {
+				return page.getNumber() + 1;
+			} else {
+				return page.getNumber();
 			}
-			if(page.current>1) {
-				out.println("<a href=\"dashboard.html?gopage="+(page.current-1)+"\" >"+(page.current-1) + "</a>");
-			}
-			out.println("<a href=\"#\"> - </a>");
-			if(page.current<nbPage) {
-				out.println("<a href=\"dashboard.html?gopage="+(page.current+1)+"\" >"+(page.current+1) + "</a>");
-			}
-			if(page.current<nbPage-1) {
-				out.println("<a href=\"dashboard.html?gopage="+(page.current+2)+"\" >"+(page.current+2) + "</a>");
-			}
-			if(page.current<2) {
-				out.println("<a href=\"dashboard.html?gopage="+(page.current+3)+"\" >"+(page.current+3) + "</a>");
-			}
-			if(page.current<1) {
-				out.println("<a href=\"dashboard.html?gopage="+(page.current+4)+"\" >"+(page.current+4) + "</a>");
+
+		case "previous":
+			if (page.hasPrevious()) {
+				return page.getNumber() - 1;
+			} else {
+				return page.getNumber();
 			}
 		}
+		return page.getNumber();
 	}
 
 	public Page<Computer> getPage() {
@@ -64,22 +72,6 @@ public class PageTag extends SimpleTagSupport {
 
 	public void setAction(String action) {
 		this.action = action;
-	}
-
-	public String getTarget() {
-		return target;
-	}
-
-	public void setTarget(String target) {
-		this.target = target;
-	}
-
-	public String getNbElement() {
-		return nbElement;
-	}
-
-	public void setNbElement(String nbElement) {
-		this.nbElement = nbElement;
 	}
 
 }

@@ -4,15 +4,6 @@
 	<short-name>Example TLD</short-name>
 
 	<tag>
-		<name>pagination</name>
-		<tag-class>main.java.excilys.cdb.taglib.PageTag</tag-class>
-		<body-content>JSP</body-content>
-		<attribute>
-			<name>offset</name>
-			<required>true</required>
-		</attribute>
-	</tag>
-	<tag>
 		<name>link</name>
 		<tag-class>main.java.excilys.cdb.taglib.PageTag</tag-class>
 		<body-content>empty</body-content>
@@ -28,14 +19,7 @@
 			<rtexprvalue>true</rtexprvalue>
 
 		</attribute>
-		<attribute>
-			<name>target</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>nbElement</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
+	
+	
 	</tag>
 </taglib>

@@ -5,14 +5,16 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import main.java.excilys.cdb.model.Computer;
 import main.java.excilys.cdb.repositories.ComputerRepositoryImpl;
 
 @Service
-public class ComputerServiceImpl implements ServiceCDB<Computer> {
+public class ComputerServiceImpl {
 
 	private final ComputerRepositoryImpl computerRepository;
 
@@ -20,31 +22,31 @@ public class ComputerServiceImpl implements ServiceCDB<Computer> {
 		this.computerRepository = computerRepositoryImpl;
 	}
 
-	public List<Computer> getAllEntities() {
-		return   (List<Computer>) computerRepository.findAll();
+	public List<Computer> getAll() {
+		return (List<Computer>) computerRepository.findAll();
 	}
 
-	public Page<Computer> getPage(Pageable p) {
-		Page<Computer> page = computerRepository.findAll(p);
+	public Page<Computer> getPage(int numPage,int nbElement) {
+		Page<Computer> page = computerRepository.findAll(PageRequest.of(numPage, nbElement));
 		return page;
 	}
 
-	public Page<Computer> getPageByName( String name, Pageable pageable) {
-		Page<Computer> page= computerRepository.findAllByName(name,pageable);
+	public Page<Computer> getPageByName(int numPage,int nbElementPage,String name) {
+		Page<Computer> page = computerRepository.findAll(PageRequest.of(numPage,nbElementPage,Sort.Direction.ASC,name));
 		return page;
 	}
 
-	public int getNbSearch(String name) {
+	public long getNbSearch(String name) {
 		return computerRepository.countByName(name);
 	}
 
-	public Page<Computer> getPageByOrder(Pageable page, String critere, Boolean order) {
-		Page<Computer> computerRepository.findByOrderNameAsc(page);
-		return null;
+	public Page<Computer> getPageByOrder(int numPage,int nbElementPage, Direction direction) {
+		Page<Computer> page = computerRepository.findAll(PageRequest.of(numPage, nbElementPage, direction));
+		return page;
 	}
 
 	public int getNbTotal() {
-		return (int)computerRepository.count();
+		return (int) computerRepository.count();
 	}
 
 	public void create(Computer computer) {

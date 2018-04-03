@@ -22,6 +22,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,12 +35,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import main.java.excilys.cdb.dto.CompanyDto;
 import main.java.excilys.cdb.dto.ComputerDto;
 import main.java.excilys.cdb.exceptions.DatabaseException;
-import main.java.excilys.cdb.exceptions.InvalidDateException;
 import main.java.excilys.cdb.mapper.MapperCompany;
 import main.java.excilys.cdb.mapper.MapperComputer;
 import main.java.excilys.cdb.model.Company;
 import main.java.excilys.cdb.model.Computer;
-import main.java.excilys.cdb.model.Page;
 import main.java.excilys.cdb.service.CompanyServiceImpl;
 import main.java.excilys.cdb.service.ComputerServiceImpl;
 import main.java.excilys.cdb.validator.ValidatorComputer;
@@ -51,11 +51,12 @@ public class ComputerControllerSpring {
 	private final MapperComputer computerMap;
 	private final MapperCompany companyMap;
 	private ValidatorComputer computerValidator;
+	private Page<Computer> page;
+	int numPage;
+	int nbElementP;
+
 	@Autowired
 	MessageSource messageSource;
-
-	Page<Computer> page = new Page<Computer>(0, 0, 10);
-	private int idComputer;
 
 	public ComputerControllerSpring(ComputerServiceImpl computerService, CompanyServiceImpl companyService,
 			MapperComputer computerMap, MapperCompany companyMap, ValidatorComputer computerValidator) {
@@ -64,16 +65,18 @@ public class ComputerControllerSpring {
 		this.companyMap = companyMap;
 		this.computerMap = computerMap;
 		this.computerValidator = computerValidator;
+		this.numPage = 0;
+		this.nbElementP = 10;
 	}
 
 	/***
-	 * ====== GET : VIEW DASHBOARD ======
+	 * ======[ GET ] : VIEW DASHBOARD ======
 	 */
 	@GetMapping("/dashboard.html")
 	public String getDashboard(@RequestParam Map<String, String> params, Locale Locale, Model model) {
 		try {
 			model = affichagePage(params.get(ACTION_PAGE), params.get(LIMIT), params.get(SEARCH),
-					params.get(TYPE_ORDER), params.get(ORDER_CMP), model);
+					params.get(TYPE_ORDER), model);
 			return VIEW_BOARD;
 		} catch (DatabaseException e) {
 			return "500";
@@ -81,17 +84,16 @@ public class ComputerControllerSpring {
 	}
 
 	/***
-	 * ====== POST : VIEW DASHBOARD ======
+	 * ====== [ POST ] : VIEW DASHBOARD ======
 	 */
 	@PostMapping("/dashboard.html")
 	public String submitDashboard(@RequestParam Map<String, String> params, Locale Locale,
 			@RequestParam(value = SELECTION, required = false) List<String> selection, Model model) {
 		try {
 			String search = null;
-			String orderCmp = null;
 			String typeOrder = null;
 			gestionDelete(selection);
-			model = affichagePage(params.get(ACTION_PAGE), params.get(LIMIT), search, typeOrder, orderCmp, model);
+			model = affichagePage(params.get(ACTION_PAGE), params.get(LIMIT), search, typeOrder, model);
 			return VIEW_BOARD;
 		} catch (DatabaseException e) {
 			return "500";
@@ -99,7 +101,7 @@ public class ComputerControllerSpring {
 	}
 
 	/**
-	 * ===== GET : VIEW ADD COMPUTER ======
+	 * ===== [ GET ] : VIEW ADD COMPUTER ======
 	 */
 	@GetMapping("/addComputer.html")
 	public String getAddComputer(Model model) {
@@ -109,7 +111,7 @@ public class ComputerControllerSpring {
 	}
 
 	/**
-	 * ===== POST : VIEW ADD COMPUTER =====
+	 * ===== [ POST ] : VIEW ADD COMPUTER =====
 	 */
 	@PostMapping("/addComputer.html")
 	private String submitAddComputer(@ModelAttribute("computerDto") @Valid ComputerDto computerDto,
@@ -151,7 +153,7 @@ public class ComputerControllerSpring {
 	}
 
 	/***
-	 * ====== POST : SUBMIT EDIT COMPUTER ======
+	 * ====== [ POST ] : SUBMIT EDIT COMPUTER ======
 	 */
 	@PostMapping("/editComputer.html")
 	public String submitEditComputer(@ModelAttribute("ComputerDto") @Valid ComputerDto computerDto,
@@ -168,7 +170,7 @@ public class ComputerControllerSpring {
 	}
 
 	/**
-	 * ======= GESTION DE LA REQUETE DE EDITION D'UN COMPUTER =======
+	 * ======= [ REQUETE ] : EDITION D'UN COMPUTER =======
 	 * 
 	 * @param request
 	 * @return
@@ -186,7 +188,7 @@ public class ComputerControllerSpring {
 	}
 
 	/**
-	 * ===== GESTION DE LA REQUETE DE SUPPRESSION DES COMPUTER =======
+	 * ===== [ REQUETE ] : SUPPRESSION DES COMPUTER =======
 	 * 
 	 * @param selection
 	 */
@@ -200,46 +202,38 @@ public class ComputerControllerSpring {
 	}
 
 	/**
-	 * ======== GESTION D'AFFICHAGE DES PAGE DE COMPUTER ET LA RECHERCHE ======
+	 * ======== [ GESTION ]:  AFFICHAGE DES PAGE DE COMPUTER ET LA RECHERCHE ======
 	 * 
 	 * @param request
 	 * @return
 	 */
-	public Model affichagePage(String actionPage, String limit, String search, String typeOrder, String orderCmp,
-			Model model) throws DatabaseException {
+	public Model affichagePage(String actionPage, String limit, String search, String order, Model model)
+			throws DatabaseException {
 
-		if (search != null) {
-			page.setSearch(search);
-		}
+		int sortNum = 0;
+
 		int count = computerService.getNbTotal();
 
-		if (typeOrder != null) {
-			page.setTypeOrder(typeOrder);
+		if (order != null) {
+			sortNum = Integer.parseInt(order);
 		}
-		if (orderCmp != null) {
-			page.setOrderCmp(Integer.parseInt(orderCmp));
 
-		}
 		if (actionPage == null) {
 			actionPage = "";
 		}
 		if (limit != null) {
-			page.limit = Integer.parseInt(limit);
-			page.offset = 0;
-			page.current = (page.getOffset() / page.getLimit()) + 1;
+			nbElementP = Integer.parseInt(limit);
 		}
 
-		actionPage(actionPage, count);
-
-		if (page.getSearch() != null && !page.getSearch().equals("null")) {
-			count = computerService.getNbSearch(page.getSearch());
-			page = computerService.getPageByName(page, page.getSearch());
+		if (search != null && !search.equals("null")) {
+			count = (int) computerService.getNbSearch(search);
+			page = computerService.getPageByName(numPage, nbElementP, search);
 		} else {
-			handlePageOrder(computerService);
+			handlePageOrder(computerService, sortNum);
 		}
 
 		ArrayList<ComputerDto> listeDtoComputers = new ArrayList<>();
-		for (Computer computer : page.elementsPage) {
+		for (Computer computer : page.getContent()) {
 			ComputerDto dtoComputer = new ComputerDto();
 			dtoComputer = computerMap.mapToDto(computer);
 			listeDtoComputers.add(dtoComputer);
@@ -250,57 +244,27 @@ public class ComputerControllerSpring {
 		return model;
 	}
 
-	/**
-	 * ===== GESTION DES ACTIONS DEMANDE POUR AFFICHER LA PAGE DE COMPUTER ====
-	 * 
-	 * @param action
-	 * @param count
-	 */
-	public void actionPage(String action, int count) {
-		switch (action) {
-		case "next":
-			if (page.current <= Math.ceil((count / page.limit))) {
-				page.offset = page.offset + page.limit;
-				page.current = (page.getOffset() / page.getLimit()) + 1;
+	public void handlePageOrder(ComputerServiceImpl computerService, int sortNum) {
+		if (sortNum != 0) {
+			numPage = 0;
+			if (sortNum == 1) {
+				page = computerService.getPageByOrder(numPage, nbElementP, Sort.Direction.ASC);
+			} else {
+				page = computerService.getPageByOrder(numPage, nbElementP, Sort.Direction.DESC);
 			}
-			break;
-
-		case "previous":
-			if (page.current - 1 > 0) {
-				page.offset = page.offset - page.limit;
-				page.current = (page.getOffset() / page.getLimit()) + 1;
-			}
-			break;
-		}
-	}
-
-	public void handlePageOrder(ComputerServiceImpl computerService) {
-		if (page.getTypeOrder() != null && !page.getTypeOrder().equals("null")) {
-			page.setOrderCmp(page.getOrderCmp() + 1);
-			if (page.getOrderCmp() % 2 == 0) {
-				page.offset = 0;
-				page = computerService.getPageByOrder(page, page.getTypeOrder(), true);
-				page.current = (page.getOffset() / page.getLimit()) + 1;
-			}
-			if (page.getOrderCmp() % 2 == 1) {
-				page.offset = 0;
-				page = computerService.getPageByOrder(page, page.getTypeOrder(), false);
-				page.current = (page.getOffset() / page.getLimit()) + 1;
-			}
-			page.setTypeOrder(null);
 		} else {
-			page = computerService.getPage(page);
+			page = computerService.getPage(numPage, nbElementP);
 		}
 	}
 
 	/***
-	 * ======= GESTION DE LA RECUPERATION DE LA LISTE DE COMPANY =========
+	 * ======= [ GESTION ]: RECUPERATION DE LA LISTE DE COMPANY =========
 	 * 
 	 * @param request
 	 * @return
 	 */
 	public Model affichageCompany(Model request) {
-		List<Company> companys = companyService.getAllEntities();
+		List<Company> companys = companyService.getAll();
 		List<CompanyDto> listeDtoCompany = new ArrayList<>();
 
 		for (Company company : companys) {
@@ -312,9 +276,9 @@ public class ComputerControllerSpring {
 		return request;
 	}
 
+
 	/**
-	 * ======= GERE LA CREATION D'UN COMPUTER : APPEL DE LA REQUETE CREATION FOURNI
-	 * PAR LE SERVICE ========
+	 * ======= [ REQUETE ] LA CREATION D'UN COMPUTER ===========
 	 * 
 	 * @param stringName
 	 * @param stringDateIntro
