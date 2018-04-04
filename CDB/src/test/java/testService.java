@@ -8,15 +8,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import main.java.excilys.cdb.dao.InterfaceDao;
 import main.java.excilys.cdb.model.Computer;
 
 
 
 public class testService {
 
-	@Mock
-	private InterfaceDao<Computer> mockDAOComputer;
 
 	@Before
 	public void setUp() throws Exception {

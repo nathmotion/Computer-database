@@ -15,7 +15,7 @@ import main.java.excilys.cdb.model.Computer;
 public class PageTag extends SimpleTagSupport {
 	private String action;
 	Page<Computer> page;
-	int search;
+	String search;
 	Sort.Direction order;
 	int numpage;
 	StringWriter sw = new StringWriter();
@@ -27,7 +27,7 @@ public class PageTag extends SimpleTagSupport {
 					+ "\" aria-label=\"Next\"> <span aria-hidden=true>&raquo;</span>\n" + "</a>");
 		}
 		if (action.equals("previous")) {
-			out.println(" <a href=\"dashboard.html?numpage=" + actionPage() + "p&search=" + search + "&order=" + order
+			out.println(" <a href=\"dashboard.html?numpage=" + actionPage() + "&search=" + search + "&order=" + order
 					+ "\" \n	aria-label=\"Previous\"> <span aria-hidden=\"true\">&laquo;</span>\n</a>");
 		}
 		out.println("<a href=\"dashboard.html?numpage=" + (page.getTotalPages() - 1) + "/>");

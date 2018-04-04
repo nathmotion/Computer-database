@@ -80,7 +80,11 @@ public class Computer {
 	}
 
 	public LocalDate getIntroduced() {
-		return introduced.toLocalDateTime().toLocalDate();
+		if (introduced != null) {
+			return introduced.toLocalDateTime().toLocalDate();
+		} else {
+			return null;
+		}
 	}
 
 	public void setIntroduced(LocalDate introduction) {
@@ -88,7 +92,10 @@ public class Computer {
 	}
 
 	public LocalDate getDiscontinued() {
-		return discontinued.toLocalDateTime().toLocalDate();
+		if (discontinued != null) {
+			return discontinued.toLocalDateTime().toLocalDate();
+		}
+		return null;
 	}
 
 	public void setDiscontinued(LocalDate discontinuation) {

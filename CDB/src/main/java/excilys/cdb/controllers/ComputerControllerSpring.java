@@ -75,7 +75,7 @@ public class ComputerControllerSpring {
 	@GetMapping("/dashboard.html")
 	public String getDashboard(@RequestParam Map<String, String> params, Locale Locale, Model model) {
 		try {
-			model = affichagePage(params.get(ACTION_PAGE), params.get(LIMIT), params.get(SEARCH),
+			model = affichagePage(params.get(ACTION_PAGE), params.get(LIMIT), params.get("numpage"), params.get(SEARCH),
 					params.get(TYPE_ORDER), model);
 			return VIEW_BOARD;
 		} catch (DatabaseException e) {
@@ -93,7 +93,8 @@ public class ComputerControllerSpring {
 			String search = null;
 			String typeOrder = null;
 			gestionDelete(selection);
-			model = affichagePage(params.get(ACTION_PAGE), params.get(LIMIT), search, typeOrder, model);
+			model = affichagePage(params.get(ACTION_PAGE), params.get(LIMIT), params.get("numpage"), search, typeOrder,
+					model);
 			return VIEW_BOARD;
 		} catch (DatabaseException e) {
 			return "500";
@@ -202,14 +203,13 @@ public class ComputerControllerSpring {
 	}
 
 	/**
-	 * ======== [ GESTION ]:  AFFICHAGE DES PAGE DE COMPUTER ET LA RECHERCHE ======
+	 * ======== [ GESTION ]: AFFICHAGE DES PAGE DE COMPUTER ET LA RECHERCHE ======
 	 * 
 	 * @param request
 	 * @return
 	 */
-	public Model affichagePage(String actionPage, String limit, String search, String order, Model model)
-			throws DatabaseException {
-
+	public Model affichagePage(String actionPage, String limit, String stringNumPage, String search, String order,
+			Model model) throws DatabaseException {
 		int sortNum = 0;
 
 		int count = computerService.getNbTotal();
@@ -224,7 +224,9 @@ public class ComputerControllerSpring {
 		if (limit != null) {
 			nbElementP = Integer.parseInt(limit);
 		}
-
+		if (stringNumPage != null) {
+			numPage = Integer.parseInt(stringNumPage);
+		}
 		if (search != null && !search.equals("null")) {
 			count = (int) computerService.getNbSearch(search);
 			page = computerService.getPageByName(numPage, nbElementP, search);
@@ -275,7 +277,6 @@ public class ComputerControllerSpring {
 		request.addAttribute("ListeCompany", listeDtoCompany);
 		return request;
 	}
-
 
 	/**
 	 * ======= [ REQUETE ] LA CREATION D'UN COMPUTER ===========

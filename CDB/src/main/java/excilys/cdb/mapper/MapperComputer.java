@@ -61,8 +61,11 @@ public class MapperComputer {
 		} else {
 			dtoComputer.setDate_discontinued("");
 		}
+		if(computer.getCompany()!=null) {
 		dtoComputer.setCompanyId((computer.getCompany().getId().toString()));
 		dtoComputer.setCompanyName(computer.getCompany().getName());
+		}
+	
 		return dtoComputer;
 	}
 }
