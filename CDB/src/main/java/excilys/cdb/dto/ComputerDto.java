@@ -26,6 +26,15 @@ public class ComputerDto {
 	public ComputerDto() {
 
 	}
+	public ComputerDto(String id, String name, String date_introduced, String date_discontinued) {
+		this.id = id;
+		this.name = name;
+		this.date_introduced = date_introduced;
+		this.date_discontinued = date_discontinued;
+		this.companyId = null;
+		this.companyName = null;
+	}
+
 
 	public ComputerDto(String id, String name, String date_introduced, String date_discontinued, Company company) {
 		this.id = id;

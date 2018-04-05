@@ -178,13 +178,18 @@ public class ComputerControllerSpring {
 	 */
 	public Model editRequest(String stringId, String stringName, String stringDateIntro, String stringDateDisc,
 			String stringCompanyId, Model request) {
-		Boolean validate = true;
-		if (validate) {
-			Company company = new Company(Long.parseLong(stringCompanyId), "");
-			ComputerDto dtoComputer = new ComputerDto(stringId, stringName, stringDateIntro, stringDateDisc, company);
-			Computer computer = computerMap.mapToEntity(dtoComputer);
-			computerService.update(computer);
+		ComputerDto dtoComputer;
+		if (stringCompanyId.equals("") || stringCompanyId == null) {
+
+			dtoComputer = new ComputerDto(stringId, stringName, stringDateIntro, stringDateDisc);
+
+		} else {
+			Company company = new Company(Long.parseLong(stringCompanyId), null);
+			dtoComputer = new ComputerDto(stringId, stringName, stringDateIntro, stringDateDisc, company);
 		}
+		Computer computer = computerMap.mapToEntity(dtoComputer);
+		computerService.update(computer);
+
 		return request;
 	}
 
@@ -228,8 +233,11 @@ public class ComputerControllerSpring {
 			numPage = Integer.parseInt(stringNumPage);
 		}
 		if (search != null && !search.equals("null")) {
+			System.out.println(" RECHERCHE");
 			count = (int) computerService.getNbSearch(search);
+			System.out.println("			count = " + count);
 			page = computerService.getPageByName(numPage, nbElementP, search);
+
 		} else {
 			handlePageOrder(computerService, sortNum);
 		}

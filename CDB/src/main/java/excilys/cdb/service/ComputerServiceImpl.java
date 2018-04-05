@@ -6,9 +6,9 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import main.java.excilys.cdb.model.Computer;
 import main.java.excilys.cdb.repositories.ComputerRepositoryImpl;
@@ -32,12 +32,14 @@ public class ComputerServiceImpl {
 	}
 
 	public Page<Computer> getPageByName(int numPage,int nbElementPage,String name) {
-		Page<Computer> page = computerRepository.findAll(PageRequest.of(numPage,nbElementPage,Sort.Direction.ASC,name));
+		Page<Computer> page = computerRepository.findByNameContaining(PageRequest.of(numPage,nbElementPage),name);
 		return page;
 	}
 
 	public long getNbSearch(String name) {
-		return computerRepository.countByName(name);
+		long cout =computerRepository.countByNameContaining(name);
+		System.out.println("SERVICE - count ="+cout);
+		return cout;
 	}
 
 	public Page<Computer> getPageByOrder(int numPage,int nbElementPage, Direction direction) {
@@ -53,6 +55,7 @@ public class ComputerServiceImpl {
 		computerRepository.save(computer);
 	}
 
+	@Transactional
 	public void update(Computer computer) {
 		computerRepository.save(computer);
 	}
@@ -62,6 +65,6 @@ public class ComputerServiceImpl {
 	}
 
 	public Optional<Computer> findById(int id) throws SQLException {
-		return computerRepository.findById(id);
+		return computerRepository.findById((long)id);
 	}
 }

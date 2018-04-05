@@ -17,7 +17,7 @@ import javax.persistence.Table;
 public class Computer {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 
@@ -88,7 +88,12 @@ public class Computer {
 	}
 
 	public void setIntroduced(LocalDate introduction) {
-		this.introduced = Timestamp.valueOf(introduction.atStartOfDay());
+		if (introduced != null) {
+
+			this.introduced = Timestamp.valueOf(introduction.atStartOfDay());
+		} else {
+			this.introduced=null;
+		}
 	}
 
 	public LocalDate getDiscontinued() {
@@ -99,7 +104,11 @@ public class Computer {
 	}
 
 	public void setDiscontinued(LocalDate discontinuation) {
-		discontinued = Timestamp.valueOf(discontinuation.atStartOfDay());
+		if (discontinuation != null) {
+			discontinued = Timestamp.valueOf(discontinuation.atStartOfDay());
+		} else {
+			discontinued = null;
+		}
 	}
 
 	@Override

@@ -20,7 +20,7 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<a class="navbar-brand"
-				href="dashboard.html?limit=${page.getSize()}&search=null&typeOrder=null">
+				href="dashboard.html?limit=${page.getSize()}">
 				<spring:message code="App.Title" />
 			</a>
 			<div class="pull-right">

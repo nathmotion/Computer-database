@@ -1,6 +1,5 @@
 package main.java.excilys.cdb.mapper;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -14,9 +13,7 @@ import main.java.excilys.cdb.model.Computer;
 public class MapperComputer {
 
 	public Computer mapToEntity(ComputerDto dtoComputer) {
-		Company company = new Company();
-		company.setId(Long.parseLong(dtoComputer.getCompanyId()));
-		company.setName(dtoComputer.getCompanyName());
+
 		Computer computer = new Computer();
 		if (dtoComputer.getDate_introduced() == null || dtoComputer.getDate_introduced().equals("")) {
 			computer.setIntroduced(null);
@@ -31,15 +28,16 @@ public class MapperComputer {
 			computer.setDiscontinued(parseTmpDate);
 
 		}
-
-		if (dtoComputer.getId() != null) {
-			computer.setId(Long.parseLong(dtoComputer.getId()));
+		Company company = new Company();
+		company.setName(dtoComputer.getCompanyName());
+		if (dtoComputer.getCompanyId() != null) {
+			company.setId(Long.parseLong(dtoComputer.getId()));
+			computer.setCompany(company);
 		} else {
-			computer.setId((long) 0);
+			computer.setCompany(null);
 		}
 
 		computer.setName(dtoComputer.getName());
-		computer.setCompany(company);
 		return computer;
 	}
 
@@ -61,11 +59,11 @@ public class MapperComputer {
 		} else {
 			dtoComputer.setDate_discontinued("");
 		}
-		if(computer.getCompany()!=null) {
-		dtoComputer.setCompanyId((computer.getCompany().getId().toString()));
-		dtoComputer.setCompanyName(computer.getCompany().getName());
+		if (computer.getCompany() != null) {
+			dtoComputer.setCompanyId((computer.getCompany().getId().toString()));
+			dtoComputer.setCompanyName(computer.getCompany().getName());
 		}
-	
+
 		return dtoComputer;
 	}
 }
