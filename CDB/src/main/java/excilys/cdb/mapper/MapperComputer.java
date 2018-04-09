@@ -15,10 +15,16 @@ public class MapperComputer {
 	public Computer mapToEntity(ComputerDto dtoComputer) {
 
 		Computer computer = new Computer();
+		
+		if(dtoComputer.getId()!=null) {
+			computer.setId(Long.parseLong(dtoComputer.getId()));
+		}
+
 		if (dtoComputer.getDate_introduced() == null || dtoComputer.getDate_introduced().equals("")) {
 			computer.setIntroduced(null);
 		} else {
-			computer.setIntroduced(LocalDate.parse(dtoComputer.getDate_introduced()));
+			LocalDate tmpIntro= LocalDate.parse(dtoComputer.getDate_introduced());
+			computer.setIntroduced(tmpIntro);
 		}
 
 		if (dtoComputer.getDate_discontinued() == null || dtoComputer.getDate_discontinued().equals("")) {

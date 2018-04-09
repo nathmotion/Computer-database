@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import main.java.excilys.cdb.model.Company;
 
 @Repository 
-public interface CompanyRepositoryImpl extends PagingAndSortingRepository<Company, Integer>{
+public interface CompanyRepositoryImpl extends PagingAndSortingRepository<Company, Long>{
 
 }

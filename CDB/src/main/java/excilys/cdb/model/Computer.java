@@ -88,8 +88,7 @@ public class Computer {
 	}
 
 	public void setIntroduced(LocalDate introduction) {
-		if (introduced != null) {
-
+		if (introduction != null) {
 			this.introduced = Timestamp.valueOf(introduction.atStartOfDay());
 		} else {
 			this.introduced=null;

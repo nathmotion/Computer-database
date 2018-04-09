@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import main.java.excilys.cdb.model.Computer;
 import main.java.excilys.cdb.repositories.ComputerRepositoryImpl;
@@ -38,7 +37,6 @@ public class ComputerServiceImpl {
 
 	public long getNbSearch(String name) {
 		long cout =computerRepository.countByNameContaining(name);
-		System.out.println("SERVICE - count ="+cout);
 		return cout;
 	}
 
@@ -55,8 +53,9 @@ public class ComputerServiceImpl {
 		computerRepository.save(computer);
 	}
 
-	@Transactional
+
 	public void update(Computer computer) {
+		System.out.println(" computer "+ computer.toString());
 		computerRepository.save(computer);
 	}
 

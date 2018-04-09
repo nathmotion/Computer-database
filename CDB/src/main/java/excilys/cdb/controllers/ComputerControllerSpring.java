@@ -121,10 +121,10 @@ public class ComputerControllerSpring {
 			System.out.println(" le binding a trouve une erreur !");
 			return VIEW_ADD_COMPUTER;
 		}
+		
 		List<String> errors = computerValidator.validate(computerDto);
 		if (errors.size() == 0) {
-			gestionCreation(computerDto.getName(), computerDto.getDate_introduced(), computerDto.getDate_discontinued(),
-					computerDto.getCompanyId());
+			gestionCreation(computerDto);
 			model = affichageCompany(model);
 			return "redirect:" + VIEW_BOARD + ".html";
 		} else {
@@ -161,8 +161,7 @@ public class ComputerControllerSpring {
 			BindingResult binding, Model model) {
 		List<String> errors = computerValidator.validate(computerDto);
 		if (errors.size() == 0) {
-			model = editRequest(computerDto.getId(), computerDto.getName(), computerDto.getDate_introduced(),
-					computerDto.getDate_discontinued(), computerDto.getCompanyId(), model);
+			model = editRequest(computerDto, model);
 			return "redirect:" + VIEW_BOARD + ".html";
 		} else {
 			model.addAttribute("errors", errors);
@@ -176,18 +175,13 @@ public class ComputerControllerSpring {
 	 * @param request
 	 * @return
 	 */
-	public Model editRequest(String stringId, String stringName, String stringDateIntro, String stringDateDisc,
-			String stringCompanyId, Model request) {
-		ComputerDto dtoComputer;
-		if (stringCompanyId.equals("") || stringCompanyId == null) {
-
-			dtoComputer = new ComputerDto(stringId, stringName, stringDateIntro, stringDateDisc);
-
-		} else {
-			Company company = new Company(Long.parseLong(stringCompanyId), null);
-			dtoComputer = new ComputerDto(stringId, stringName, stringDateIntro, stringDateDisc, company);
+	public Model editRequest(ComputerDto computerDto, Model request) {
+		
+		if (!computerDto.getCompanyId().equals("") || computerDto.getCompanyId()!= null) {
+			computerDto.setCompanyId(null);
+			computerDto.setCompanyName(null);
 		}
-		Computer computer = computerMap.mapToEntity(dtoComputer);
+		Computer computer = computerMap.mapToEntity(computerDto);
 		computerService.update(computer);
 
 		return request;
@@ -294,9 +288,12 @@ public class ComputerControllerSpring {
 	 * @param stringDateDisc
 	 * @param stringCompanyId
 	 */
-	public void gestionCreation(String computerName, String introduced, String discontinued, String companyId) {
-		ComputerDto dtoComputer = new ComputerDto(computerName, introduced, discontinued, companyId, "");
-		Computer computer = computerMap.mapToEntity(dtoComputer);
+	public void gestionCreation(ComputerDto computerDto) {
+		if (!computerDto.getCompanyId().equals("") || computerDto.getCompanyId()!= null) {
+			computerDto.setCompanyId(null);
+			computerDto.setCompanyName(null);
+		}
+		Computer computer = computerMap.mapToEntity(computerDto);
 		computerService.create(computer);
 	}
 

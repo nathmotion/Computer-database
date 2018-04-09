@@ -1,6 +1,6 @@
 package main.java.excilys.cdb.dto;
 
-import org.springframework.lang.NonNull;
+import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -9,7 +9,7 @@ public class CompanyDto {
 	
 	public String id;
 	
-	@NonNull
+	@NotNull
 	public String name;
 
 	public CompanyDto() {
