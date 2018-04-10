@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "excilys.cdb")
+@EnableJpaRepositories(basePackages = "excilys.cdb.repositories")
 @PropertySource({ "classpath:hibernate.properties" })
 public class JpaConfig {
 
@@ -37,7 +37,7 @@ public class JpaConfig {
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 		em.setDataSource(dataSource());
-		em.setPackagesToScan(new String[] { "excilys.cdb" });
+		em.setPackagesToScan(new String[] { "excilys.cdb.model" });
 		em.setJpaProperties(hibernateProperties());
 		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		em.setJpaVendorAdapter(vendorAdapter);

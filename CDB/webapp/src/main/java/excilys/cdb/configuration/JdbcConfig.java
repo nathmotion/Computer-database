@@ -12,7 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Configuration
-@ComponentScan("main.java.excilys.cdb")
+@ComponentScan("excilys.cdb")
 @PropertySource(value= {"classpath:userInfoDB.properties"})
 public class JdbcConfig {
 
