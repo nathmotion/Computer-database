@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>CDB</groupId>
+		<groupId>com.excilys</groupId>
 		<artifactId>CDB</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -19,7 +19,7 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>CDB</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>core</artifactId>
 			<version>0.0.1-SNAPSHOT </version>
 		</dependency>
