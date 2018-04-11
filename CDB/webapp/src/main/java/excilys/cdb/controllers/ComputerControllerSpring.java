@@ -54,8 +54,7 @@ public class ComputerControllerSpring {
 	int numPage;
 	int nbElementP;
 
-	@Autowired
-	MessageSource messageSource;
+
 
 	public ComputerControllerSpring(ComputerServiceImpl computerService, CompanyServiceImpl companyService,
 			MapperComputer computerMap, MapperCompany companyMap, ValidatorComputer computerValidator) {

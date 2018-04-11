@@ -1,4 +1,4 @@
-package main.java.excilys.cdb.configuration;
+package main.java.excilys.cdb.hibernateconfiguration;
 
 import java.util.Properties;
 
@@ -6,6 +6,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -22,8 +23,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //@PropertySource("classpath:jpa.properties")
 
 @Configuration
-@EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "excilys.cdb.repositories")
+@EnableTransactionManagement(proxyTargetClass = true)
+@EnableJpaRepositories(basePackages = {"main.java.excilys.cdb.repositories","main.java.excilys.cdb.model","main.java.excilys.cdb.service"})
 @PropertySource({ "classpath:hibernate.properties" })
 public class JpaConfig {
 
@@ -37,7 +38,7 @@ public class JpaConfig {
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 		em.setDataSource(dataSource());
-		em.setPackagesToScan(new String[] { "excilys.cdb.model" });
+		em.setPackagesToScan(new String[] { "main.java.excilys.cdb.model" });
 		em.setJpaProperties(hibernateProperties());
 		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		em.setJpaVendorAdapter(vendorAdapter);
