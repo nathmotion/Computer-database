@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -7,32 +8,31 @@
 
 	<parent>
 		<artifactId>ComputerDatabase</artifactId>
-		<groupId>${cdb-group-id}</groupId>
+		<groupId>com.excilys.formation.tbezenger.cdb</groupId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
+		<!-- modules -->
 		<dependency>
-			<groupId>${cdb-group-id}</groupId>
+			<groupId>com.excilys.formation.tbezenger.cdb</groupId>
 			<artifactId>binding</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>${cdb-group-id}</groupId>
+			<groupId>com.excilys.formation.tbezenger.cdb</groupId>
 			<artifactId>service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-
+		<!-- servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/taglibs/standard -->
 		<dependency>
 			<groupId>taglibs</groupId>
 			<artifactId>standard</artifactId>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/javax.servlet.jsp.jstl/jstl -->
 		<dependency>
 			<groupId>javax.servlet.jsp.jstl</groupId>
 			<artifactId>jstl-api</artifactId>
@@ -41,7 +41,11 @@
 			<groupId>org.glassfish.web</groupId>
 			<artifactId>jstl-impl</artifactId>
 		</dependency>
-
+		<!-- security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

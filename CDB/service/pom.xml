@@ -7,13 +7,13 @@
     
     <parent>
         <artifactId>ComputerDatabase</artifactId>
-        <groupId>${cdb-group-id}</groupId>
+        <groupId>com.excilys.formation.tbezenger.cdb</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     
     <dependencies>
         <dependency>
-            <groupId>${cdb-group-id}</groupId>
+            <groupId>com.excilys.formation.tbezenger.cdb</groupId>
             <artifactId>persistence</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

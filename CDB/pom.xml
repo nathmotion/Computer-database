@@ -1,8 +1,9 @@
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>${cdb-group-id}</groupId>
+	<groupId>com.excilys.formation.tbezenger.cdb</groupId>
 	<artifactId>ComputerDatabase</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -19,20 +20,20 @@
 		<jstl-version>1.2</jstl-version>
 		<taglibs-version>1.1.2</taglibs-version>
 		<hikari-version>2.7.8</hikari-version>
-		
+
 		<cdb-group-id>com.excilys.formation.tbezenger.ComputerDatabase</cdb-group-id>
 
 	</properties>
 
-    <modules>
-        <module>webapp</module>
-        <module>core</module>
-        <module>console</module>
-        <module>persistence</module>
-        <module>binding</module>
-        <module>service</module>
-        
-    </modules>
+	<modules>
+		<module>webapp</module>
+		<module>core</module>
+		<module>console</module>
+		<module>persistence</module>
+		<module>binding</module>
+		<module>service</module>
+
+	</modules>
 
 	<build>
 		<plugins>
@@ -54,57 +55,55 @@
 				<version>${junit-version}</version>
 				<scope>test</scope>
 			</dependency>
-	
+
 			<dependency>
 				<groupId>org.mockito</groupId>
 				<artifactId>mockito-all</artifactId>
 				<version>${mockito-version}</version>
 				<scope>test</scope>
 			</dependency>
-	
+
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
 				<artifactId>log4j-core</artifactId>
 				<version>${log4j-version}</version>
 			</dependency>
-	
+
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
 				<artifactId>log4j-api</artifactId>
 				<version>${log4j-version}</version>
 			</dependency>
-	
+
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
 				<artifactId>log4j-iostreams</artifactId>
 				<version>${log4j-version}</version>
 			</dependency>
-	
+
 			<dependency>
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
 				<version>${mysql-version}</version>
 			</dependency>
-	
+
+			<!-- Servlet -->
 			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>javax.servlet-api</artifactId>
 				<version>${servlet-version}</version>
 				<scope>provided</scope>
 			</dependency>
-	
 			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>jstl</artifactId>
 				<version>${jstl-version}</version>
 			</dependency>
-			<!-- https://mvnrepository.com/artifact/taglibs/standard -->
 			<dependency>
 				<groupId>taglibs</groupId>
 				<artifactId>standard</artifactId>
 				<version>${taglibs-version}</version>
 			</dependency>
-			<!-- https://mvnrepository.com/artifact/javax.servlet.jsp.jstl/jstl -->
 			<dependency>
 				<groupId>javax.servlet.jsp.jstl</groupId>
 				<artifactId>jstl-api</artifactId>
@@ -115,12 +114,16 @@
 				<artifactId>jstl-impl</artifactId>
 				<version>${jstl-version}</version>
 			</dependency>
+
+			<!-- Connection POOL -->
 			<dependency>
 				<groupId>com.zaxxer</groupId>
 				<artifactId>HikariCP</artifactId>
 				<version>${hikari-version}</version>
 				<scope>compile</scope>
 			</dependency>
+
+			<!-- SPRING / HIBERNATE -->
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-jdbc</artifactId>
@@ -131,16 +134,21 @@
 				<artifactId>spring-webmvc</artifactId>
 				<version>5.0.4.RELEASE</version>
 			</dependency>
-	
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
 				<version>5.2.12.Final</version>
 			</dependency>
-	
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-orm</artifactId>
+				<version>5.0.4.RELEASE</version>
+			</dependency>
+
+			<!-- Security -->
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
 				<version>5.0.4.RELEASE</version>
 			</dependency>
 		</dependencies>
