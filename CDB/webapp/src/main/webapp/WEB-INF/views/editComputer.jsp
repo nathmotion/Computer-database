@@ -15,8 +15,8 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.html"> Application -
-				Computer Database </a>
+			<a class="navbar-brand" href="dashboard"> Application - Computer
+				Database </a>
 		</div>
 	</header>
 	<section id="main">
@@ -26,28 +26,32 @@
 					<div class="label label-default pull-right">id:${computer.id}</div>
 					<h1>Edit Computer</h1>
 
-					<form:form action="editComputer.html" modelAttribute="computerDto" method="POST">
+					<form:form action="editComputer" modelAttribute="computerDto"
+						method="POST">
 						<form:input type="hidden" value="${computer.id}" id="id"
 							name="computerId" path="id" />
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> <form:input
-									type="text" class="form-control" id="computerName"
-									name="computerName" value="${computer.name}"  path="name"/>
+								<label for="computerName">Computer name</label>
+								<form:input type="text" class="form-control" id="computerName"
+									name="computerName" value="${computer.name}" path="name" />
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date</label> <form:input
-									type="date" class="form-control" id="introduced"
-									name="introduced" value="${computer.date_introduced}" min="1970-01-01" path="date_introduced"/>
+								<label for="introduced">Introduced date</label>
+								<form:input type="date" class="form-control" id="introduced"
+									name="introduced" value="${computer.date_introduced}"
+									min="1970-01-01" path="date_introduced" />
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> <form:input
-									type="date" class="form-control" id="discontinued"
-									name="discontinued" value="${computer.date_discontinued }" min="1970-01-01" path="date_discontinued"/>
+								<label for="discontinued">Discontinued date</label>
+								<form:input type="date" class="form-control" id="discontinued"
+									name="discontinued" value="${computer.date_discontinued }"
+									min="1970-01-01" path="date_discontinued" />
 							</div>
 							<div class="form-group">
-								<label for="companyId">Company</label> <form:select
-									class="form-control" id="companyId" name="companyId" path="companyId">
+								<label for="companyId">Company</label>
+								<form:select class="form-control" id="companyId"
+									name="companyId" path="companyId">
 									<option value="${computer.companyId}">${computer.companyId}-${computer.companyName}</option>
 									<c:forEach items="${ListeCompany}" var="company">
 										<option value="${company.id}">${company.id}-${company.name}</option>
@@ -57,7 +61,7 @@
 						</fieldset>
 						<div class="actions pull-right">
 							<input type="submit" value="Edit" class="btn btn-primary">
-							or <a href="dashboard.html" class="btn btn-default">Cancel</a>
+							or <a href="dashboard" class="btn btn-default">Cancel</a>
 						</div>
 					</form:form>
 				</div>

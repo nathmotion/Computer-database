@@ -24,8 +24,8 @@
 				<spring:message code="App.Title" />
 			</a>
 			<div class="pull-right">
-				<a href="dashboard.html?myLocale=fr">FR</a> <a
-					href="dashboard.html?myLocale=en">EN</a>
+				<a href="dashboard?myLocale=fr">FR</a> <a
+					href="dashboard?myLocale=en">EN</a>
 			</div>
 		</div>
 		<div>
@@ -45,7 +45,7 @@
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="dashboard.html" method="GET"
+					<form id="searchForm" action="dashboard" method="GET"
 						class="form-inline">
 						<input type="search" id="searchbox" name="search"
 							class="form-control"
@@ -56,7 +56,7 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer.html"><spring:message
+					<a class="btn btn-success" id="addComputer" href="addComputer"><spring:message
 							code="label.buttonAddComputer" /></a> <a class="btn btn-default"
 						id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message
 							code="label.buttonEdit" /></a>
@@ -81,13 +81,13 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><a href="dashboard.html?typeOrder=computer&orderCmp=0"><spring:message
+						<th><a href="dashboard?typeOrder=computer&orderCmp=0"><spring:message
 									code="label.listTitleComputerName" /></a></th>
 						<th><spring:message code="label.listTitleDateIntroduced" /></th>
 						<!-- Table header for Discontinued Date -->
 						<th><spring:message code="label.listTitleDateDiscontinued" /></th>
 						<!-- Table header for Company -->
-						<th><a href="dashboard.html?typeOrder=company&orderCmp=0"><spring:message
+						<th><a href="dashboard?typeOrder=company&orderCmp=0"><spring:message
 									code="label.listTitleCompany" /></a></th>
 
 					</tr>
@@ -98,7 +98,7 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.id}"></td>
-							<td><a href="editComputer.html?id=${computer.id}" onclick="">${ computer.name }</a>
+							<td><a href="editComputer?id=${computer.id}" onclick="">${ computer.name }</a>
 							</td>
 							<td>${ computer.date_introduced }</td>
 							<td>${ computer.date_discontinued }</td>
@@ -120,11 +120,11 @@
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<input type="button" class="btn btn-default"
-					onClick="location.href='dashboard.html?limit=10'" value="10" /> <input
+					onClick="location.href='dashboard?limit=10'" value="10" /> <input
 					type="button" class="btn btn-default"
-					onClick="location.href='dashboard.html?limit=50'" value="50" /> <input
+					onClick="location.href='dashboard?limit=50'" value="50" /> <input
 					type="button" class="btn btn-default"
-					onClick="location.href='dashboard.html?limit=100'" value="100" />
+					onClick="location.href='dashboard?limit=100'" value="100" />
 			</div>
 		</div>
 	</footer>

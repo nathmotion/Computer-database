@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import main.java.excilys.cdb.dto.ComputerDto;
 import main.java.excilys.cdb.exceptions.InvalidDateException;
-import main.java.excilys.cdb.model.Computer;
 
 @Component
 public class ValidatorComputer {

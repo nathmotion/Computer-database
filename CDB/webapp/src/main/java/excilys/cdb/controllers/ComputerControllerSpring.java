@@ -19,8 +19,6 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -70,7 +68,7 @@ public class ComputerControllerSpring {
 	/***
 	 * ======[ GET ] : VIEW DASHBOARD ======
 	 */
-	@GetMapping("/dashboard.html")
+	@GetMapping("/dashboard")
 	public String getDashboard(@RequestParam Map<String, String> params, Locale Locale, Model model) {
 		try {
 			model = affichagePage(params.get(ACTION_PAGE), params.get(LIMIT), params.get("numpage"), params.get(SEARCH),
@@ -84,7 +82,7 @@ public class ComputerControllerSpring {
 	/***
 	 * ====== [ POST ] : VIEW DASHBOARD ======
 	 */
-	@PostMapping("/dashboard.html")
+	@PostMapping("/dashboard")
 	public String submitDashboard(@RequestParam Map<String, String> params, Locale Locale,
 			@RequestParam(value = SELECTION, required = false) List<String> selection, Model model) {
 		try {
@@ -102,7 +100,7 @@ public class ComputerControllerSpring {
 	/**
 	 * ===== [ GET ] : VIEW ADD COMPUTER ======
 	 */
-	@GetMapping("/addComputer.html")
+	@GetMapping("/addComputer")
 	public String getAddComputer(Model model) {
 		model.addAttribute("computerDto", new ComputerDto());
 		model = affichageCompany(model);
@@ -112,7 +110,7 @@ public class ComputerControllerSpring {
 	/**
 	 * ===== [ POST ] : VIEW ADD COMPUTER =====
 	 */
-	@PostMapping("/addComputer.html")
+	@PostMapping("/addComputer")
 	private String submitAddComputer(@ModelAttribute("computerDto") @Valid ComputerDto computerDto,
 			BindingResult binding, Model model) {
 		if (binding.hasErrors()) {
@@ -134,7 +132,7 @@ public class ComputerControllerSpring {
 	/***
 	 * ====== GET : Edit Computer ======
 	 */
-	@GetMapping("/editComputer.html")
+	@GetMapping("/editComputer")
 	public String getEditComputer(@RequestParam(value = ID, required = false) String id, Model model) {
 		try {
 			Optional<Computer> optComputer = computerService.findById(Integer.parseInt(id));
@@ -154,7 +152,7 @@ public class ComputerControllerSpring {
 	/***
 	 * ====== [ POST ] : SUBMIT EDIT COMPUTER ======
 	 */
-	@PostMapping("/editComputer.html")
+	@PostMapping("/editComputer")
 	public String submitEditComputer(@ModelAttribute("ComputerDto") @Valid ComputerDto computerDto,
 			BindingResult binding, Model model) {
 		List<String> errors = computerValidator.validate(computerDto);

@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>CDB</artifactId>
@@ -12,7 +13,7 @@
 		<module>webapp</module>
 		<module>service</module>
 	</modules>
-	<groupId>excilys.cdb</groupId>
+	<groupId>main.java.excilys.cdb</groupId>
 
 	<!-- PROPERTIES VERSION -->
 	<properties>
@@ -24,6 +25,7 @@
 		<mockito-core-version>2.13.0</mockito-core-version>
 		<log4j-core-version>2.8.2</log4j-core-version>
 		<slf4j-api-version>1.7.21</slf4j-api-version>
+		<log4j-version>2.10.0</log4j-version>
 		<hsql-version>2.4.0</hsql-version>
 		<taglibs>1.1.2</taglibs>
 		<jstl>1.2</jstl>
@@ -32,12 +34,31 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-core</artifactId>
+				<version>${log4j-version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-api</artifactId>
+				<version>${log4j-version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-iostreams</artifactId>
+				<version>${log4j-version}</version>
+			</dependency>
+
 			<!-- JDBC CONNNECTOR -->
 			<dependency>
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
 				<version>${mysql-connector-version}</version>
 			</dependency>
+			
 
 			<!-- TEST DEPENDENCE -->
 			<dependency>
@@ -112,9 +133,9 @@
 				<version>${spring-version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.tomcat</groupId>
-				<artifactId>tomcat-dbcp</artifactId>
-				<version>7.0.55</version>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${spring-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -136,7 +157,6 @@
 				<artifactId>spring-tx</artifactId>
 				<version>${spring-version}</version>
 			</dependency>
-			
 			<dependency>
 				<groupId>javax.validation</groupId>
 				<artifactId>validation-api</artifactId>
@@ -172,7 +192,7 @@
 	</dependencyManagement>
 
 	<!-- REPERTORIEs -->
-	<repositories>
+<!-- 	<repositories>
 		<repository>
 			<id>spring-libs-release</id>
 			<name>Spring Releases</name>
@@ -181,7 +201,7 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-	</repositories>
+	</repositories> -->
 	<!-- BUILD -->
 	<build>
 		<sourceDirectory>src</sourceDirectory>
