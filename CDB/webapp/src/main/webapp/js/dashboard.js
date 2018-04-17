@@ -2,7 +2,6 @@
 $(function() {
     // Default: hide edit mode
     $(".editMode").hide();
-    
     // Click on "selectall" box
     $("#selectall").click(function () {
         $('.cb').prop('checked', this.checked);
@@ -33,9 +32,7 @@ $(function() {
         var str = $('.' + checkboxFieldName + ':checked').map(function() {
             return this.value;
         }).get().join();
-        
         $(this).attr('value',str);
-        
         return this;
     };
 
@@ -62,7 +59,7 @@ $(function() {
 // Function delete selected: Asks for confirmation to delete selected computers, then submits it to the deleteForm
 (function ( $ ) {
     $.fn.deleteSelected = function() {
-        if (confirm("Are you sure you want to delete the selected computers?")) { 
+        if (confirm("Are you sure you want to delete the selected computers?")) {
             $('#deleteForm input[name=selection]').setCheckboxValues('selection','cb');
             $('#deleteForm').submit();
         }
@@ -80,7 +77,7 @@ $(document).keydown(function(e) {
         case 46:
             if($(".editMode").is(":visible") && $(".cb:checked").length != 0) {
                 $.fn.deleteSelected();
-            }   
+            }
             break;
         //E key (CTRL+E will switch to edit mode)
         case 69:
