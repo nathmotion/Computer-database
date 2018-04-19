@@ -1,38 +1,35 @@
-
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.excilys.formation.tbezenger.cdb</groupId>
-	<artifactId>ComputerDatabase</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+
+	<groupId>com.excilys.xdurbec.formation.computerdatabase</groupId>
+	<artifactId>ComputerDB</artifactId>
+	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
+
+	<name>ComputerDB</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<mainClass>com.excilys.formation.tbezenger.cdb.App</mainClass>
-
-		<junit-version>3.8.1</junit-version>
-		<mockito-version>1.10.19</mockito-version>
-		<log4j-version>2.10.0</log4j-version>
-		<mysql-version>6.0.6</mysql-version>
-		<servlet-version>3.0.1</servlet-version>
-		<jstl-version>1.2</jstl-version>
-		<taglibs-version>1.1.2</taglibs-version>
+		<spring-version>5.0.0.RELEASE</spring-version>
+		<hibernate-version>5.2.12.Final</hibernate-version>
 		<hikari-version>2.7.8</hikari-version>
-
-		<cdb-group-id>com.excilys.formation.tbezenger.ComputerDatabase</cdb-group-id>
-
+		<taglib-version>1.1.2</taglib-version>
+		<jstl-version>1.2</jstl-version>
+		<jsp-version>2.0</jsp-version>
+		<junit-version>4.12</junit-version>
+		<javax-version>3.0.1</javax-version>
+		<mysql-version>6.0.6</mysql-version>
+		<log4j-version>2.10.0</log4j-version>
 	</properties>
 
 	<modules>
-		<module>webapp</module>
 		<module>core</module>
-		<module>console</module>
 		<module>persistence</module>
-		<module>binding</module>
 		<module>service</module>
-
+		<module>binding</module>
+		<module>webapp</module>
 	</modules>
 
 	<build>
@@ -45,33 +42,22 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<warSourceDirectory>WebContent</warSourceDirectory>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
+
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>${junit-version}</version>
-				<scope>test</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>org.mockito</groupId>
-				<artifactId>mockito-all</artifactId>
-				<version>${mockito-version}</version>
-				<scope>test</scope>
-			</dependency>
 
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
 				<artifactId>log4j-core</artifactId>
-				<version>${log4j-version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.logging.log4j</groupId>
-				<artifactId>log4j-api</artifactId>
 				<version>${log4j-version}</version>
 			</dependency>
 
@@ -82,40 +68,50 @@
 			</dependency>
 
 			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-api</artifactId>
+				<version>${log4j-version}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
 				<version>${mysql-version}</version>
 			</dependency>
-
-			<!-- Servlet -->
+			
 			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>javax.servlet-api</artifactId>
-				<version>${servlet-version}</version>
+				<version>${javax-version}</version>
 				<scope>provided</scope>
 			</dependency>
+			
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit-version}</version>
+				<scope>test</scope>
+			</dependency>
+
 			<dependency>
 				<groupId>javax.servlet</groupId>
-				<artifactId>jstl</artifactId>
-				<version>${jstl-version}</version>
+				<artifactId>jsp-api</artifactId>
+				<version>${jsp-version}</version>
+				<scope>provided</scope>
 			</dependency>
-			<dependency>
-				<groupId>taglibs</groupId>
-				<artifactId>standard</artifactId>
-				<version>${taglibs-version}</version>
-			</dependency>
+
 			<dependency>
 				<groupId>javax.servlet.jsp.jstl</groupId>
 				<artifactId>jstl-api</artifactId>
 				<version>${jstl-version}</version>
 			</dependency>
+
 			<dependency>
-				<groupId>org.glassfish.web</groupId>
-				<artifactId>jstl-impl</artifactId>
-				<version>${jstl-version}</version>
+				<groupId>taglibs</groupId>
+				<artifactId>standard</artifactId>
+				<version>${taglib-version}</version>
 			</dependency>
 
-			<!-- Connection POOL -->
 			<dependency>
 				<groupId>com.zaxxer</groupId>
 				<artifactId>HikariCP</artifactId>
@@ -123,34 +119,50 @@
 				<scope>compile</scope>
 			</dependency>
 
-			<!-- SPRING / HIBERNATE -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-jdbc</artifactId>
-				<version>5.0.4.RELEASE</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-webmvc</artifactId>
-				<version>5.0.4.RELEASE</version>
-			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
-				<version>5.2.12.Final</version>
+				<version>${hibernate-version}</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring-version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${spring-version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jdbc</artifactId>
+				<version>${spring-version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-orm</artifactId>
-				<version>5.0.4.RELEASE</version>
+				<version>${spring-version}</version>
 			</dependency>
 
-			<!-- Security -->
 			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-web</artifactId>
-				<version>5.0.4.RELEASE</version>
+				<version>${spring-version}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<version>${spring-version}</version>
+			</dependency> 
+			
+			
 		</dependencies>
 	</dependencyManagement>
+	
 </project>
