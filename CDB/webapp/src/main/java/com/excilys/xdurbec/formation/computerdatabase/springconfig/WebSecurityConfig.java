@@ -24,6 +24,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
     auth.jdbcAuthentication().dataSource(dataSource)
+//            .withDefaultSchema()
         .usersByUsernameQuery("select username, password, enabled"
             + " from users where username=?")
         .authoritiesByUsernameQuery("select username, authority "
@@ -33,8 +34,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.authorizeRequests().anyRequest().hasAnyRole("ADMIN", "USER")
-    .and()
+      http.authorizeRequests()
+    .anyRequest()
+    .authenticated()
+     .and()
     .formLogin()
     .loginPage("/login")
     .defaultSuccessUrl("/dashboard")
